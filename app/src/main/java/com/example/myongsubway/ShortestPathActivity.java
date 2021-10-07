@@ -1,4 +1,14 @@
 package com.example.myongsubway;
 
-public class ShortestPathActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+
+public class ShortestPathActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_shortest_path);
+    }
 }
