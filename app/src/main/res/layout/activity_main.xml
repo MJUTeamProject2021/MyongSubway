@@ -2,17 +2,168 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/Main_ConstraintLayout_Main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Test2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="#536AE8"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="출발역"
+                android:textStyle="bold"
+                android:translationX="3dp"
+                android:translationY="18dp" />
+
+            <TextView
+                android:id="@+id/Main_textView_Depstation"
+                android:layout_width="15dp"
+                android:layout_height="40dp"
+                android:layout_weight="2"
+                android:background="#FFFFFF"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:translationX="-20dp"
+                android:translationY="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="도착역"
+                android:textStyle="bold"
+                android:translationX="-5dp"
+                android:translationY="18dp" />
+
+            <TextView
+                android:id="@+id/Main_textView_Desstation"
+                android:layout_width="15dp"
+                android:layout_height="40dp"
+                android:layout_weight="2"
+                android:background="#FFFFFF"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:translationX="-30dp"
+                android:translationY="20dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/Main_Button_Find"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:backgroundTint="#513E3E"
+                    app:icon="@drawable/ic_stat_name" />
+
+                <Button
+                    android:id="@+id/Main_Button_Change"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:backgroundTint="#913333"
+                    app:icon="@drawable/ic_change" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <com.github.chrisbanes.photoview.PhotoView
+            android:id="@+id/Main_imageView_station"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:adjustViewBounds="false"
+            android:cropToPadding="false"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/station" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#3F51B5"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/Main_Button_GotoSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#00000000"
+                android:backgroundTint="#00000000"
+                android:textAlignment="viewStart"
+                app:icon="@drawable/ic_search"
+                app:iconGravity="textTop"
+                app:iconPadding="0dp"
+                app:iconSize="25dp"
+                app:strokeColor="#00000000"
+                app:strokeWidth="0dp" />
+
+            <Button
+                android:id="@+id/button5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#00000000"
+                android:backgroundTint="#00000000"
+                android:textAlignment="viewStart"
+                app:icon="@drawable/ic_subway"
+                app:iconGravity="textTop"
+                app:iconPadding="0dp"
+                app:iconSize="25dp"
+                app:iconTint="#000000"
+                app:strokeColor="#00000000"
+                app:strokeWidth="0dp" />
+
+            <Button
+                android:id="@+id/Main_Button_GotoBookmark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#00000000"
+                android:backgroundTint="#00000000"
+                android:textAlignment="viewStart"
+                app:icon="@drawable/ic_bookmark"
+                app:iconGravity="textTop"
+                app:iconPadding="0dp"
+                app:iconSize="25dp"
+                app:strokeColor="#00000000"
+                app:strokeWidth="0dp" />
+
+            <Button
+                android:id="@+id/Main_Button_GotoSetting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#00000000"
+                android:backgroundTint="#00000000"
+                android:textAlignment="viewStart"
+                app:icon="@drawable/ic_setting"
+                app:iconGravity="textTop"
+                app:iconPadding="0dp"
+                app:iconSize="25dp"
+                app:strokeColor="#00000000"
+                app:strokeWidth="0dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
