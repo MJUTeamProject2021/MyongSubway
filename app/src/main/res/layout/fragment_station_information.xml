@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@empty"
+    android:clickable="true"
+    tools:context=".StationInformationFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <LinearLayout
+        android:layout_width="347dp"
+        android:layout_height="560dp"
+        android:layout_gravity="center"
+        android:background="@drawable/border_layout"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:weightSum="14"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="start"
+            android:layout_weight="2"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/fragment_station_linename"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="1호선"
+                android:textAlignment="center"
+                android:textColor="#050505"
+                android:textSize="20sp"
+                android:translationY="30dp" />
+
+            <TextView
+                android:id="@+id/fragment_station_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:text="101역"
+                android:textAlignment="viewStart"
+                android:textColor="#3F51B5"
+                android:textSize="40sp"
+                android:textStyle="bold"
+                android:translationX="10dp"
+                android:translationY="30dp" />
+
+            <Button
+                android:id="@+id/fragment_station_close"
+                android:layout_width="28dp"
+                android:layout_height="32dp"
+                android:layout_gravity="right|top"
+                android:layout_weight="1"
+                android:background="#00000000"
+                android:backgroundTint="#D64545"
+                android:translationX="-5dp"
+                android:translationY="-15dp"
+                app:icon="@android:drawable/ic_menu_close_clear_cancel"
+                app:iconTint="#000000" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/fragment_station_linkstalayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#FFFFFF"
+                android:text="연결된 역"
+                android:textAlignment="center"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:gravity="center|center_horizontal|fill"
+            android:orientation="horizontal"
+            android:background="@drawable/border_layout">
+
+
+            <LinearLayout
+                android:id="@+id/fragment_station_toiletOX"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="역내 화장실이\n 있습니다"
+                    android:textColor="#000000"
+                    android:translationX="10dp"
+                    android:translationY="-5dp" />
+
+                <Button
+                    android:layout_width="94dp"
+                    android:layout_height="match_parent"
+                    android:background="#00932222"
+                    android:backgroundTint="#00000000"
+                    android:textColor="#020202"
+                    android:translationX="-30dp"
+                    app:icon="@mipmap/ic_toilet_foreground"
+                    app:iconTint="#000000" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="환승역"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:translationY="30dp" />
+
+            <LinearLayout
+                android:id="@+id/fragment_station_transferlayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/fragment_station_transferOX"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="환승역이 \n존재하지 않습니다"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/fragment_station_facilitieslayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="내부 시설"
+                android:textAlignment="center"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/fragment_station_departbutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@empty"
+                android:backgroundTint="#CDD7DF"
+                android:insetRight="15dp"
+                android:text="출발"
+                android:textColor="#0F1213"
+                android:textSize="22sp" />
+
+            <Button
+                android:id="@+id/fragment_station_destibutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@empty"
+                android:backgroundTint="#CDD7DF"
+                android:insetLeft="15dp"
+                android:text="도착"
+                android:textColor="#0F1213"
+                android:textSize="22sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>
