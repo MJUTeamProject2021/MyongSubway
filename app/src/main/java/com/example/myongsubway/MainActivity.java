@@ -30,10 +30,13 @@ import com.github.chrisbanes.photoview.PhotoView;
 import com.github.chrisbanes.photoview.PhotoViewAttacher;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class    MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    public StationInformationFragment fragment;
+    //public StationInformationFragment fragment;
+    public StationReportFragment fragment;
     public Button findButton;
     public Button changeButton;
     public Button gotoBookmark;
@@ -42,18 +45,21 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
     public TextView departText;
     public TextView destiText;
     public Intent intent;
+    public ArrayList<Button>StationButtonList = new ArrayList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // 핀치줌을 위한 레이아웃 불러오기
-        PhotoView photoview = (PhotoView) findViewById(R.id.Main_imageView_station);
-        photoview.setImageResource(R.drawable.station);
-        //이미지의 xy좌표따기
-        PhotoViewAttacher mAttacher = new PhotoViewAttacher(photoview);
-        mAttacher.setOnPhotoTapListener(this::onPhotoTap);
+        //한번에 버튼 id랑 클릭리스너 입력 (맵사용예정)
+       /* for( int i=0; i<2; i++){
+            int k = getResources().getIdentifier("Main_Button_Station205"+i, "id", getPackageName());
+            StationButtonList.get(i) = findViewById(k);
+            StationButtonList.get(i).setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {   }
+            });
+        }*/
         //액션바 가리기
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
@@ -76,7 +82,7 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     //역 클릭
-    void onPhotoTap (ImageView view ,float  x ,float  y )
+  /*  void onPhotoTap (ImageView view ,float  x ,float  y )
     {
         System.out.println(x + " " + y);
         ArrayList<String> adjacent_ = new ArrayList();
@@ -86,7 +92,8 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
             adjacent_.add(a); adjacent_.add(b);
             String c;  c = "세븐일레븐 205역점 ";
             facilities_.add(c);
-            fragment = new StationInformationFragment("205역",adjacent_,facilities_,2,false);
+           // fragment = new StationInformationFragment("205역",adjacent_,facilities_,2,false);
+            fragment = new StationReportFragment();
         }
         else if(x>0.027996428&& y>0.10434187&&x<0.06481509&& y<0.15522596 ){
             String a,b;  a = "203";  b = "205";
@@ -113,7 +120,7 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
         FragmentTransaction transaction  = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.Main_ConstraintLayout_Main, fragment);
         transaction.commit();
-    }
+    }*/
 
     //프래그먼트 파괴
     void destroyFragment(){
