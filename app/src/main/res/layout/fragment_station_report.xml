@@ -4,19 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#361C1C1B"
+    android:background="#CB1C1C1B"
     android:clickable="true"
     tools:context=".StationReportFragment">
 
     <Button
-        android:id="@+id/button11"
+        android:id="@+id/fragment_report_tourist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="#00FFFFFF"
-        android:backgroundTint="#FFFFFF"
         android:text="주변 식당\n시설"
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         android:textStyle="bold"
         android:translationX="-60dp"
         android:translationY="-70dp"
@@ -27,14 +26,14 @@
         app:iconTint="#2196F3" />
 
     <Button
-        android:id="@+id/button8"
+        android:id="@+id/fragment_report_adjoin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="#00FFFFFF"
         android:backgroundTint="#FFFFFF"
         android:text="인접역"
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         android:textStyle="bold"
         android:translationX="90dp"
         app:icon="@drawable/ic_leftright"
@@ -44,14 +43,14 @@
         app:iconTint="#2196F3" />
 
     <Button
-        android:id="@+id/button10"
+        android:id="@+id/fragment_report_information"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="#00FFFFFF"
         android:backgroundTint="#FFFFFF"
         android:text="역정보"
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         android:textStyle="bold"
         android:translationX="-90dp"
         app:icon="@drawable/ic_info"
@@ -61,14 +60,14 @@
         app:iconTint="#2196F3" />
 
     <Button
-        android:id="@+id/button13"
+        android:id="@+id/fragment_report_depart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="#00FFFFFF"
         android:backgroundTint="#FFFFFF"
         android:text="출발역"
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         android:textStyle="bold"
         android:translationX="-50dp"
         android:translationY="70dp"
@@ -76,17 +75,17 @@
         app:iconGravity="top"
         app:iconPadding="0dp"
         app:iconSize="50dp"
-        app:iconTint="#085A9C" />
+        app:iconTint="#00BCD4" />
 
     <Button
-        android:id="@+id/button12"
+        android:id="@+id/fragment_report_desti"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="#00FFFFFF"
         android:backgroundTint="#FFFFFF"
         android:text="도착역"
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         android:textStyle="bold"
         android:translationX="40dp"
         android:translationY="70dp"
@@ -94,24 +93,24 @@
         app:iconGravity="top"
         app:iconPadding="0dp"
         app:iconSize="50dp"
-        app:iconTint="#085A9C" />
+        app:iconTint="#00BCD4" />
 
     <Button
-        android:id="@+id/button21"
+        android:id="@+id/fragment_report_close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="#00FFFFFF"
         android:backgroundTint="#FFFFFF"
         android:text="닫기"
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         android:textStyle="bold"
         android:translationY="-150dp"
         app:icon="@drawable/ic_exit"
         app:iconGravity="top"
         app:iconPadding="0dp"
         app:iconSize="50dp"
-        app:iconTint="#000000" />
+        app:iconTint="#EC5959" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button"
@@ -129,14 +128,14 @@
         android:layout_width="match_parent"
         android:layout_height="166dp"
         android:layout_gravity="bottom"
-        android:background="#CEE1EF"
+        android:background="#F4F4F4"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#322196F3"
+            android:background="#32FFFFFF"
             android:text="1호선"
             android:textAlignment="center"
             android:textColor="#000000"
@@ -146,7 +145,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:background="#9E43ACDC"
+            android:background="#C2DBEF"
             android:orientation="horizontal"
             android:weightSum="5">
 
@@ -155,19 +154,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-                android:background="#0C1688E3"
-                android:backgroundTint="#803737"
+                android:background="#08B53939"
+                android:backgroundTint="#BA2121"
                 android:text="123역"
-                android:textColor="#5C2929"
+                android:textColor="#000000"
                 app:icon="@drawable/ic_leftarrow" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button19"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="#19BF8383"
-                android:backgroundTint="#9C8F8F"
+                android:background="#FFFFFF"
+                android:backgroundTint="@null"
                 android:text="101역"
                 android:textColor="#000000"
                 android:textStyle="bold"
@@ -178,10 +177,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-                android:background="#0C1688E3"
-                android:backgroundTint="#803737"
+                android:background="#08B53939"
+                android:backgroundTint="#BA2121"
                 android:text="102역"
-                android:textColor="#5C2929"
+                android:textColor="#000000"
                 app:icon="@drawable/ic_rightarrow"
                 app:iconGravity="end" />
         </LinearLayout>
@@ -207,7 +206,8 @@
                 app:icon="@mipmap/ic_toilet_foreground"
                 app:iconGravity="end"
                 app:iconPadding="1dp"
-                app:iconSize="80dp" />
+                app:iconSize="80dp"
+                app:iconTint="#000000" />
 
             <Button
                 android:id="@+id/button17"
@@ -232,14 +232,14 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/button9"
+        android:id="@+id/fragment_report_bookmark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="#00FFFFFF"
         android:backgroundTint="#FFFFFF"
         android:text="즐겨찾기"
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         android:textStyle="bold"
         android:translationX="50dp"
         android:translationY="-80dp"

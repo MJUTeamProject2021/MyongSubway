@@ -7,13 +7,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link StationReportFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class StationReportFragment extends Fragment {
+public class StationReportFragment extends Fragment implements View.OnClickListener{
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,19 +21,18 @@ public class StationReportFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private Button departureButton;
+    private Button destinationButton;
+    private Button closeButton;
+    private Button adjoinButton;
+    private Button informationButton;
+    private Button touristButton;
+    private Button bookmarkButton;
+
     public StationReportFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment fragment_station_report.
-     */
-    // TODO: Rename and change types and number of parameters
     public static StationReportFragment newInstance(String param1, String param2) {
         StationReportFragment fragment = new StationReportFragment();
         Bundle args = new Bundle();
@@ -58,7 +54,34 @@ public class StationReportFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_station_report, container, false);
+        View v = inflater.inflate(R.layout.fragment_station_report, container, false);
+        departureButton = v.findViewById(R.id.fragment_report_depart);
+        destinationButton= v.findViewById(R.id.fragment_report_desti);
+        closeButton= v.findViewById(R.id.fragment_report_close);
+        adjoinButton = v.findViewById(R.id.fragment_report_adjoin);
+        informationButton = v.findViewById(R.id.fragment_report_information);
+        touristButton= v.findViewById(R.id.fragment_report_tourist);
+        bookmarkButton= v.findViewById(R.id.fragment_report_bookmark);
+
+        departureButton.setOnClickListener(this);
+        destinationButton.setOnClickListener(this);
+        closeButton.setOnClickListener(this);
+        adjoinButton.setOnClickListener(this);
+        informationButton.setOnClickListener(this);
+        touristButton.setOnClickListener(this);
+        bookmarkButton.setOnClickListener(this);
+
+        return v;
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            //출근버튼
+            case R.id.fragment_report_close:
+                ((MainActivity) getActivity()).destroyFragment();
+                break;
+
+        }
     }
 }
