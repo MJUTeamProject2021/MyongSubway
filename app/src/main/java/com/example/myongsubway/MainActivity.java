@@ -39,6 +39,7 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
     public StationReportFragment fragment;
     public Button findButton;
     public Button changeButton;
+    public Button gotoShort;
     public Button gotoBookmark;
     public Button gotoSearch;
     public Button gotoSetting;
@@ -46,20 +47,21 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
     public TextView destiText;
     public Intent intent;
     public ArrayList<Button>StationButtonList = new ArrayList();
-
+    public Button station444;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //한번에 버튼 id랑 클릭리스너 입력 (맵사용예정)
-       /* for( int i=0; i<2; i++){
-            int k = getResources().getIdentifier("Main_Button_Station205"+i, "id", getPackageName());
-            StationButtonList.get(i) = findViewById(k);
-            StationButtonList.get(i).setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {   }
-            });
-        }*/
+        for(int i=0;i<111;i++) {
+            //ID 동적으로 받기
+            String tempId =  "main_Button_Station" + (i+1) ;
+            int resID = getResources().getIdentifier(tempId, "id", getPackageName());
+            Button button = findViewById(resID);
+            StationButtonList.add(button);
+            StationButtonList.get(i).setOnClickListener(this);
+        }
+
         //액션바 가리기
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
@@ -71,6 +73,7 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
         gotoBookmark = findViewById(R.id.Main_Button_GotoBookmark);
         gotoSearch = findViewById(R.id.Main_Button_GotoSearch);
         gotoSetting = findViewById(R.id.Main_Button_GotoSetting);
+        gotoShort = findViewById(R.id.Main_Button_GotoShort);
 
         //클릭리스너등록
         findButton.setOnClickListener(this);
@@ -78,13 +81,12 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
         gotoBookmark.setOnClickListener(this);
         gotoSearch.setOnClickListener(this);
         gotoSetting.setOnClickListener(this);
-
+        gotoShort.setOnClickListener(this);
     }
 
     //역 클릭
   /*  void onPhotoTap (ImageView view ,float  x ,float  y )
     {
-        System.out.println(x + " " + y);
         ArrayList<String> adjacent_ = new ArrayList();
         ArrayList<String> facilities_ = new ArrayList();
         if(x>0.03275892&& y>0.020183377&&x<0.065530114&& y<0.0830131 ) {
@@ -132,8 +134,17 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
     //터치
     @Override
     public void onClick(View view) {
+
+        for(int i=0;i<111;i++) {
+            if(view.getId() ==StationButtonList.get(i).getId()) {
+                System.out.println(StationButtonList.get(i).getId());
+                fragment = new StationReportFragment();
+                FragmentTransaction transaction  = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.Main_ConstraintLayout_Main, fragment);
+                transaction.commit();
+            }
+            }
         switch (view.getId()) {
-            //출근버튼
             case R.id.Main_Button_Find:
                 if(destiText.length() ==0 || departText.length() ==0){
                     Toast.makeText(this, "출발역과 도착역을 모두 입력하지 않았습니다.", Toast.LENGTH_SHORT).show();
@@ -164,6 +175,15 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
                 intent = new Intent(this,SettingsActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.Main_Button_GotoShort:
+                intent = new Intent(this,ShortestPathActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.main_Button_Station1:
+                System.out.println(StationButtonList.get(0).getId());
+                break;
+
         }
+
     }
 }
