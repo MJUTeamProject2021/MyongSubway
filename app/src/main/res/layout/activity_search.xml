@@ -5,5 +5,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SearchActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="-450dp">
+
+        <EditText
+            android:id="@+id/EditStation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:autofillHints="no"
+            android:hint="검색할 역의 이름을 입력하세요"
+            android:paddingStart="10dp"
+            android:textColor="#0067A7"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:inputType="number" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:paddingStart="10dp"
+            android:text="검색 내역" />
+
+        <ListView
+            android:id="@+id/StationListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/teal_200"
+            android:dividerHeight="1dp"/>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
