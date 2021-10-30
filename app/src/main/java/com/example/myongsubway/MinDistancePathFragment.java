@@ -32,7 +32,7 @@ public class MinDistancePathFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_min_distance_path, container, false);
 
-        textView = v.findViewById(R.id.textView);
+        textView = v.findViewById(R.id.fragment_report_line);
         String output = "";
 
         int i;

@@ -32,7 +32,7 @@ public class MinTimePathFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v =  inflater.inflate(R.layout.fragment_min_time_path, container, false);
 
-        textView = v.findViewById(R.id.textView);
+        textView = v.findViewById(R.id.fragment_report_line);
         String output = "";
 
         int i;
