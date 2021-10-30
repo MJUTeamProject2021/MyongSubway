@@ -1,14 +1,29 @@
 package com.example.myongsubway;
 
+import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.PorterDuff;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.annotation.ColorInt;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class StationReportFragment extends Fragment implements View.OnClickListener{
 
@@ -20,26 +35,36 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private int line;
 
+    private LinearLayout menuLinearLayout;
+    private LinearLayout addLinearLayout;
     private Button departureButton;
     private Button destinationButton;
     private Button closeButton;
-    private Button adjoinButton;
     private Button informationButton;
     private Button touristButton;
     private Button bookmarkButton;
+    private Button nameButton;
+    private Button leftButton;
+    private Button rightButton;
+    private Button toiletButton;
+    private Button doorButton;
+    private Button nameButton2;
+    private TextView lineTextView;
 
-    public StationReportFragment() {
-        // Required empty public constructor
-    }
+    private ArrayList<Button> addButtonList = new ArrayList();
+    private CustomAppGraph.Vertex vertex;
+    public ArrayList<CustomAppGraph.Vertex> vertices;
+    private CustomAppGraph graph;
 
-    public static StationReportFragment newInstance(String param1, String param2) {
-        StationReportFragment fragment = new StationReportFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+
+
+    public StationReportFragment(CustomAppGraph.Vertex _vertex,ArrayList<CustomAppGraph.Vertex> _vertices,CustomAppGraph _graph,int _line) {
+        vertex = _vertex;
+        vertices = _vertices;
+        graph = _graph;
+        line = _line;
     }
 
     @Override
@@ -55,33 +80,174 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_station_report, container, false);
+
+        //버튼 ID등록 및 클릭리스너 설정
         departureButton = v.findViewById(R.id.fragment_report_depart);
         destinationButton= v.findViewById(R.id.fragment_report_desti);
         closeButton= v.findViewById(R.id.fragment_report_close);
-        adjoinButton = v.findViewById(R.id.fragment_report_adjoin);
         informationButton = v.findViewById(R.id.fragment_report_information);
         touristButton= v.findViewById(R.id.fragment_report_tourist);
         bookmarkButton= v.findViewById(R.id.fragment_report_bookmark);
+        leftButton= v.findViewById(R.id.fragment_report_left);
+        rightButton= v.findViewById(R.id.fragment_report_right);
+        toiletButton = v.findViewById(R.id.fragment_report_toilet);
+        doorButton = v.findViewById(R.id.fragment_report_door);
+        nameButton= v.findViewById(R.id.fragment_report_name);
+        nameButton2 =  v.findViewById(R.id.fragment_report_name2);
+        lineTextView= v.findViewById(R.id.fragment_report_line);
+        addLinearLayout = v.findViewById(R.id.fragment_report_addlayout);
+        menuLinearLayout = v.findViewById(R.id.fragment_report_menulayout);
 
         departureButton.setOnClickListener(this);
         destinationButton.setOnClickListener(this);
         closeButton.setOnClickListener(this);
-        adjoinButton.setOnClickListener(this);
         informationButton.setOnClickListener(this);
         touristButton.setOnClickListener(this);
         bookmarkButton.setOnClickListener(this);
+        nameButton.setOnClickListener(this);
+        nameButton2.setOnClickListener(this);
+        leftButton.setOnClickListener(this);
+        rightButton.setOnClickListener(this);
+        toiletButton.setOnClickListener(this);
+        doorButton.setOnClickListener(this);
+        lineTextView.setOnClickListener(this);
+
+
+        //하단 메뉴 설정
+        nameButton.setText(vertex.getVertex()+"역");
+        lineTextView.setText(vertex.getLine()+"호선");
+        nameButton2.setText(vertex.getVertex()+"역");
+        if(vertex.getLine()==1){menuLinearLayout.setBackgroundColor(Color.rgb(64,169,64));}
+        else if(vertex.getLine()==2){menuLinearLayout.setBackgroundColor(Color.rgb(20,140,255));}
+        else if(vertex.getLine()==3){menuLinearLayout.setBackgroundColor(Color.rgb(214,138,70));}
+        else if(vertex.getLine()==4){menuLinearLayout.setBackgroundColor(Color.rgb(255,91,127));}
+        else if(vertex.getLine()==5){menuLinearLayout.setBackgroundColor(Color.rgb(0,185,255));}
+        else if(vertex.getLine()==6){menuLinearLayout.setBackgroundColor(Color.rgb(229,216,90));}
+        else if(vertex.getLine()==7){menuLinearLayout.setBackgroundColor(Color.rgb(99,204,99));}
+        else if(vertex.getLine()==8){menuLinearLayout.setBackgroundColor(Color.rgb(174,218,255));}
+        else if(vertex.getLine()==9){menuLinearLayout.setBackgroundColor(Color.rgb(205,127,202));}
+
+        //주변과 환승역들 보여주기
+        for(int i=0;i<vertex.getAdjacent().size();i++) {
+            int adjName = Integer.parseInt(vertices.get(vertex.getAdjacent().get(i)).getVertex());
+            int lineName = vertices.get(vertex.getAdjacent().get(i)).getLine();
+            int verName = Integer.parseInt(vertex.getVertex());
+            if (vertex.getAdjacent().size() == 1 && adjName + 1 == verName) {
+                leftButton.setText(Integer.toString(adjName) + "역");
+                break;
+            } else if (vertex.getAdjacent().size() == 1 && adjName - 1 == verName) {
+                rightButton.setText(Integer.toString(adjName) + "역");
+                break;
+            } else if (i == 0) {
+                leftButton.setText(Integer.toString(adjName) + "역");
+            } else if (i == 1) {
+                rightButton.setText(Integer.toString(adjName) + "역");
+            }else {
+                final Button btn = new Button(getContext());
+                btn.setId(i*10);
+                btn.setText(Integer.toString(adjName) + "역");
+                btn.setBackgroundColor(Color.rgb(250,200,200));
+                btn.setOnClickListener(this);
+                addLinearLayout.addView(btn);
+                addButtonList.add(btn);
+            }
+         }
+
+
+        //거꾸로 나오는 현상 거르기
+        if(Integer.parseInt(leftButton.getText().subSequence(0,leftButton.getText().length()-1).toString())-1 == Integer.parseInt(vertex.getVertex())){
+            String s = leftButton.getText().toString();
+            leftButton.setText(rightButton.getText());
+            rightButton.setText(s);
+        }
+
+        //화장실 여부
+        if(vertex.getToilet()==false){
+            toiletButton.setText("내부\n화장실: X");
+        }else {
+            toiletButton.setText("내부\n화장실: O");
+        }
+        //내리는 문
+        if(vertex.getDoorDirection().equals("오른쪽")){
+           doorButton.setText("내리는문:\t\t오른쪽");
+        }else if(vertex.getDoorDirection().equals("왼쪽")){
+            doorButton.setText("내리는문:\t\t왼쪽");
+        }else {
+            doorButton.setText("내리는문:\t\t양쪽");
+        }
 
         return v;
     }
 
+    //information 프래그먼트 닫기
+    public void removeInformationFragment(StationInformationFragment _fragment){
+        FragmentTransaction mFragmentTransaction = getChildFragmentManager().beginTransaction();
+        mFragmentTransaction.remove(_fragment);
+        mFragmentTransaction.commit();
+    }
+
     @Override
     public void onClick(View view) {
+        int index;
+        FragmentTransaction transaction;                    //환승역 클릭시 교체
+        for(int i=0;i<vertex.getAdjacent().size()-2;i++) {
+            if(view.getId() == 20+i*10){
+                Button btn = addButtonList.get(i);
+                if(btn.getText()==""){break;}
+                ((MainActivity) getActivity()).destroyFragment();
+                index = graph.getMap().get(btn.getText().subSequence(0,btn.getText().length()-1));
+                ((MainActivity) getActivity()).fragment = new StationReportFragment(vertices.get(index),vertices,graph,line);
+                transaction = ((MainActivity)getActivity()).getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.Main_ConstraintLayout_Main, ((MainActivity) getActivity()).fragment);
+                transaction.commit();}
+        }
+
         switch (view.getId()) {
-            //출근버튼
             case R.id.fragment_report_close:
                 ((MainActivity) getActivity()).destroyFragment();
                 break;
+            case R.id.fragment_report_depart:
+                if(((MainActivity)getActivity()).destiText.getText() == vertex.getVertex()){
+                    Toast.makeText(getContext(), "도착역에 이미 등록되어있습니다.", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    ((MainActivity) getActivity()).departText.setText(vertex.getVertex());
+                    ((MainActivity) getActivity()).destroyFragment();
+                }
+                break;
+            case R.id.fragment_report_desti:
+                if(((MainActivity)getActivity()).departText.getText() == vertex.getVertex()){
+                    Toast.makeText(getContext(), "출발역에 이미 등록되어있습니다.", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    ((MainActivity)getActivity()).destiText.setText(vertex.getVertex());
+                    ((MainActivity) getActivity()).destroyFragment();
+                }
+                break;
+            case R.id.fragment_report_left:         //왼쪽 역 터치
+                if(leftButton.getText()==""){break;}
+                ((MainActivity) getActivity()).destroyFragment();
+                index = graph.getMap().get(leftButton.getText().subSequence(0,leftButton.getText().length()-1));
+                ((MainActivity) getActivity()).fragment = new StationReportFragment(vertices.get(index),vertices,graph,line);
+                transaction  = ((MainActivity)getActivity()).getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.Main_ConstraintLayout_Main, ((MainActivity) getActivity()).fragment);
+                transaction.commit();
+                break;
 
+            case R.id.fragment_report_right:        //오른쪽 역 터치
+                if(rightButton.getText()==""){break;}
+                ((MainActivity) getActivity()).destroyFragment();
+                index = graph.getMap().get(rightButton.getText().subSequence(0,rightButton.getText().length()-1));
+                ((MainActivity) getActivity()).fragment = new StationReportFragment(vertices.get(index),vertices,graph,line);
+                transaction = ((MainActivity)getActivity()).getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.Main_ConstraintLayout_Main, ((MainActivity) getActivity()).fragment);
+                transaction.commit();
+                break;
+            case R.id.fragment_report_information:      //역정보 터치
+                FragmentTransaction mFragmentTransaction = getChildFragmentManager().beginTransaction();
+                StationInformationFragment informationfragment = new StationInformationFragment(vertex,graph);
+                mFragmentTransaction.add(R.id.fragment_report_framelayout,informationfragment);
+                mFragmentTransaction.commit();
         }
     }
 }
