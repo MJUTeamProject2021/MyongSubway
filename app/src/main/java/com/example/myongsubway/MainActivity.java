@@ -46,8 +46,8 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
     public TextView departText;
     public TextView destiText;
     public Intent intent;
-    public ArrayList<Button>StationButtonList = new ArrayList();
-    public Button station444;
+    public ArrayList<Button>stationButtonList = new ArrayList();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,8 +58,8 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
             String tempId =  "main_Button_Station" + (i+1) ;
             int resID = getResources().getIdentifier(tempId, "id", getPackageName());
             Button button = findViewById(resID);
-            StationButtonList.add(button);
-            StationButtonList.get(i).setOnClickListener(this);
+            stationButtonList.add(button);
+            stationButtonList.get(i).setOnClickListener(this);
         }
 
         //액션바 가리기
@@ -136,8 +136,8 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View view) {
 
         for(int i=0;i<111;i++) {
-            if(view.getId() ==StationButtonList.get(i).getId()) {
-                System.out.println(StationButtonList.get(i).getId());
+            if(view.getId() ==stationButtonList.get(i).getId()) {
+                System.out.println(stationButtonList.get(i).getId());
                 fragment = new StationReportFragment();
                 FragmentTransaction transaction  = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.Main_ConstraintLayout_Main, fragment);
@@ -178,9 +178,6 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.Main_Button_GotoShort:
                 intent = new Intent(this,ShortestPathActivity.class);
                 startActivity(intent);
-                break;
-            case R.id.main_Button_Station1:
-                System.out.println(StationButtonList.get(0).getId());
                 break;
 
         }
