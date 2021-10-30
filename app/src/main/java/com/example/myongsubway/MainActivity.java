@@ -4,6 +4,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.MotionEventCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
@@ -31,11 +32,12 @@ import com.github.chrisbanes.photoview.PhotoViewAttacher;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class    MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    //public StationInformationFragment fragment;
+
     public StationReportFragment fragment;
     private Button findButton;
     private Button changeButton;
@@ -43,14 +45,15 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
     private Button gotoBookmark;
     private Button gotoSearch;
     private Button gotoSetting;
-    public TextView departText;
-    public TextView destiText;
-    public Intent intent;
+    private TextView departText;
+    private TextView destiText;
+    private Intent intent;
     private CustomAppGraph graph;
     public ArrayList<Button>stationButtonList = new ArrayList();
     public ArrayList<CustomAppGraph.Vertex> mainVertices;
 
-
+    private BackPressHandler backPressHandler = new BackPressHandler(this); //백버튼 핸들러
+    private boolean isFragment = false;                 //프래그먼트 켜져있으면 true 아니면 false
 
     @Override        //초기화 메소드
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +101,7 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.remove(fragment);
         fragmentTransaction.commit();
+        isFragment=false;
     }
 
     //터치할시에
@@ -111,6 +115,7 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
                 FragmentTransaction transaction  = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.Main_ConstraintLayout_Main, fragment);
                 transaction.commit();
+                isFragment = true;
             }
             }
 
@@ -150,8 +155,35 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
                 intent = new Intent(this,ShortestPathActivity.class);
                 startActivity(intent);
                 break;
-
         }
+    }
 
+    String getDepart(){
+        return departText.toString();
+    }
+    String getDesti(){
+        return destiText.toString();
+    }
+    void setDepart(String s){
+        departText.setText(s);
+    }
+    void setDesti(String s){
+        destiText.setText(s);
+    }
+    void setIsFragmentFalse(){
+        isFragment=false;
+    }
+    void setIsFragmentTrue(){
+        isFragment=true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(isFragment == false) {
+            backPressHandler.onBackPressed();
+        }
+        if(isFragment == true) {
+            destroyFragment();
+        }
     }
 }
