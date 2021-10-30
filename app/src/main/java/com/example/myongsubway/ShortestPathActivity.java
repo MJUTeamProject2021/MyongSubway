@@ -44,6 +44,7 @@ public class ShortestPathActivity extends AppCompatActivity {
 
         // 초기화
         graph = (CustomAppGraph) getApplicationContext();       // 액티비티 간에 공유되는 데이터를 담는 클래스의 객체.
+        if (graph == null) return;
 
         paths = new ArrayList<ArrayList<Integer>>(TYPE_COUNT);
         for (int i = 0; i < TYPE_COUNT; i++) {
@@ -63,12 +64,17 @@ public class ShortestPathActivity extends AppCompatActivity {
         dijkstra(graph.getMap().get(departure), CustomAppGraph.SearchType.MIN_COST);
 
         // 뷰페이저2와 어댑터를 연결 (반드시 TabLayoutMediator 선언 전에 선행되어야 함)
-        pager = findViewById(R.id.viewpager);
+        pager = findViewById(R.id.viewPager);
         pagerAdapter = new VPAdapter(this);
         pager.setAdapter(pagerAdapter);
 
         // 뷰페이저와 탭레이아웃을 연동
+        // 탭과 뷰페이저를 연결, 여기서 새로운 탭을 다시 만드므로 레이아웃에서 꾸미지말고 여기서 꾸며야함
         tabLayout = findViewById(R.id.tab);
+        ArrayList<Integer> ids = new ArrayList<Integer>(3);
+        ids.add(R.id.tab0);
+        ids.add(R.id.tab1);
+        ids.add(R.id.tab2);
         new TabLayoutMediator(tabLayout, pager, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
             public void onConfigureTab(@NonNull @NotNull TabLayout.Tab tab, int position) {
@@ -126,7 +132,7 @@ public class ShortestPathActivity extends AppCompatActivity {
         parent.set(here, here);
 
         // 출발역부터 갈 수 있는 모든 정점을 탐색한다.
-        while (discovered.isEmpty() == false) {
+        while (!discovered.isEmpty()) {
             // 발견한 후보 중 cost 가 가장 작은, 방문할 후보를 찾는다.
             VertexCost bestVC = discovered.remove();
 

@@ -18,6 +18,10 @@ public class MinDistancePathFragment extends Fragment {
     ArrayList<Integer> minDistancePath;
     HashMap<Integer, String> reverseMap;
 
+    public MinDistancePathFragment() {
+
+    }
+
     public MinDistancePathFragment(ArrayList<Integer>path, HashMap<Integer, String> _reverseMap) {
         minDistancePath = path;
         reverseMap = _reverseMap;

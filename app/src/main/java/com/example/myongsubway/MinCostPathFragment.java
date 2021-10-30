@@ -18,6 +18,10 @@ public class MinCostPathFragment extends Fragment {
     ArrayList<Integer> minCostPath;
     HashMap<Integer, String> reverseMap;
 
+    public MinCostPathFragment() {
+
+    }
+
     public MinCostPathFragment(ArrayList<Integer>path, HashMap<Integer, String> _reverseMap) {
         minCostPath = path;
         reverseMap = _reverseMap;

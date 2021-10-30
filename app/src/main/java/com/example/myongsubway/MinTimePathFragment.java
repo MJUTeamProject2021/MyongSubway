@@ -18,6 +18,10 @@ public class MinTimePathFragment extends Fragment {
     ArrayList<Integer> minTimePath;
     HashMap<Integer, String> reverseMap;
 
+    public MinTimePathFragment() {
+
+    }
+
     public MinTimePathFragment(ArrayList<Integer>path, HashMap<Integer, String> _reverseMap) {
         minTimePath = path;
         reverseMap = _reverseMap;
