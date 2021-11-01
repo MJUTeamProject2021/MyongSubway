@@ -3,6 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/MyongSubway/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/MyongSubway/app/src/main/res/layout/activity_settings.xml" value="0.25364583333333335" />
+        <entry key="..\:/MyongSubway/app/src/main/res/layout/fragment_settings.xml" value="0.11875" />
+        <entry key="..\:/MyongSubway/app/src/main/res/xml/activity_settings.xml" value="0.4" />
         <entry key="..\:/Users/hp/Documents/MyongSubway/app/src/main/res/layout/activity_bookmark.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/hp/Documents/MyongSubway/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Users/hp/Documents/MyongSubway/app/src/main/res/layout/activity_search.xml" value="0.25364583333333335" />
