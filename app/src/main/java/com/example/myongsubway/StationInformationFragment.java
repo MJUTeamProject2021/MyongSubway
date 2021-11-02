@@ -25,23 +25,20 @@ public class StationInformationFragment extends Fragment implements View.OnClick
     private String mParam1;
     private String mParam2;
 
-
-    LinearLayout adjacentLayout;
-    LinearLayout facilitiesLayout;
-    TextView vertexName;
-    TextView toilet;
-    TextView door;
-    TextView number;
-    Button lineName;
-    Button closeButton;
+    private LinearLayout adjacentLayout;
+    private LinearLayout facilitiesLayout;
+    private TextView vertexName;
+    private TextView toilet;
+    private TextView door;
+    private TextView number;
+    private Button lineName;
+    private Button closeButton;
     private CustomAppGraph.Vertex vertex;
     CustomAppGraph graph;
     public StationInformationFragment(CustomAppGraph.Vertex _vertex,CustomAppGraph _graph) {
         vertex=_vertex;
         graph = _graph;
     }
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -111,7 +108,6 @@ public class StationInformationFragment extends Fragment implements View.OnClick
             case R.id.fragment_information_number:
                 Intent tt = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+vertex.getNumber().replace("-","")));
                 startActivity(tt);
-
                 break;
         }
     }

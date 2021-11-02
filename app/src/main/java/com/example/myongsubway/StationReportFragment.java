@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,10 +36,12 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private int line;
+
+
 
     private LinearLayout menuLinearLayout;
     private LinearLayout addLinearLayout;
+    private Button opaqueButton;
     private Button departureButton;
     private Button destinationButton;
     private Button closeButton;
@@ -55,9 +58,9 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
 
     private ArrayList<Button> addButtonList = new ArrayList();
     private CustomAppGraph.Vertex vertex;
-    public ArrayList<CustomAppGraph.Vertex> vertices;
+    private ArrayList<CustomAppGraph.Vertex> vertices;
     private CustomAppGraph graph;
-
+    private int line;
 
 
     public StationReportFragment(CustomAppGraph.Vertex _vertex,ArrayList<CustomAppGraph.Vertex> _vertices,CustomAppGraph _graph,int _line) {
@@ -82,6 +85,7 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
         View v = inflater.inflate(R.layout.fragment_station_report, container, false);
 
         //버튼 ID등록 및 클릭리스너 설정
+        opaqueButton= v.findViewById(R.id.fragment_report_opaque);
         departureButton = v.findViewById(R.id.fragment_report_depart);
         destinationButton= v.findViewById(R.id.fragment_report_desti);
         closeButton= v.findViewById(R.id.fragment_report_close);
@@ -98,6 +102,7 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
         addLinearLayout = v.findViewById(R.id.fragment_report_addlayout);
         menuLinearLayout = v.findViewById(R.id.fragment_report_menulayout);
 
+        opaqueButton.setOnClickListener(this);
         departureButton.setOnClickListener(this);
         destinationButton.setOnClickListener(this);
         closeButton.setOnClickListener(this);
@@ -130,8 +135,9 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
         //주변과 환승역들 보여주기
         for(int i=0;i<vertex.getAdjacent().size();i++) {
             int adjName = Integer.parseInt(vertices.get(vertex.getAdjacent().get(i)).getVertex());
-            int lineName = vertices.get(vertex.getAdjacent().get(i)).getLine();
             int verName = Integer.parseInt(vertex.getVertex());
+            int lineName = vertices.get(vertex.getAdjacent().get(i)).getLine();
+
             if (vertex.getAdjacent().size() == 1 && adjName + 1 == verName) {
                 leftButton.setText(Integer.toString(adjName) + "역");
                 break;
@@ -199,7 +205,9 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
                 ((MainActivity) getActivity()).fragment = new StationReportFragment(vertices.get(index),vertices,graph,line);
                 transaction = ((MainActivity)getActivity()).getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.Main_ConstraintLayout_Main, ((MainActivity) getActivity()).fragment);
-                transaction.commit();}
+                transaction.commit();
+                ((MainActivity)getActivity()).setIsFragmentTrue();
+            }
         }
 
         switch (view.getId()) {
@@ -207,20 +215,20 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
                 ((MainActivity) getActivity()).destroyFragment();
                 break;
             case R.id.fragment_report_depart:
-                if(((MainActivity)getActivity()).destiText.getText() == vertex.getVertex()){
+                if(((MainActivity)getActivity()).getDesti() == vertex.getVertex()){
                     Toast.makeText(getContext(), "도착역에 이미 등록되어있습니다.", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    ((MainActivity) getActivity()).departText.setText(vertex.getVertex());
+                    ((MainActivity) getActivity()).setDepart(vertex.getVertex());
                     ((MainActivity) getActivity()).destroyFragment();
                 }
                 break;
             case R.id.fragment_report_desti:
-                if(((MainActivity)getActivity()).departText.getText() == vertex.getVertex()){
+                if(((MainActivity)getActivity()).getDepart() == vertex.getVertex()){
                     Toast.makeText(getContext(), "출발역에 이미 등록되어있습니다.", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    ((MainActivity)getActivity()).destiText.setText(vertex.getVertex());
+                    ((MainActivity)getActivity()).setDesti(vertex.getVertex());
                     ((MainActivity) getActivity()).destroyFragment();
                 }
                 break;
@@ -232,6 +240,7 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
                 transaction  = ((MainActivity)getActivity()).getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.Main_ConstraintLayout_Main, ((MainActivity) getActivity()).fragment);
                 transaction.commit();
+                ((MainActivity)getActivity()).setIsFragmentTrue();
                 break;
 
             case R.id.fragment_report_right:        //오른쪽 역 터치
@@ -242,12 +251,18 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
                 transaction = ((MainActivity)getActivity()).getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.Main_ConstraintLayout_Main, ((MainActivity) getActivity()).fragment);
                 transaction.commit();
+                ((MainActivity)getActivity()).setIsFragmentTrue();
                 break;
             case R.id.fragment_report_information:      //역정보 터치
                 FragmentTransaction mFragmentTransaction = getChildFragmentManager().beginTransaction();
                 StationInformationFragment informationfragment = new StationInformationFragment(vertex,graph);
                 mFragmentTransaction.add(R.id.fragment_report_framelayout,informationfragment);
                 mFragmentTransaction.commit();
+                break;
+            case R.id.fragment_report_opaque:
+                ((MainActivity) getActivity()).destroyFragment();
+                break;
         }
     }
+
 }
