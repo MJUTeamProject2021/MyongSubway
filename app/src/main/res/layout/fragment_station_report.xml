@@ -16,7 +16,7 @@
         <Button
             android:id="@+id/fragment_report_opaque"
             android:layout_width="match_parent"
-            android:layout_height="591dp"
+            android:layout_height="548dp"
             android:background="#00FFFFFF" />
 
         <Button

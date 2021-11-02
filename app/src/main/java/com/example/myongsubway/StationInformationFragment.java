@@ -25,7 +25,6 @@ public class StationInformationFragment extends Fragment implements View.OnClick
     private String mParam1;
     private String mParam2;
 
-
     private LinearLayout adjacentLayout;
     private LinearLayout facilitiesLayout;
     private TextView vertexName;
@@ -40,8 +39,6 @@ public class StationInformationFragment extends Fragment implements View.OnClick
         vertex=_vertex;
         graph = _graph;
     }
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -114,7 +111,4 @@ public class StationInformationFragment extends Fragment implements View.OnClick
                 break;
         }
     }
-
-
-
 }

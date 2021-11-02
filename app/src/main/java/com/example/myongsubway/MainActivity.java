@@ -117,7 +117,7 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
                 transaction.commit();
                 isFragment = true;
             }
-            }
+        }
 
         //상단과 하단의 메뉴버튼들 클릭확인하는 스위치문
         switch (view.getId()) {
@@ -159,10 +159,10 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     String getDepart(){
-        return departText.toString();
+        return departText.getText().toString();
     }
     String getDesti(){
-        return destiText.toString();
+        return destiText.getText().toString();
     }
     void setDepart(String s){
         departText.setText(s);
