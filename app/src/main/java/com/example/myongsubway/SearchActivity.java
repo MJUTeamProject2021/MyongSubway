@@ -10,6 +10,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import java.util.ArrayList;
@@ -24,11 +25,21 @@ public class SearchActivity extends AppCompatActivity {
     private ArrayList<String> stationList; // 모든 역 리스트
     private List<String> searchedStationList; // 이전에 검색된 역 리스트
     private List<String> viewedStationList; // ListView 에서 보여질 역 리스트
+    private Button backButton; // 뒤로가기 버튼
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        
+        // 뒤로가기 버튼
+        backButton = findViewById(R.id.Search_Button_back);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         // 액션바 숨기기
         ActionBar actionBar = getSupportActionBar();
