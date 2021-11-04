@@ -11,6 +11,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
@@ -25,7 +26,7 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 public class ShortestPathActivity extends AppCompatActivity {
-    private ViewPager2 pager;                   // 뷰페이저
+    private ViewPager2 viewPager;               // 뷰페이저
     private FragmentStateAdapter pagerAdapter;  // 뷰페이저 어댑터
     private TabLayout tabLayout;                // 탭들을 담는 탭 레이아웃
     private final List<String> tabElement = Arrays.asList("최소시간", "최단거리", "최소비용");  // 탭을 채울 텍스트
@@ -52,11 +53,11 @@ public class ShortestPathActivity extends AppCompatActivity {
         }
 
         // MainActivity 가 전송한 데이터 받기
-        /*Intent intent = getIntent();
+        Intent intent = getIntent();
         departure = intent.getStringExtra("departureStation");
-        arrival = intent.getStringExtra("DestinationStation");*/
-        departure = "101";
-        arrival = "204";
+        arrival = intent.getStringExtra("destinationStation");
+        //departure = "101";
+        //arrival = "501";
 
         // 다익스트라 알고리즘을 통해 경로탐색, 3가지 SearchType 을 모두 수행한다.
         dijkstra(graph.getMap().get(departure), CustomAppGraph.SearchType.MIN_TIME);
@@ -64,23 +65,36 @@ public class ShortestPathActivity extends AppCompatActivity {
         dijkstra(graph.getMap().get(departure), CustomAppGraph.SearchType.MIN_COST);
 
         // 뷰페이저2와 어댑터를 연결 (반드시 TabLayoutMediator 선언 전에 선행되어야 함)
-        pager = findViewById(R.id.viewPager);
+        /*viewPager = findViewById(R.id.viewPager);
         pagerAdapter = new VPAdapter(this);
-        pager.setAdapter(pagerAdapter);
+        viewPager.setAdapter(pagerAdapter);
 
         // 뷰페이저와 탭레이아웃을 연동
         // 탭과 뷰페이저를 연결, 여기서 새로운 탭을 다시 만드므로 레이아웃에서 꾸미지말고 여기서 꾸며야함
-        tabLayout = findViewById(R.id.tab);
-        ArrayList<Integer> ids = new ArrayList<Integer>(3);
-        ids.add(R.id.tab0);
-        ids.add(R.id.tab1);
-        ids.add(R.id.tab2);
-        new TabLayoutMediator(tabLayout, pager, new TabLayoutMediator.TabConfigurationStrategy() {
+        tabLayout = findViewById(R.id.tabLayout);
+        new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
             public void onConfigureTab(@NonNull @NotNull TabLayout.Tab tab, int position) {
                 TextView textView = new TextView(ShortestPathActivity.this);
                 textView.setText(tabElement.get(position));
                 tab.setCustomView(textView);
+            }
+        }).attach();*/
+
+
+        // 뷰페이저2와 어댑터를 연결 (반드시 TabLayoutMediator 선언 전에 선행되어야 함)
+        viewPager = findViewById(R.id.viewPager);
+        setupViewPager(viewPager);
+
+        tabLayout = findViewById(R.id.tabLayout);
+        ArrayList<TextView> tabs = setupTabIcons();
+
+        // 뷰페이저와 탭레이아웃을 연동
+        // 탭과 뷰페이저를 연결, 여기서 새로운 탭을 다시 만드므로 레이아웃에서 꾸미지말고 여기서 꾸며야함
+        new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
+            @Override
+            public void onConfigureTab(@NonNull @NotNull TabLayout.Tab tab, int position) {
+                tab.setCustomView(tabs.get(position));
             }
         }).attach();
 
@@ -89,7 +103,7 @@ public class ShortestPathActivity extends AppCompatActivity {
         actionBar.hide();
     }
 
-    public void dijkstra(int here, CustomAppGraph.SearchType TYPE) {
+    private void dijkstra(int here, CustomAppGraph.SearchType TYPE) {
         // 역과 비용을 관리하는 VertexCost 클래스
         class VertexCost implements Comparable<VertexCost> {
             int vertex;     // 역
@@ -181,9 +195,38 @@ public class ShortestPathActivity extends AppCompatActivity {
         paths.get(TYPE.ordinal()).add(best.get(graph.getMap().get(arrival)));
     }
 
+    private void setupViewPager(ViewPager2 viewPager) {
+        VPAdapter adapter = new VPAdapter(this);
+        //adapter.addFragment(new MinTimePathFragment(), "First");
+        //adapter.addFragment(new MinDistancePathFragment(), "Second");
+        //adapter.addFragment(new MinCostPathFragment(), "Third");
+        viewPager.setAdapter(adapter);
+    }
+
+    private ArrayList<TextView> setupTabIcons() {
+        ArrayList<TextView> tabs = new ArrayList<TextView>(3);
+
+        View viewFirst = getLayoutInflater().inflate(R.layout.custom_tab, null);
+        TextView tabFirst = viewFirst.findViewById(R.id.textTab);
+        tabFirst.setText(R.string.First);
+        tabs.add(tabFirst);
+
+        View viewSecond = getLayoutInflater().inflate(R.layout.custom_tab, null);
+        TextView tabSecond = viewSecond.findViewById(R.id.textTab);
+        tabSecond.setText(R.string.Second);
+        tabs.add(tabSecond);
+
+        View viewThird = getLayoutInflater().inflate(R.layout.custom_tab, null);
+        TextView tabThird = viewThird.findViewById(R.id.textTab);
+        tabThird.setText(R.string.Third);
+        tabs.add(tabThird);
+
+        return tabs;
+    }
+
 
     private class VPAdapter extends FragmentStateAdapter {
-        private ArrayList<Fragment> items;
+        private final ArrayList<Fragment> items;
 
         public VPAdapter(FragmentActivity fa) {
             super(fa);
@@ -204,5 +247,4 @@ public class ShortestPathActivity extends AppCompatActivity {
             return items.size();
         }
     }
-
 }
