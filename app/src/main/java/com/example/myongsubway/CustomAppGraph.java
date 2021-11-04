@@ -96,22 +96,6 @@ public class CustomAppGraph extends Application {
             nearbyFacilities = _nearbyFacilities.split(",");
         }
 
-        // 디버깅 용 메소드
-        public String getInformation() {
-            String output = vertex + " : " + String.valueOf(toilet) + " " + number + " " + doorDirection + " ";
-            for (String item : stationFacilities) {
-                output += item + " ";
-            }
-            for (String item : nearbyRestaurants) {
-                output += item + " ";
-            }
-            for (String item : nearbyFacilities) {
-                output += item + " ";
-            }
-
-            return output;
-        }
-
         // getter (안쓰는 메소드는 삭제할 예정)
         public String getVertex() { return vertex; }
         public ArrayList<Integer> getAdjacent() { return adjacent; }
@@ -158,10 +142,10 @@ public class CustomAppGraph extends Application {
             vertices.add(null);
         }
 
-        String from, to;    // 엑셀 파일의 0번째와 1번째 셀을 저장하는 변수 (역 이름)
-
         // 엑셀 읽기
         try {
+            String from, to;    // 엑셀 파일의 0번째와 1번째 셀을 저장하는 변수 (역 이름)
+
             // stations.xls 노선도 읽기
             InputStream stationsIs = getBaseContext().getResources().getAssets().open("stations.xls");
             Workbook stationWb = Workbook.getWorkbook(stationsIs);
