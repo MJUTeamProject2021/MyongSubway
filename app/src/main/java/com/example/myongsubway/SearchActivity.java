@@ -31,7 +31,11 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        
+
+        // 액션바 숨기기
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
+
         // 뒤로가기 버튼
         backButton = findViewById(R.id.Search_Button_back);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -41,9 +45,6 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
-        // 액션바 숨기기
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
 
         // 검색창, 리스트뷰 연결
         editStation = findViewById(R.id.Search_EditText_editStation);
