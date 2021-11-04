@@ -8,14 +8,18 @@
     tools:context=".ShortestPathActivity"
     android:orientation="vertical">
 
+    <include
+        layout="@layout/toolbar"
+        android:id="@+id/toolbar"/>
+
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:background="#536AE8"
+        android:background="@color/basicColor"
         app:tabMode="fixed"
         app:tabGravity="fill"
         app:tabIndicatorColor="@color/white"/>

@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="tabSelectedColor">#FFFFFF</color>
     <color name="tabUnSelectedColor">#000000</color>
+    <color name="basicColor">#536AE8</color>
 </resources>

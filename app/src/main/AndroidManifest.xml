@@ -11,17 +11,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyongSubway">
         <activity android:name=".ShortestPathActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".SettingsActivity" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".BookmarkActivity" />
         <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

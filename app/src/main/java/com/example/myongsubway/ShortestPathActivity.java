@@ -3,6 +3,7 @@ package com.example.myongsubway;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
@@ -11,11 +12,11 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -55,6 +56,12 @@ public class ShortestPathActivity extends AppCompatActivity {
             paths.add(new ArrayList<Integer>());
         }
 
+        //툴바 설정
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("지하철 경로 탐색");
+        toolbar.setTitleTextColor(Color.WHITE);
+        setSupportActionBar(toolbar);
+
         // MainActivity 가 전송한 데이터 받기
         Intent intent = getIntent();
         departure = intent.getStringExtra("departureStation");
@@ -69,18 +76,17 @@ public class ShortestPathActivity extends AppCompatActivity {
 
         // 뷰페이저2와 어댑터를 연결 (반드시 TabLayoutMediator 선언 전에 선행되어야 함)
         viewPager = findViewById(R.id.viewPager);
-        setupViewPager(viewPager);
-
+        pagerAdapter = new VPAdapter(this);
+        viewPager.setAdapter(pagerAdapter);
         tabLayout = findViewById(R.id.tabLayout);
-        ArrayList<TextView> tabs = setupTabIcons();
 
-        // 뷰페이저와 탭레이아웃을 연동
+        // 뷰페이저2와 탭레이아웃을 연동
         // 탭과 뷰페이저를 연결, 여기서 새로운 탭을 다시 만드므로 레이아웃에서 꾸미지말고 여기서 꾸며야함
         new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
             public void onConfigureTab(@NonNull @NotNull TabLayout.Tab tab, int position) {
-                //tab.setCustomView(tabs.get(position));
-
+                // 탭의 텍스트를 나타낼 텍스트뷰를 만든다.
+                // 텍스트뷰의 정렬, 색을 정하고 탭에 적용시킨다.
                 TextView textView = new TextView(ShortestPathActivity.this);
                 textView.setText(tabElement.get(position));
                 textView.setGravity(Gravity.CENTER);
@@ -90,6 +96,7 @@ public class ShortestPathActivity extends AppCompatActivity {
             }
         }).attach();
 
+        // 탭이 선택됐을 때의 액션을 설정하는 부분
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) { // 선택 X -> 선택 O
@@ -107,10 +114,20 @@ public class ShortestPathActivity extends AppCompatActivity {
 
             }
         });
+    }
 
-        //액션바 가리기
-        /*ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();*/
+    // 툴바의 액션버튼을 설정하는 메소드
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.quit_menu, menu);
+        return true;
+    }
+
+    // 툴바의 액션버튼이 선택됐을때의 기능을 설정하는 메소드
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return true;
     }
 
     private void dijkstra(int here, CustomAppGraph.SearchType TYPE) {
@@ -205,36 +222,7 @@ public class ShortestPathActivity extends AppCompatActivity {
         paths.get(TYPE.ordinal()).add(best.get(graph.getMap().get(arrival)));
     }
 
-    private void setupViewPager(ViewPager2 viewPager) {
-        VPAdapter adapter = new VPAdapter(this);
-        //adapter.addFragment(new MinTimePathFragment(), "First");
-        //adapter.addFragment(new MinDistancePathFragment(), "Second");
-        //adapter.addFragment(new MinCostPathFragment(), "Third");
-        viewPager.setAdapter(adapter);
-    }
-
-    private ArrayList<TextView> setupTabIcons() {
-        ArrayList<TextView> tabs = new ArrayList<TextView>(3);
-
-        View viewFirst = getLayoutInflater().inflate(R.layout.custom_tab, null);
-        TextView tabFirst = viewFirst.findViewById(R.id.textTab);
-        tabFirst.setText(R.string.First);
-        tabs.add(tabFirst);
-
-        View viewSecond = getLayoutInflater().inflate(R.layout.custom_tab, null);
-        TextView tabSecond = viewSecond.findViewById(R.id.textTab);
-        tabSecond.setText(R.string.Second);
-        tabs.add(tabSecond);
-
-        View viewThird = getLayoutInflater().inflate(R.layout.custom_tab, null);
-        TextView tabThird = viewThird.findViewById(R.id.textTab);
-        tabThird.setText(R.string.Third);
-        tabs.add(tabThird);
-
-        return tabs;
-    }
-
-
+    // 뷰페이저 어댑터 클래스
     private class VPAdapter extends FragmentStateAdapter {
         private final ArrayList<Fragment> items;
 
