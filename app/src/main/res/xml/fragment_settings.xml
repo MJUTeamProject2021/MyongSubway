@@ -13,15 +13,31 @@
             android:key="ring"
             android:summary="알림음 사용 체크"
             android:title="알림음" />
+        <ListPreference
+            android:entries="@array/array_ringtone"
+            android:entryValues="@array/array_ringtone"
+            android:key="ringtone_list"
+            android:summary="기본"
+            android:title="알림음 선택"
+            android:dependency="ring"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="오류">
         <Preference
             android:key="e_mail"
             android:title="오류 및 건의사항"
-            android:summary="건의사항이 있거나 오류발생시에 이메일로 보내주세요" />
-        <intent android:action="android.intent.action.SENDTO"
-            android:data="mailto:jkh0479@naver.com" />
+            android:summary="건의사항이 있거나 오류발생시에 이메일로 보내주세요">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="mailto:halo4945@gmail.com">
+                <extra
+                    android:name="android.intent.extra.SUBJECT"
+                    android:value="Feedback"/>
+                <extra
+                    android:name="android.intent.extra.TEXT"
+                    android:value="Text of Feedback"/>
+            </intent>
+        </Preference>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="앱정보">
