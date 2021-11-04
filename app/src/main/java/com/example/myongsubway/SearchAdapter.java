@@ -8,23 +8,23 @@ import android.widget.TextView;
 import java.util.List;
 
 class ViewHolder{
-    public TextView Search_TextView_Station;
+    public TextView stationTextView;
 }
 
 public class SearchAdapter extends BaseAdapter {
     private Context context;
     private LayoutInflater inflate;
-    private List<String> Search_StationList; // 모든 역 리스트
+    private List<String> stationList; // 모든 역 리스트
     private ViewHolder viewHolder; // ListView 를 구성하는 TextView
 
     public SearchAdapter(List<String> list, Context context){
-        this.Search_StationList = list;
+        this.stationList = list;
         this.context = context;
         this.inflate = LayoutInflater.from(context);
     }
     @Override
     public int getCount() {
-        return this.Search_StationList.size();
+        return this.stationList.size();
     }
 
     @Override
@@ -40,17 +40,17 @@ public class SearchAdapter extends BaseAdapter {
     @Override
     public View getView(int pos, View convertView, ViewGroup viewGroup) {
         if(convertView == null){
-            convertView = inflate.inflate(R.layout.row_listview, null);
+            convertView = inflate.inflate(R.layout.listview_station, null);
 
             viewHolder = new ViewHolder();
-            viewHolder.Search_TextView_Station = (TextView) convertView.findViewById(R.id.Station);
+            viewHolder.stationTextView = (TextView) convertView.findViewById(R.id.Search_TextView_station);
 
             convertView.setTag(viewHolder);
         }else{
             viewHolder = (ViewHolder) convertView.getTag();
         }
         // TextView 설정
-        viewHolder.Search_TextView_Station.setText(Search_StationList.get(pos));
+        viewHolder.stationTextView.setText(stationList.get(pos));
 
         return convertView;
     }

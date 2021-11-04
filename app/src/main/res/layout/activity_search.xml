@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SearchActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -13,7 +14,7 @@
         tools:layout_editor_absoluteY="-450dp">
 
         <EditText
-            android:id="@+id/EditStation"
+            android:id="@+id/Search_EditText_editStation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -32,11 +33,21 @@
             android:text="검색 내역" />
 
         <ListView
-            android:id="@+id/StationListView"
+            android:id="@+id/Search_ListView_stationListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_weight="5"
             android:divider="@color/teal_200"
-            android:dividerHeight="1dp"/>
+            android:dividerHeight="1dp">
+        </ListView>
+        <Button
+            android:id="@+id/Search_Button_back"
+            android:layout_width="100sp"
+            android:layout_height="100sp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="Back"
+            tools:ignore="MissingConstraints" />
 
     </LinearLayout>
 
