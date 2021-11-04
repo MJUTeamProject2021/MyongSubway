@@ -15,8 +15,10 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        android:background="#536AE8"
         app:tabMode="fixed"
-        app:tabGravity="fill"/>
+        app:tabGravity="fill"
+        app:tabIndicatorColor="@color/white"/>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"

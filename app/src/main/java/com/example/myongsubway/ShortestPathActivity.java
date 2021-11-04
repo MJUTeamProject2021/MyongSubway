@@ -9,10 +9,13 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -56,31 +59,13 @@ public class ShortestPathActivity extends AppCompatActivity {
         Intent intent = getIntent();
         departure = intent.getStringExtra("departureStation");
         arrival = intent.getStringExtra("destinationStation");
-        //departure = "101";
-        //arrival = "501";
+        departure = "101";
+        arrival = "501";
 
         // 다익스트라 알고리즘을 통해 경로탐색, 3가지 SearchType 을 모두 수행한다.
         dijkstra(graph.getMap().get(departure), CustomAppGraph.SearchType.MIN_TIME);
         dijkstra(graph.getMap().get(departure), CustomAppGraph.SearchType.MIN_DISTANCE);
         dijkstra(graph.getMap().get(departure), CustomAppGraph.SearchType.MIN_COST);
-
-        // 뷰페이저2와 어댑터를 연결 (반드시 TabLayoutMediator 선언 전에 선행되어야 함)
-        /*viewPager = findViewById(R.id.viewPager);
-        pagerAdapter = new VPAdapter(this);
-        viewPager.setAdapter(pagerAdapter);
-
-        // 뷰페이저와 탭레이아웃을 연동
-        // 탭과 뷰페이저를 연결, 여기서 새로운 탭을 다시 만드므로 레이아웃에서 꾸미지말고 여기서 꾸며야함
-        tabLayout = findViewById(R.id.tabLayout);
-        new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
-            @Override
-            public void onConfigureTab(@NonNull @NotNull TabLayout.Tab tab, int position) {
-                TextView textView = new TextView(ShortestPathActivity.this);
-                textView.setText(tabElement.get(position));
-                tab.setCustomView(textView);
-            }
-        }).attach();*/
-
 
         // 뷰페이저2와 어댑터를 연결 (반드시 TabLayoutMediator 선언 전에 선행되어야 함)
         viewPager = findViewById(R.id.viewPager);
@@ -94,13 +79,38 @@ public class ShortestPathActivity extends AppCompatActivity {
         new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
             public void onConfigureTab(@NonNull @NotNull TabLayout.Tab tab, int position) {
-                tab.setCustomView(tabs.get(position));
+                //tab.setCustomView(tabs.get(position));
+
+                TextView textView = new TextView(ShortestPathActivity.this);
+                textView.setText(tabElement.get(position));
+                textView.setGravity(Gravity.CENTER);
+                textView.setTextColor(getColor(R.color.tabUnSelectedColor));
+                if (position == 0) textView.setTextColor(getColor(R.color.tabSelectedColor));
+                tab.setCustomView(textView);
             }
         }).attach();
 
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) { // 선택 X -> 선택 O
+                TextView textView = (TextView) tab.getCustomView();
+                textView.setTextColor(getColor(R.color.tabSelectedColor));
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) { // 선택 O -> 선택 X
+                TextView textView = (TextView) tab.getCustomView();
+                textView.setTextColor(getColor(R.color.tabUnSelectedColor));
+            }
+
+            public void onTabReselected(TabLayout.Tab tab) { // 선택 O -> 선택 O
+
+            }
+        });
+
         //액션바 가리기
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
+        /*ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();*/
     }
 
     private void dijkstra(int here, CustomAppGraph.SearchType TYPE) {
