@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    tools:context=".SurroundingFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_layout"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/fragment_surrounding_close"
+                android:layout_width="68dp"
+                android:layout_height="72dp"
+                android:background="#05E4D5D5"
+                app:icon="@drawable/ic_leftarrow"
+                app:iconGravity="top"
+                app:iconSize="60dp"
+                app:iconTint="#000000" />
+
+            <TextView
+                android:id="@+id/fragment_surrounding_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="101역"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textColorHighlight="#D61B1B"
+                android:textColorHint="#9A6262"
+                android:textSize="50sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/fragment_surrounding_line"
+                android:layout_width="64dp"
+                android:layout_height="61dp"
+                android:layout_gravity="right"
+                android:background="@drawable/round_button"
+                android:drawableTint="@null"
+                android:text="1호선"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:translationX="-3dp"
+                android:translationY="5dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/fragment_surrounding_building"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="@drawable/round_layout"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#00FFFFFF"
+                android:backgroundTint="@empty"
+                android:text="주변건물"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:icon="@drawable/ic_building"
+                app:iconGravity="textEnd"
+                app:iconTint="#000000" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/fragment_surrounding_restuarent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/round_layout"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/button5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#00FFFFFF"
+                android:backgroundTint="@empty"
+                android:text="주변식당"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:icon="@drawable/ic_restuarent"
+                app:iconGravity="textEnd"
+                app:iconTint="#000000" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

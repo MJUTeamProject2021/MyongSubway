@@ -3,14 +3,19 @@ package com.example.myongsubway;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
@@ -25,7 +30,7 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 public class ShortestPathActivity extends AppCompatActivity {
-    private ViewPager2 pager;                   // 뷰페이저
+    private ViewPager2 viewPager;               // 뷰페이저
     private FragmentStateAdapter pagerAdapter;  // 뷰페이저 어댑터
     private TabLayout tabLayout;                // 탭들을 담는 탭 레이아웃
     private final List<String> tabElement = Arrays.asList("최소시간", "최단거리", "최소비용");  // 탭을 채울 텍스트
@@ -44,18 +49,25 @@ public class ShortestPathActivity extends AppCompatActivity {
 
         // 초기화
         graph = (CustomAppGraph) getApplicationContext();       // 액티비티 간에 공유되는 데이터를 담는 클래스의 객체.
+        if (graph == null) return;
 
         paths = new ArrayList<ArrayList<Integer>>(TYPE_COUNT);
         for (int i = 0; i < TYPE_COUNT; i++) {
             paths.add(new ArrayList<Integer>());
         }
 
+        //툴바 설정
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("지하철 경로 탐색");
+        toolbar.setTitleTextColor(Color.WHITE);
+        setSupportActionBar(toolbar);
+
         // MainActivity 가 전송한 데이터 받기
-        /*Intent intent = getIntent();
+        Intent intent = getIntent();
         departure = intent.getStringExtra("departureStation");
-        arrival = intent.getStringExtra("DestinationStation");*/
+        arrival = intent.getStringExtra("destinationStation");
         departure = "101";
-        arrival = "204";
+        arrival = "501";
 
         // 다익스트라 알고리즘을 통해 경로탐색, 3가지 SearchType 을 모두 수행한다.
         dijkstra(graph.getMap().get(departure), CustomAppGraph.SearchType.MIN_TIME);
@@ -63,27 +75,62 @@ public class ShortestPathActivity extends AppCompatActivity {
         dijkstra(graph.getMap().get(departure), CustomAppGraph.SearchType.MIN_COST);
 
         // 뷰페이저2와 어댑터를 연결 (반드시 TabLayoutMediator 선언 전에 선행되어야 함)
-        pager = findViewById(R.id.viewpager);
+        viewPager = findViewById(R.id.viewPager);
         pagerAdapter = new VPAdapter(this);
-        pager.setAdapter(pagerAdapter);
+        viewPager.setAdapter(pagerAdapter);
+        tabLayout = findViewById(R.id.tabLayout);
 
-        // 뷰페이저와 탭레이아웃을 연동
-        tabLayout = findViewById(R.id.tab);
-        new TabLayoutMediator(tabLayout, pager, new TabLayoutMediator.TabConfigurationStrategy() {
+        // 뷰페이저2와 탭레이아웃을 연동
+        // 탭과 뷰페이저를 연결, 여기서 새로운 탭을 다시 만드므로 레이아웃에서 꾸미지말고 여기서 꾸며야함
+        new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
             public void onConfigureTab(@NonNull @NotNull TabLayout.Tab tab, int position) {
+                // 탭의 텍스트를 나타낼 텍스트뷰를 만든다.
+                // 텍스트뷰의 정렬, 색을 정하고 탭에 적용시킨다.
                 TextView textView = new TextView(ShortestPathActivity.this);
                 textView.setText(tabElement.get(position));
+                textView.setGravity(Gravity.CENTER);
+                textView.setTextColor(getColor(R.color.tabUnSelectedColor));
+                if (position == 0) textView.setTextColor(getColor(R.color.tabSelectedColor));
                 tab.setCustomView(textView);
             }
         }).attach();
 
-        //액션바 가리기
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
+        // 탭이 선택됐을 때의 액션을 설정하는 부분
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) { // 선택 X -> 선택 O
+                TextView textView = (TextView) tab.getCustomView();
+                textView.setTextColor(getColor(R.color.tabSelectedColor));
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) { // 선택 O -> 선택 X
+                TextView textView = (TextView) tab.getCustomView();
+                textView.setTextColor(getColor(R.color.tabUnSelectedColor));
+            }
+
+            public void onTabReselected(TabLayout.Tab tab) { // 선택 O -> 선택 O
+
+            }
+        });
     }
 
-    public void dijkstra(int here, CustomAppGraph.SearchType TYPE) {
+    // 툴바의 액션버튼을 설정하는 메소드
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.quit_menu, menu);
+        return true;
+    }
+
+    // 툴바의 액션버튼이 선택됐을때의 기능을 설정하는 메소드
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return true;
+    }
+
+    private void dijkstra(int here, CustomAppGraph.SearchType TYPE) {
         // 역과 비용을 관리하는 VertexCost 클래스
         class VertexCost implements Comparable<VertexCost> {
             int vertex;     // 역
@@ -126,7 +173,7 @@ public class ShortestPathActivity extends AppCompatActivity {
         parent.set(here, here);
 
         // 출발역부터 갈 수 있는 모든 정점을 탐색한다.
-        while (discovered.isEmpty() == false) {
+        while (!discovered.isEmpty()) {
             // 발견한 후보 중 cost 가 가장 작은, 방문할 후보를 찾는다.
             VertexCost bestVC = discovered.remove();
 
@@ -175,9 +222,9 @@ public class ShortestPathActivity extends AppCompatActivity {
         paths.get(TYPE.ordinal()).add(best.get(graph.getMap().get(arrival)));
     }
 
-
+    // 뷰페이저 어댑터 클래스
     private class VPAdapter extends FragmentStateAdapter {
-        private ArrayList<Fragment> items;
+        private final ArrayList<Fragment> items;
 
         public VPAdapter(FragmentActivity fa) {
             super(fa);
@@ -198,5 +245,4 @@ public class ShortestPathActivity extends AppCompatActivity {
             return items.size();
         }
     }
-
 }

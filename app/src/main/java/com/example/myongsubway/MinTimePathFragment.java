@@ -18,6 +18,10 @@ public class MinTimePathFragment extends Fragment {
     ArrayList<Integer> minTimePath;
     HashMap<Integer, String> reverseMap;
 
+    public MinTimePathFragment() {
+
+    }
+
     public MinTimePathFragment(ArrayList<Integer>path, HashMap<Integer, String> _reverseMap) {
         minTimePath = path;
         reverseMap = _reverseMap;
@@ -28,7 +32,7 @@ public class MinTimePathFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v =  inflater.inflate(R.layout.fragment_min_time_path, container, false);
 
-        textView = v.findViewById(R.id.fragment_report_line);
+        /*textView = v.findViewById(R.id.fragment_report_line);
         String output = "";
 
         int i;
@@ -37,7 +41,7 @@ public class MinTimePathFragment extends Fragment {
         }
         output += "총 비용 : " + minTimePath.get(i);
 
-        textView.setText(output);
+        textView.setText(output);*/
 
         return v;
     }

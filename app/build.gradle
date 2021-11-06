@@ -38,7 +38,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.otaliastudios:zoomlayout:1.8.0'
     implementation 'com.google.android.material:material:1.4.0' // 탭 레이아웃
-    implementation 'androidx.preference:preference:1.1.1'// 뷰페이저2
+    implementation 'androidx.preference:preference:1.1.1'
     implementation 'androidx.viewpager2:viewpager2:1.0.0'       // 뷰페이저2
     implementation 'net.sourceforge.jexcelapi:jxl:2.6.12'       // jxl (엑셀 읽는 외부 라이브러리)
     implementation platform('com.google.firebase:firebase-bom:29.0.0')  // Import the Firebase BoM
