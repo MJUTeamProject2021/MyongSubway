@@ -11,6 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyongSubway">
         <activity android:name=".ShortestPathActivity">
+
         </activity>
         <activity android:name=".SettingsActivity" />
         <activity android:name=".SearchActivity" />

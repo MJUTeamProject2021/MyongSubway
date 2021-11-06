@@ -96,22 +96,6 @@ public class CustomAppGraph extends Application {
             nearbyFacilities = _nearbyFacilities.split(",");
         }
 
-        // 디버깅 용 메소드
-        public String getInformation() {
-            String output = vertex + " : " + String.valueOf(toilet) + " " + number + " " + doorDirection + " ";
-            for (String item : stationFacilities) {
-                output += item + " ";
-            }
-            for (String item : nearbyRestaurants) {
-                output += item + " ";
-            }
-            for (String item : nearbyFacilities) {
-                output += item + " ";
-            }
-
-            return output;
-        }
-
         // getter (안쓰는 메소드는 삭제할 예정)
         public String getVertex() { return vertex; }
         public ArrayList<Integer> getAdjacent() { return adjacent; }
@@ -158,10 +142,10 @@ public class CustomAppGraph extends Application {
             vertices.add(null);
         }
 
-        String from, to;    // 엑셀 파일의 0번째와 1번째 셀을 저장하는 변수 (역 이름)
-
         // 엑셀 읽기
         try {
+            String from, to;    // 엑셀 파일의 0번째와 1번째 셀을 저장하는 변수 (역 이름)
+
             // stations.xls 노선도 읽기
             InputStream stationsIs = getBaseContext().getResources().getAssets().open("stations.xls");
             Workbook stationWb = Workbook.getWorkbook(stationsIs);
@@ -205,23 +189,15 @@ public class CustomAppGraph extends Application {
 
                             // 현재 from 에 해당하는 역이 등록되지 않았다면 추가하고
                             // from 에 연결된 역에 to 를 추가
-                            if (vertices.get(map.get(from)) == null) {
-                                Log.d("test", from + " is null");
+                            if (vertices.get(map.get(from)) == null)
                                 vertices.set(map.get(from), vFrom);
-                            } else {
-                                Log.d("test", from + " is not null");
-                            }
 
                             vertices.get(map.get(from)).addAdjacent(map.get(to));
 
                             // 현재 to 에 해당하는 역이 등록되지 않았다면 추가하고
                             // to 에 연결된 역에 from 을 추가
-                            if (vertices.get(map.get(to)) == null) {
-                                Log.d("test", to + " is null");
+                            if (vertices.get(map.get(to)) == null)
                                 vertices.set(map.get(to), vTo);
-                            } else {
-                                Log.d("test", to + " is not null");
-                            }
 
                             vertices.get(map.get(to)).addAdjacent(map.get(from));
 
@@ -241,9 +217,7 @@ public class CustomAppGraph extends Application {
                         int rowIndexStart = 1;
                         int rowTotal = dataSheet.getColumn(colTotal - 1).length;
 
-                        int count = 0;          // 배열의 index 를 세기위한 변수
-
-                        // stations.xls 를 읽어서 초기화
+                        // data.xls 를 읽어서 초기화
                         for (int row = rowIndexStart; row < rowTotal; row++) {
                             String index = dataSheet.getCell(0, row).getContents();
                             String toilet = dataSheet.getCell(1, row).getContents();

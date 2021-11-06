@@ -1,7 +1,5 @@
 package com.example.myongsubway;
 
-
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
