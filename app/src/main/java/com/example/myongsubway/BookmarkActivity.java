@@ -33,7 +33,7 @@ import static android.content.ContentValues.TAG;
 
 public class BookmarkActivity extends AppCompatActivity  {
 
-    private EditText departStation;
+   /* private EditText departStation;
     private EditText destination;
     private Button bookmarkOn;
     private EditText station;
@@ -53,8 +53,7 @@ public class BookmarkActivity extends AppCompatActivity  {
         bookmarkOn = findViewById(R.id.button);
         station = findViewById(R.id.sample_EditText);
 
-        // Access a Cloud Firestore instance from your Activity
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
         DocumentReference docRef = db.collection("users").document(User);
 
 
@@ -111,5 +110,5 @@ public class BookmarkActivity extends AppCompatActivity  {
     String getDestination(){ return destination.getText().toString(); }
     void setDestination(String s){ destination.setText(s); }
 
-    String getStation(){ return station.getText().toString(); }
+    String getStation(){ return station.getText().toString(); }*/
 }
