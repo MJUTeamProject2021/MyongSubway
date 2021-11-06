@@ -1,13 +1,14 @@
 {
   "project_info": {
     "project_number": "33753148430",
+    "firebase_url": "https://myongsubway-default-rtdb.firebaseio.com",
     "project_id": "myongsubway",
     "storage_bucket": "myongsubway.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:33753148430:android:038ca9abc6bbf9dbb5205f",
+        "mobilesdk_app_id": "1:33753148430:android:3568c971c364577ab5205f",
         "android_client_info": {
           "package_name": "com.example.myongsubway"
         }
