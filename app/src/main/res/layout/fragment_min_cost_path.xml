@@ -1,19 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/fragment_report_line"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="min_cost_path"
-        android:textSize="50dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:id="@+id/relativeLayout">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/departureButton"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:text="101"
+            android:layout_marginLeft="25dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/linear"
+            android:orientation="vertical"
+            android:layout_centerInParent="true">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/zoomButton"
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:text="확대"
+                android:textStyle="bold"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/transferButton"
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:text="환승"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/arrivalButton"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:text="201"
+            android:layout_marginRight="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:id="@+id/departureLine"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text=" 호선"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginLeft="60dp"
+            android:layout_marginTop="15dp"
+            android:layout_below="@id/departureButton"/>
+
+        <TextView
+            android:id="@+id/arrivalLine"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text=" 호선"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginRight="60dp"
+            android:layout_marginTop="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/arrivalButton"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="2">
+
+    </RelativeLayout>
+
+
+</LinearLayout>

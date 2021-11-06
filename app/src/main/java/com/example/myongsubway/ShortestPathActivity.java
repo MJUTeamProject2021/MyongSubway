@@ -38,6 +38,7 @@ public class ShortestPathActivity extends AppCompatActivity {
 
     private String departure, arrival;              // 출발역과 도착역
     private ArrayList<ArrayList<Integer>> paths;    // 출발역 ~ 도착역의 경로를 저장하는 리스트, 순서대로 최소시간, 최단거리, 최소비용의 경로가 저장됨
+    private ArrayList<ArrayList<Integer>> allCosts; // 소요시간, 소요거리, 소요비용을 저장하는 리스트, 순서대로 최소시간, 최단거리, 최소비용의 경우가 저장됨
     private final int TYPE_COUNT = 3;               // SearchType 의 경우의 수 (최소시간, 최단거리, 최소비용)
 
     private CustomAppGraph graph;                   // 액티비티 간에 공유되는 데이터를 담는 클래스
@@ -54,6 +55,11 @@ public class ShortestPathActivity extends AppCompatActivity {
         paths = new ArrayList<ArrayList<Integer>>(TYPE_COUNT);
         for (int i = 0; i < TYPE_COUNT; i++) {
             paths.add(new ArrayList<Integer>());
+        }
+
+        allCosts = new ArrayList<ArrayList<Integer>>(TYPE_COUNT);
+        for (int i = 0; i < TYPE_COUNT; i++) {
+            allCosts.add(new ArrayList<Integer>(3));
         }
 
         //툴바 설정
@@ -218,8 +224,58 @@ public class ShortestPathActivity extends AppCompatActivity {
         // 경로가 저장된 리스트를 뒤집는다.
         Collections.reverse(paths.get(TYPE.ordinal()));
 
-        // path 리스트의 마지막에 총 비용을 추가한다.
-        paths.get(TYPE.ordinal()).add(best.get(graph.getMap().get(arrival)));
+        // 소요시간, 소요거리, 소요비용을 저장한다.
+        calculateAllCosts(paths.get(TYPE.ordinal()), TYPE, best.get(graph.getMap().get(arrival)));
+    }
+
+    private void calculateAllCosts(ArrayList<Integer> path, CustomAppGraph.SearchType TYPE, int best) {
+        switch (TYPE) {
+            case MIN_TIME:
+                allCosts.get(TYPE.ordinal()).add(best);
+                allCosts.get(TYPE.ordinal()).add(calculateDistance(path));
+                allCosts.get(TYPE.ordinal()).add(calculateCost(path));
+                break;
+            case MIN_DISTANCE:
+                allCosts.get(TYPE.ordinal()).add(calculateTime(path));
+                allCosts.get(TYPE.ordinal()).add(best);
+                allCosts.get(TYPE.ordinal()).add(calculateCost(path));
+                break;
+            case MIN_COST:
+                allCosts.get(TYPE.ordinal()).add(calculateTime(path));
+                allCosts.get(TYPE.ordinal()).add(calculateDistance(path));
+                allCosts.get(TYPE.ordinal()).add(best);
+                break;
+        }
+    }
+
+    private int calculateTime(ArrayList<Integer> path) {
+        int output = 0;
+
+        for (int pathIndex = 0; pathIndex < path.size() - 1; pathIndex++) {
+            output += graph.getAdjacent().get(path.get(pathIndex)).get(path.get(pathIndex + 1)).getCost(CustomAppGraph.SearchType.MIN_TIME);
+        }
+
+        return output;
+    }
+
+    private int calculateDistance(ArrayList<Integer> path) {
+        int output = 0;
+
+        for (int pathIndex = 0; pathIndex < path.size() - 1; pathIndex++) {
+            output += graph.getAdjacent().get(path.get(pathIndex)).get(path.get(pathIndex + 1)).getCost(CustomAppGraph.SearchType.MIN_DISTANCE);
+        }
+
+        return output;
+    }
+
+    private int calculateCost(ArrayList<Integer> path) {
+        int output = 0;
+
+        for (int pathIndex = 0; pathIndex < path.size() - 1; pathIndex++) {
+            output += graph.getAdjacent().get(path.get(pathIndex)).get(path.get(pathIndex + 1)).getCost(CustomAppGraph.SearchType.MIN_COST);
+        }
+
+        return output;
     }
 
     // 뷰페이저 어댑터 클래스
@@ -229,9 +285,14 @@ public class ShortestPathActivity extends AppCompatActivity {
         public VPAdapter(FragmentActivity fa) {
             super(fa);
             items = new ArrayList<Fragment>();
-            items.add(new MinTimePathFragment(paths.get(CustomAppGraph.SearchType.MIN_TIME.ordinal()), graph.getReverseMap()));
-            items.add(new MinDistancePathFragment(paths.get(CustomAppGraph.SearchType.MIN_DISTANCE.ordinal()), graph.getReverseMap()));
-            items.add(new MinCostPathFragment(paths.get(CustomAppGraph.SearchType.MIN_COST.ordinal()), graph.getReverseMap()));
+            items.add(new MinTimePathFragment(paths.get(CustomAppGraph.SearchType.MIN_TIME.ordinal()),
+                    allCosts.get(CustomAppGraph.SearchType.MIN_TIME.ordinal()), graph));
+
+            items.add(new MinDistancePathFragment(paths.get(CustomAppGraph.SearchType.MIN_DISTANCE.ordinal()),
+                    allCosts.get(CustomAppGraph.SearchType.MIN_DISTANCE.ordinal()), graph));
+
+            items.add(new MinCostPathFragment(paths.get(CustomAppGraph.SearchType.MIN_COST.ordinal()),
+                    allCosts.get(CustomAppGraph.SearchType.MIN_TIME.ordinal()), graph));
         }
 
         @NonNull

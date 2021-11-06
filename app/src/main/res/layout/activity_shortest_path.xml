@@ -22,7 +22,8 @@
         android:background="@color/basicColor"
         app:tabMode="fixed"
         app:tabGravity="fill"
-        app:tabIndicatorColor="@color/white"/>
+        app:tabIndicatorColor="#ff7f00"
+        app:tabRippleColor="#ffffffff"/>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
