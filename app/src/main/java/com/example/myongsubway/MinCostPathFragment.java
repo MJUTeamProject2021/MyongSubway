@@ -32,7 +32,7 @@ public class MinCostPathFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_min_cost_path, container, false);
 
-        textView = v.findViewById(R.id.fragment_report_line);
+        /*textView = v.findViewById(R.id.fragment_report_line);
         String output = "";
 
         int i;
@@ -41,7 +41,7 @@ public class MinCostPathFragment extends Fragment {
         }
         output += "총 비용 : " + minCostPath.get(i);
 
-        textView.setText(output);
+        textView.setText(output);*/
 
 
         return v;
