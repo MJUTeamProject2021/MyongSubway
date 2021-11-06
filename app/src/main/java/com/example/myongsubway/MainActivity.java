@@ -30,6 +30,12 @@ import com.github.chrisbanes.photoview.OnViewTapListener;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.github.chrisbanes.photoview.PhotoViewAttacher;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,6 +60,7 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
 
     private BackPressHandler backPressHandler = new BackPressHandler(this); //백버튼 핸들러
     private boolean isFragment = false;                 //프래그먼트 켜져있으면 true 아니면 false
+
 
     @Override        //초기화 메소드
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,4 +193,6 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
             destroyFragment();
         }
     }
+
+
 }

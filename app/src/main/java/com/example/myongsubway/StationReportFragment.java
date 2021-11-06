@@ -192,11 +192,17 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
         mFragmentTransaction.remove(_fragment);
         mFragmentTransaction.commit();
     }
+    public void removeSurroundingFragment(SurroundingFragment _fragment){
+        FragmentTransaction mFragmentTransaction = getChildFragmentManager().beginTransaction();
+        mFragmentTransaction.remove(_fragment);
+        mFragmentTransaction.commit();
+    }
 
     @Override
     public void onClick(View view) {
         int index;
         FragmentTransaction transaction;                    //환승역 클릭시 교체
+        FragmentTransaction mFragmentTransaction = getChildFragmentManager().beginTransaction();
         for(int i=0;i<vertex.getAdjacent().size()-2;i++) {
             if(view.getId() == 20+i*10){
                 Button btn = addButtonList.get(i);
@@ -255,9 +261,13 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
                 ((MainActivity)getActivity()).setIsFragmentTrue();
                 break;
             case R.id.fragment_report_information:      //역정보 터치
-                FragmentTransaction mFragmentTransaction = getChildFragmentManager().beginTransaction();
                 StationInformationFragment informationfragment = new StationInformationFragment(vertex,graph);
                 mFragmentTransaction.add(R.id.fragment_report_framelayout,informationfragment);
+                mFragmentTransaction.commit();
+                break;
+            case R.id.fragment_report_tourist:      //역정보 터치
+                SurroundingFragment surroundingfragment = new SurroundingFragment(vertex,graph);
+                mFragmentTransaction.add(R.id.fragment_report_framelayout,surroundingfragment);
                 mFragmentTransaction.commit();
                 break;
             case R.id.fragment_report_opaque:
