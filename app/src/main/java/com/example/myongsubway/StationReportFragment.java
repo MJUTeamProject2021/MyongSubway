@@ -1,5 +1,6 @@
 package com.example.myongsubway;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.PorterDuff;
@@ -122,15 +123,15 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
         nameButton.setText(vertex.getVertex()+"역");
         lineTextView.setText(vertex.getLine()+"호선");
         nameButton2.setText(vertex.getVertex()+"역");
-        if(vertex.getLine()==1){menuLinearLayout.setBackgroundColor(Color.rgb(64,169,64));}
-        else if(vertex.getLine()==2){menuLinearLayout.setBackgroundColor(Color.rgb(20,140,255));}
-        else if(vertex.getLine()==3){menuLinearLayout.setBackgroundColor(Color.rgb(214,138,70));}
-        else if(vertex.getLine()==4){menuLinearLayout.setBackgroundColor(Color.rgb(255,91,127));}
-        else if(vertex.getLine()==5){menuLinearLayout.setBackgroundColor(Color.rgb(0,185,255));}
-        else if(vertex.getLine()==6){menuLinearLayout.setBackgroundColor(Color.rgb(229,216,90));}
-        else if(vertex.getLine()==7){menuLinearLayout.setBackgroundColor(Color.rgb(99,204,99));}
-        else if(vertex.getLine()==8){menuLinearLayout.setBackgroundColor(Color.rgb(174,218,255));}
-        else if(vertex.getLine()==9){menuLinearLayout.setBackgroundColor(Color.rgb(205,127,202));}
+        if(vertex.getLine()==1){menuLinearLayout.setBackgroundColor(getResources().getColor(R.color.frag1Color, null));}
+        else if(vertex.getLine()==2){menuLinearLayout.setBackgroundColor(getResources().getColor(R.color.frag2Color, null));}
+        else if(vertex.getLine()==3){menuLinearLayout.setBackgroundColor(getResources().getColor(R.color.frag3Color, null));}
+        else if(vertex.getLine()==4){menuLinearLayout.setBackgroundColor(getResources().getColor(R.color.frag4Color, null));}
+        else if(vertex.getLine()==5){menuLinearLayout.setBackgroundColor(getResources().getColor(R.color.frag5Color, null));}
+        else if(vertex.getLine()==6){menuLinearLayout.setBackgroundColor(getResources().getColor(R.color.frag6Color, null));}
+        else if(vertex.getLine()==7){menuLinearLayout.setBackgroundColor(getResources().getColor(R.color.frag7Color, null));}
+        else if(vertex.getLine()==8){menuLinearLayout.setBackgroundColor(getResources().getColor(R.color.frag8Color, null));}
+        else if(vertex.getLine()==9){menuLinearLayout.setBackgroundColor(getResources().getColor(R.color.frag9Color, null));}
 
         //주변과 환승역들 보여주기
         for(int i=0;i<vertex.getAdjacent().size();i++) {

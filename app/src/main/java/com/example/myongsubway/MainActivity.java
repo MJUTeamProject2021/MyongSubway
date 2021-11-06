@@ -67,9 +67,9 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //액션바 가리기
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
+        //액션바 가리기   + 액션바 없앤 테마로 바꿔서 주석처리함 지워도 됨 by 이하윤
+        //ActionBar actionBar = getSupportActionBar();
+        //actionBar.hide();
 
         graph = (CustomAppGraph) getApplicationContext();        //공유되는 데이터 담는 객체
         mainVertices = graph.getVertices();

@@ -12,6 +12,7 @@
         android:theme="@style/Theme.MyongSubway"
         android:usesCleartextTraffic="true">
         <activity android:name=".ShortestPathActivity">
+
         </activity>
         <activity android:name=".SettingsActivity" />
         <activity android:name=".SearchActivity" />
