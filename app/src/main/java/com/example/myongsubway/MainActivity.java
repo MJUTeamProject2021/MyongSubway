@@ -30,6 +30,12 @@ import com.github.chrisbanes.photoview.OnViewTapListener;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.github.chrisbanes.photoview.PhotoViewAttacher;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,14 +61,15 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
     private BackPressHandler backPressHandler = new BackPressHandler(this); //백버튼 핸들러
     private boolean isFragment = false;                 //프래그먼트 켜져있으면 true 아니면 false
 
+
     @Override        //초기화 메소드
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //액션바 가리기
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
+        //액션바 가리기   + 액션바 없앤 테마로 바꿔서 주석처리함 지워도 됨 by 이하윤
+        //ActionBar actionBar = getSupportActionBar();
+        //actionBar.hide();
 
         graph = (CustomAppGraph) getApplicationContext();        //공유되는 데이터 담는 객체
         mainVertices = graph.getVertices();
@@ -186,4 +193,6 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
             destroyFragment();
         }
     }
+
+
 }

@@ -7,4 +7,33 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!--tab Color-->
+    <color name="tabSelectedColor">#FFFFFF</color>
+    <color name="tabUnSelectedColor">#000000</color>
+
+    <!--UI Basic Color-->
+    <color name="basicColor">#536AE8</color>
+
+    <!--각 호선의 색-->
+    <color name="line1Color">#009688</color>
+    <color name="line2Color">#3F51B5</color>
+    <color name="line3Color">#800A01</color>
+    <color name="line4Color">#F44336</color>
+    <color name="line5Color">#2196F3</color>
+    <color name="line6Color">#FFC107</color>
+    <color name="line7Color">#8BC34A</color>
+    <color name="line8Color">#03A9F4</color>
+    <color name="line9Color">#673AB7</color>
+
+    <!--약간 바뀐 각 호선의 색 for StationReportFragment.java-->
+    <color name="frag1Color">#40A940</color>
+    <color name="frag2Color">#148CFF</color>
+    <color name="frag3Color">#D68A46</color>
+    <color name="frag4Color">#FF5B7F</color>
+    <color name="frag5Color">#00B9FF</color>
+    <color name="frag6Color">#E5D85A</color>
+    <color name="frag7Color">#63CC63</color>
+    <color name="frag8Color">#AEDAFF</color>
+    <color name="frag9Color">#CD7FCA</color>
 </resources>

@@ -3,19 +3,23 @@ package com.example.myongsubway;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
+import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.net.URL;
 
 public class StationInformationFragment extends Fragment implements View.OnClickListener {
 
@@ -31,6 +35,9 @@ public class StationInformationFragment extends Fragment implements View.OnClick
     private TextView toilet;
     private TextView door;
     private TextView number;
+    private TextView update;
+    private TextView airstate;
+    private TextView pmq;
     private Button lineName;
     private Button closeButton;
     private CustomAppGraph.Vertex vertex;
@@ -63,6 +70,9 @@ public class StationInformationFragment extends Fragment implements View.OnClick
         number = v.findViewById(R.id.fragment_information_number);
         lineName= v.findViewById(R.id.fragment_information_line);
         closeButton = v.findViewById(R.id.fragment_information_close);
+        pmq = v.findViewById(R.id.fragment_information_pmq);
+        airstate = v.findViewById(R.id.fragment_information_airstate);
+        update = v.findViewById(R.id.fragment_information_update);
 
         number.setOnClickListener(this);
         closeButton.setOnClickListener(this);
@@ -95,6 +105,8 @@ public class StationInformationFragment extends Fragment implements View.OnClick
         }
         door.setText(vertex.getDoorDirection());
 
+        AirThread at = new AirThread();
+        at.start();
         return v;
     }
 
@@ -109,6 +121,89 @@ public class StationInformationFragment extends Fragment implements View.OnClick
                 Intent tt = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+vertex.getNumber().replace("-","")));
                 startActivity(tt);
                 break;
+        }
+    }
+
+    void getAir(){
+
+        StrictMode.enableDefaults();
+        boolean isCheckDate = false, isPMq = false;
+        String checkDate =null, pMq = null;
+
+        try{
+            URL url = new URL("http://openapi.seoul.go.kr:8088/734a457a6f6a68393536686a70446c/xml/airPolutionInfo/" +(graph.getMap().get(vertex.getVertex())+1)+"/"+(graph.getMap().get(vertex.getVertex())+1)+"/"); //검색 URL부분
+            System.out.println(url);
+            XmlPullParserFactory parserCreator = XmlPullParserFactory.newInstance();
+            XmlPullParser parser = parserCreator.newPullParser();
+
+            parser.setInput(url.openStream(), null);
+            int parserEvent = parser.getEventType();
+
+            while (parserEvent != XmlPullParser.END_DOCUMENT){
+                switch(parserEvent){
+                    case XmlPullParser.START_TAG:
+                        if(parser.getName().equals("CHECKDATE")){       //업데이트 날짜면 true
+                            isCheckDate = true;
+                        }
+                        if(parser.getName().equals("PMq")){             //PMq면 true
+                            isPMq = true;
+                        }
+                        if(parser.getName().equals("message")){
+                            airstate.setText("정보를 불러오지 못했습니다.");
+                        }
+                        break;
+
+                    case XmlPullParser.TEXT:
+                        if(isCheckDate){ //업데이트가 맞았다면 설정
+                            checkDate = parser.getText();
+                            isCheckDate = false;
+                        }
+                        if(isPMq){      //PMq가 맞았다면 설정
+                            pMq = parser.getText();
+                            isPMq = false;
+                        }
+                        break;
+                    case XmlPullParser.END_TAG:
+                        if(parser.getName().equals("CHECKDATE")){
+                            String finalCheckDate = checkDate;
+                            update.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    update.setText("확인 날짜 및 시간 : " + finalCheckDate);
+                                }
+                            });
+                            }
+                        if(parser.getName().equals("PMq")){
+                            String finalPMq = pMq;
+                            pmq.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    pmq.setText("초미세먼지량 pMq : " + finalPMq + "\n");
+                                }
+                            });
+                            }
+                        break;
+                }
+                parserEvent = parser.next();
+            }
+        } catch(Exception e){
+            airstate.setText("정보를 불러오지 못했습니다    .");
+        }
+        double tempPmq = Double.parseDouble(pMq);
+        airstate.post(new Runnable() {
+            @Override
+            public void run() {
+                if(tempPmq<15){airstate.setText("공기가 아주 좋습니다");airstate.setTextColor(Color.rgb(0,0,255));}
+                else if(tempPmq>=15&&tempPmq<35){airstate.setText("공기가 괜찮습니다");airstate.setTextColor(Color.rgb(0,255,0));}
+                else if(tempPmq>=35&&tempPmq<75){airstate.setText("공기가 좋지 않습니다");airstate.setTextColor(Color.rgb(255,128,0));}
+                else if(tempPmq>=76){airstate.setText("공기가 매우 나쁩니다");airstate.setTextColor(Color.rgb(255,0,0));}
+            }
+        });
+    }
+
+    class AirThread extends Thread{
+        public void run(){
+            getAir();
         }
     }
 }
