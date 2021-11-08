@@ -1,9 +1,7 @@
 package com.example.myongsubway;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -15,7 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -29,6 +26,7 @@ public class SearchActivity extends AppCompatActivity {
     private Button backButton; // 뒤로가기 버튼
     private CustomAppGraph graph; // CustomAppGraph
     private ArrayList<CustomAppGraph.Vertex> vertices; // 모든 정점(역) 리스트
+    private Button removeSearchHistoryButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +34,8 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
 
         // 액션바 숨기기
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
+//        ActionBar actionBar = getSupportActionBar();
+//        actionBar.hide();
 
         // 뒤로가기 버튼
         backButton = findViewById(R.id.Search_Button_back);
@@ -94,7 +92,8 @@ public class SearchActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // 메인에서 Fragment 호출.
                         // vertices.get(map.get(viewedStationList.get(pos))) -> 클릭된 vertex
-                       
+                        // 예시
+                        // ((MainActivity)MainAcitivity.context변수).함수이름(viewedStationList.get(pos));
                         // 해당 Activity 가 종료되면 같이 초기화되는 문제점..
                         addSearchedStation(viewedStationList.get(pos));
                     }
@@ -103,6 +102,22 @@ public class SearchActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
+        // 전체삭제 버튼을 눌렀을 때
+        removeSearchHistoryButton = (Button) findViewById(R.id.Search_Button_removeSearchHistory);
+        removeSearchHistoryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               removeSearchHistory();
+           }
+        });
+    }
+    public void removeSearchHistory(){
+        for(int i = searchedStationList.size() - 1; i >= 0; i--){
+            searchedStationList.remove(i);
+        }
+        viewedStationList.clear();
+        // 리스트 데이터 변경으로 Adapter 갱신
+        searchAdapter.notifyDataSetChanged();
     }
     public void search(String text){
         // 문자가 입력될 때마다 ListView를 새로 지정해야 함
