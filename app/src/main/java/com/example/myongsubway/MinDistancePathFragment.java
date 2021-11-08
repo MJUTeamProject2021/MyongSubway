@@ -1,6 +1,5 @@
 package com.example.myongsubway;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,10 +9,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class MinDistancePathFragment extends Fragment {
     ArrayList<Integer> minTimePath;                 // 최소시간을 기준으로 탐색한 경로
@@ -22,7 +21,8 @@ public class MinDistancePathFragment extends Fragment {
     ArrayList<CustomAppGraph.Vertex> vertices;      // 역들의 정보를 담는 클래스인 Vertex 객체들을 저장하는 리스트
     ArrayList<Integer> btnBackgrounds;              // 역을 나타내는 버튼들의 background xml 파일의 id를 저장하는 리스트
 
-    TextView departureTextView, arrivalTextView;    // 출발역과 도착역의 호선을 나타내는 텍스트뷰
+    Button departureButton, arrivalButton;          // 출발역과 도착역을 나타내는 버튼
+    TextView departureLine, arrivalLine;    // 출발역과 도착역의 호선을 나타내는 텍스트뷰
 
     public MinDistancePathFragment(ArrayList<Integer>path, ArrayList<Integer> _costs, CustomAppGraph _graph) {
         minTimePath = path;
@@ -38,8 +38,8 @@ public class MinDistancePathFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v =  inflater.inflate(R.layout.fragment_min_distance_path, container, false);
 
-        Button departureButton = v.findViewById(R.id.departureButton);
-        Button arrivalButton = v.findViewById(R.id.arrivalButton);
+        departureButton = v.findViewById(R.id.departureButton);
+        arrivalButton = v.findViewById(R.id.arrivalButton);
         CustomAppGraph.Vertex departure = graph.getVertices().get(minTimePath.get(0));
         CustomAppGraph.Vertex arrival = graph.getVertices().get(minTimePath.get(minTimePath.size() - 1));
 
@@ -49,17 +49,33 @@ public class MinDistancePathFragment extends Fragment {
         departureButton.setBackgroundResource(btnBackgrounds.get(departure.getLine()));
         arrivalButton.setBackgroundResource(btnBackgrounds.get(arrival.getLine()));
 
-        departureTextView = v.findViewById(R.id.departureLine);
-        arrivalTextView = v.findViewById(R.id.arrivalLine);
+        departureLine = v.findViewById(R.id.departureLine);
+        arrivalLine = v.findViewById(R.id.arrivalLine);
 
-        departureTextView.setText(departure.getLine() + "호선");
-        arrivalTextView.setText(arrival.getLine() + "호선");
+        departureLine.setText(departure.getLine() + "호선");
+        arrivalLine.setText(arrival.getLine() + "호선");
 
-
+        // 각각 departureButton , arrivalButton 의 중간에 오도록
+        // departureLine , arrivalLine 의 marginLeft, marginRight 를 설정한다.
+        setLineTextViewMargin();
 
         return v;
     }
 
+    private void setLineTextViewMargin() {
+        float density = this.getResources().getDisplayMetrics().density;
+
+        ConstraintLayout.LayoutParams dLayoutParams = (ConstraintLayout.LayoutParams) departureButton.getLayoutParams();
+        int halfDepartureWidth = (int)(dLayoutParams.width / density + 0.5) / 2;    // dp
+
+        ConstraintLayout.LayoutParams dLineLayoutParams = (ConstraintLayout.LayoutParams) departureLine.getLayoutParams();
+        ConstraintLayout.LayoutParams aLineLayoutParams = (ConstraintLayout.LayoutParams) arrivalLine.getLayoutParams();
+        int halfDepartureLineWidth = (int)(dLineLayoutParams.width / density + 0.5) / 2;    // dp
+        int margin = (25 + halfDepartureWidth) - halfDepartureLineWidth;    // dp
+
+        dLineLayoutParams.setMarginStart((int)(margin * density + 0.5));
+        aLineLayoutParams.setMarginEnd((int)(margin * density + 0.5));
+    }
 
     private void initializeBtnBackgrounds() {
         btnBackgrounds = new ArrayList<Integer>(10);

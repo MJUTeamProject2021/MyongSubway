@@ -6,16 +6,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
@@ -43,6 +46,8 @@ public class ShortestPathActivity extends AppCompatActivity {
 
     private CustomAppGraph graph;                   // 액티비티 간에 공유되는 데이터를 담는 클래스
 
+    private MinTimePathFragment minTimePathFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,11 +67,13 @@ public class ShortestPathActivity extends AppCompatActivity {
             allCosts.add(new ArrayList<Integer>(3));
         }
 
-        //툴바 설정
+        // 툴바 설정
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("지하철 경로 탐색");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
+        
+
 
         // MainActivity 가 전송한 데이터 받기
         Intent intent = getIntent();
@@ -120,6 +127,7 @@ public class ShortestPathActivity extends AppCompatActivity {
 
             }
         });
+
     }
 
     // 툴바의 액션버튼을 설정하는 메소드
@@ -136,6 +144,7 @@ public class ShortestPathActivity extends AppCompatActivity {
         return true;
     }
 
+    // 경로를 계산하는 다익스트라 알고리즘
     private void dijkstra(int here, CustomAppGraph.SearchType TYPE) {
         // 역과 비용을 관리하는 VertexCost 클래스
         class VertexCost implements Comparable<VertexCost> {
@@ -228,26 +237,39 @@ public class ShortestPathActivity extends AppCompatActivity {
         calculateAllCosts(paths.get(TYPE.ordinal()), TYPE, best.get(graph.getMap().get(arrival)));
     }
 
+    // 소요시간, 소요거리, 소요비용을 계산하는 메소드
     private void calculateAllCosts(ArrayList<Integer> path, CustomAppGraph.SearchType TYPE, int best) {
         switch (TYPE) {
             case MIN_TIME:
                 allCosts.get(TYPE.ordinal()).add(best);
-                allCosts.get(TYPE.ordinal()).add(calculateDistance(path));
-                allCosts.get(TYPE.ordinal()).add(calculateCost(path));
+                allCosts.get(TYPE.ordinal()).add(calculateElapsed(path, CustomAppGraph.SearchType.MIN_DISTANCE));
+                allCosts.get(TYPE.ordinal()).add(calculateElapsed(path, CustomAppGraph.SearchType.MIN_COST));
                 break;
             case MIN_DISTANCE:
-                allCosts.get(TYPE.ordinal()).add(calculateTime(path));
+                allCosts.get(TYPE.ordinal()).add(calculateElapsed(path, CustomAppGraph.SearchType.MIN_TIME));
                 allCosts.get(TYPE.ordinal()).add(best);
-                allCosts.get(TYPE.ordinal()).add(calculateCost(path));
+                allCosts.get(TYPE.ordinal()).add(calculateElapsed(path, CustomAppGraph.SearchType.MIN_COST));
                 break;
             case MIN_COST:
-                allCosts.get(TYPE.ordinal()).add(calculateTime(path));
-                allCosts.get(TYPE.ordinal()).add(calculateDistance(path));
+                allCosts.get(TYPE.ordinal()).add(calculateElapsed(path, CustomAppGraph.SearchType.MIN_TIME));
+                allCosts.get(TYPE.ordinal()).add(calculateElapsed(path, CustomAppGraph.SearchType.MIN_DISTANCE));
                 allCosts.get(TYPE.ordinal()).add(best);
                 break;
         }
     }
 
+    // 각각의 소요 cost 를 계산하는 메소드
+    private int calculateElapsed(ArrayList<Integer> path, CustomAppGraph.SearchType TYPE) {
+        int output = 0;
+
+        for (int pathIndex = 0; pathIndex < path.size() - 1; pathIndex++) {
+            output += graph.getAdjacent().get(path.get(pathIndex)).get(path.get(pathIndex + 1)).getCost(TYPE);
+        }
+
+        return output;
+    }
+
+    // TODO : 위의 함수 작동 확인되면 아래 3개 메소드 삭제.
     private int calculateTime(ArrayList<Integer> path) {
         int output = 0;
 
@@ -285,6 +307,7 @@ public class ShortestPathActivity extends AppCompatActivity {
         public VPAdapter(FragmentActivity fa) {
             super(fa);
             items = new ArrayList<Fragment>();
+
             items.add(new MinTimePathFragment(paths.get(CustomAppGraph.SearchType.MIN_TIME.ordinal()),
                     allCosts.get(CustomAppGraph.SearchType.MIN_TIME.ordinal()), graph));
 
