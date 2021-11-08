@@ -32,7 +32,6 @@ public class MinTimePathFragment extends Fragment {
     TextView departureLine, arrivalLine;            // 출발역과 도착역의 호선을 나타내는 텍스트뷰
     TextView costTime, costDistance, costCost;      // 각각 소요시간, 소요거리, 소요비용을 나타내는 텍스트뷰
 
-
     public MinTimePathFragment(ArrayList<Integer>path, ArrayList<Integer> _costs, CustomAppGraph _graph) {
         minTimePath = path;
         costs = _costs;
@@ -92,21 +91,24 @@ public class MinTimePathFragment extends Fragment {
         costCost = v.findViewById(R.id.costCost);
     }
 
+    // 각각 departureButton , arrivalButton 의 중간에 오도록
+    // departureLine , arrivalLine 의 marginLeft, marginRight 를 설정한다.
     private void setLineTextViewMargin() {
-        float density = this.getResources().getDisplayMetrics().density;
+        float density = this.getResources().getDisplayMetrics().density;        // dp 와 px 사이를 변환할 때 필요한 변수
 
         ConstraintLayout.LayoutParams dLayoutParams = (ConstraintLayout.LayoutParams) departureButton.getLayoutParams();
-        int halfDepartureWidth = (int)(dLayoutParams.width / density + 0.5) / 2;    // dp
+        int halfDepartureWidth = (int)(dLayoutParams.width / density + 0.5) / 2;            // dp
 
         ConstraintLayout.LayoutParams dLineLayoutParams = (ConstraintLayout.LayoutParams) departureLine.getLayoutParams();
         ConstraintLayout.LayoutParams aLineLayoutParams = (ConstraintLayout.LayoutParams) arrivalLine.getLayoutParams();
         int halfDepartureLineWidth = (int)(dLineLayoutParams.width / density + 0.5) / 2;    // dp
-        int margin = (25 + halfDepartureWidth) - halfDepartureLineWidth;    // dp
+        int margin = (25 + halfDepartureWidth) - halfDepartureLineWidth;                    // dp
 
         dLineLayoutParams.setMarginStart((int)(margin * density + 0.5));
         aLineLayoutParams.setMarginEnd((int)(margin * density + 0.5));
     }
 
+    // 소요시간, 소요거리, 소요비용을 텍스트뷰에 적용시킨다.
     private void setCostTextView() {
         String time = convertTime(costs.get(CustomAppGraph.SearchType.MIN_TIME.ordinal()));
         costTime.setText(time);
@@ -118,10 +120,28 @@ public class MinTimePathFragment extends Fragment {
         costCost.setText(cost);
     }
 
+    // 초를 시간, 분, 초로 변환하는 메소드
     private String convertTime(int time) {
         String output = "";
 
-        if (time >= 3600) {
+        if (time >= 3600000) {
+            // 단순 방어용 코드
+            int temp = time / 3600;
+            time %= 3600;
+            StringBuffer sb = new StringBuffer();
+            sb.append(Integer.toString(temp));
+            int lastIndex = sb.length() - 1;
+
+            while (lastIndex > 2) {
+                lastIndex -= 2;
+                sb.insert(lastIndex, ",");
+                lastIndex--;
+            }
+
+            sb.append("시간 ");
+            output += sb.toString();
+            
+        } else if (time >= 3600) {
             output += time / 3600 + "시간 ";
             time %= 3600;
         }
@@ -136,19 +156,39 @@ public class MinTimePathFragment extends Fragment {
         return output;
     }
 
+    // , 로 1000 단위를 구분하게 하는 메소드
     private String convertDistance(int distance) {
-        String output = "";
+        StringBuffer sb = new StringBuffer();
+        sb.append(Integer.toString(distance));
+        int lastIndex = sb.length() - 1;
 
+        while (lastIndex > 2) {
+            lastIndex -= 2;
+            sb.insert(lastIndex, ",");
+            lastIndex--;
+        }
 
-        return output;
+        sb.append("m");
+        return sb.toString();
     }
 
+    // , 로 1000 단위를 구분하게 하는 메소드
     private String convertCost(int cost) {
-        String strCost = Integer.toString(cost);
-        int lastIndex = strCost.length() - 1;
-        return null;
+        StringBuffer sb = new StringBuffer();
+        sb.append(Integer.toString(cost));
+        int lastIndex = sb.length() - 1;
+
+        while (lastIndex > 2) {
+            lastIndex -= 2;
+            sb.insert(lastIndex, ",");
+            lastIndex--;
+        }
+
+        sb.append("원");
+        return sb.toString();
     }
 
+    // 호선에 따른 역버튼 배경 xml 을 담는 메소드
     private void initializeBtnBackgrounds() {
         btnBackgrounds = new ArrayList<Integer>(10);
         btnBackgrounds.add(-1);
