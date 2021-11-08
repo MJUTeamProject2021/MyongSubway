@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -19,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
@@ -72,15 +74,17 @@ public class ShortestPathActivity extends AppCompatActivity {
         toolbar.setTitle("지하철 경로 탐색");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
-        
-
 
         // MainActivity 가 전송한 데이터 받기
         Intent intent = getIntent();
         departure = intent.getStringExtra("departureStation");
         arrival = intent.getStringExtra("destinationStation");
-        departure = "101";
-        arrival = "501";
+        // TODO : 디버깅용 코드
+        if (departure == null) {
+            departure = "101";
+            arrival = "501";
+        }
+
 
         // 다익스트라 알고리즘을 통해 경로탐색, 3가지 SearchType 을 모두 수행한다.
         dijkstra(graph.getMap().get(departure), CustomAppGraph.SearchType.MIN_TIME);
@@ -269,35 +273,16 @@ public class ShortestPathActivity extends AppCompatActivity {
         return output;
     }
 
-    // TODO : 위의 함수 작동 확인되면 아래 3개 메소드 삭제.
-    private int calculateTime(ArrayList<Integer> path) {
-        int output = 0;
+    // 역정보 프래그먼트를 띄우는 메소드
+    public void generateStationInformationFragment(CustomAppGraph.Vertex vertex) {
+        // 역정보 프래그먼트를 띄운다.
+        StationInformationFragment frag = new StationInformationFragment(vertex, graph, true);
 
-        for (int pathIndex = 0; pathIndex < path.size() - 1; pathIndex++) {
-            output += graph.getAdjacent().get(path.get(pathIndex)).get(path.get(pathIndex + 1)).getCost(CustomAppGraph.SearchType.MIN_TIME);
-        }
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
-        return output;
-    }
-
-    private int calculateDistance(ArrayList<Integer> path) {
-        int output = 0;
-
-        for (int pathIndex = 0; pathIndex < path.size() - 1; pathIndex++) {
-            output += graph.getAdjacent().get(path.get(pathIndex)).get(path.get(pathIndex + 1)).getCost(CustomAppGraph.SearchType.MIN_DISTANCE);
-        }
-
-        return output;
-    }
-
-    private int calculateCost(ArrayList<Integer> path) {
-        int output = 0;
-
-        for (int pathIndex = 0; pathIndex < path.size() - 1; pathIndex++) {
-            output += graph.getAdjacent().get(path.get(pathIndex)).get(path.get(pathIndex + 1)).getCost(CustomAppGraph.SearchType.MIN_COST);
-        }
-
-        return output;
+        transaction.replace(R.id.fragment_container, frag);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     // 뷰페이저 어댑터 클래스

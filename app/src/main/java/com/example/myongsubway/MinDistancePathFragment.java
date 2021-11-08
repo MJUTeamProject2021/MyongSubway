@@ -22,6 +22,8 @@ public class MinDistancePathFragment extends Fragment {
     ArrayList<Integer> btnBackgrounds;              // 역을 나타내는 버튼들의 background xml 파일의 id를 저장하는 리스트
 
     Button departureButton, arrivalButton;          // 출발역과 도착역을 나타내는 버튼
+    Button zoomButton, transferButton;              // 확대, 환승 버튼
+    Button reportButton;                            // 잘못된 정보 신고 버튼
     TextView departureLine, arrivalLine;            // 출발역과 도착역의 호선을 나타내는 텍스트뷰
     TextView costTime, costDistance, costCost;      // 각각 소요시간, 소요거리, 소요비용을 나타내는 텍스트뷰
 
@@ -48,6 +50,9 @@ public class MinDistancePathFragment extends Fragment {
 
         // 소요시간, 소요거리, 소요비용을 텍스트뷰에 적용시킨다.
         setCostTextView();
+
+        // 버튼들의 이벤트를 등록한다.
+        registerListener();
 
         return v;
     }
@@ -82,6 +87,40 @@ public class MinDistancePathFragment extends Fragment {
         costTime = v.findViewById(R.id.costTime);
         costDistance = v.findViewById(R.id.costDistance);
         costCost = v.findViewById(R.id.costCost);
+
+        // 확대, 환승, 잘못된 정보 신고 버튼 참조
+        zoomButton = v.findViewById(R.id.zoomButton);
+        transferButton = v.findViewById(R.id.transferButton);
+        reportButton = v.findViewById(R.id.reportButton);
+    }
+
+    // 버튼에 클릭리스너를 등록하는 메소드
+    private void registerListener() {
+
+        View.OnClickListener onClickListener = new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.departureButton:
+                        ((ShortestPathActivity) getActivity()).generateStationInformationFragment(graph.getVertices().get(minTimePath.get(0)));
+                        break;
+                    case R.id.arrivalButton:
+                        ((ShortestPathActivity) getActivity()).generateStationInformationFragment(graph.getVertices().get(minTimePath.get(minTimePath.size() - 1)));
+                        break;
+                    case R.id.zoomButton:
+
+                    case R.id.transferButton:
+
+                    case R.id.reportButton:
+                }
+            }
+        };
+
+        departureButton.setOnClickListener(onClickListener);
+        arrivalButton.setOnClickListener(onClickListener);
+        zoomButton.setOnClickListener(onClickListener);
+        transferButton.setOnClickListener(onClickListener);
+        reportButton.setOnClickListener(onClickListener);
     }
 
     // 각각 departureButton , arrivalButton 의 중간에 오도록

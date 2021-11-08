@@ -169,6 +169,7 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/reportButton"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:text="잘못된 정보 신고 >"
