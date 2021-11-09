@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,9 +43,19 @@ public class StationInformationFragment extends Fragment implements View.OnClick
     private Button closeButton;
     private CustomAppGraph.Vertex vertex;
     CustomAppGraph graph;
+    
+    private boolean isBlockCloseBtn;        // 나가기 버튼을 막을지를 나타내는 변수. true면 막는다.
+    
     public StationInformationFragment(CustomAppGraph.Vertex _vertex,CustomAppGraph _graph) {
         vertex=_vertex;
         graph = _graph;
+    }
+
+    // ShortestPathActivity 에서 프래그먼트를 띄울 때 사용하는 생성자 오버로딩 함수
+    public StationInformationFragment(CustomAppGraph.Vertex _vertex,CustomAppGraph _graph, boolean _isBlockCloseBtn) {
+        vertex=_vertex;
+        graph = _graph;
+        isBlockCloseBtn = _isBlockCloseBtn;
     }
 
     @Override
@@ -76,6 +87,10 @@ public class StationInformationFragment extends Fragment implements View.OnClick
 
         number.setOnClickListener(this);
         closeButton.setOnClickListener(this);
+
+        // ShortestPathActivity 에서 생성한 프래그먼트 객체일 때 나가기버튼을 막는다.
+        if (isBlockCloseBtn)
+            closeButton.setVisibility(View.INVISIBLE);
 
         //역 이름 및 호선이름
         vertexName.setText(vertex.getVertex()+"역");
