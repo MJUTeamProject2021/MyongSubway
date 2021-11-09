@@ -15,14 +15,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyongSubway"
         android:usesCleartextTraffic="true">
-        <activity android:name=".SignUpFragment"></activity>
         <activity android:name=".ShortestPathActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".BookmarkActivity" />
         <activity android:name=".MainActivity" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".SignInActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
