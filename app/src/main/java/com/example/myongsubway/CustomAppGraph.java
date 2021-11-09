@@ -126,7 +126,7 @@ public class CustomAppGraph extends Application {
     }
 
     // 초기화, 그래프를 생성하는 함수
-    public void createGraph() {
+    private void createGraph() {
         // 그래프에 필요한 리스트들의 초기화
         adjacent = new ArrayList<ArrayList<Edge>>(EDGE_COUNT);
         vertices = new ArrayList<Vertex>(STATION_COUNT);
