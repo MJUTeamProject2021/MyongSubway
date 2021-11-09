@@ -137,6 +137,7 @@ public class ShortestPathActivity extends AppCompatActivity {
                     case R.id.setAlarmButton:
                         Log.d("test", "setAlarmButton is pressed");
 
+
                         break;
                 }
             }

@@ -1,6 +1,7 @@
 package com.example.myongsubway;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -121,6 +122,14 @@ public class MinTimePathFragment extends Fragment {
                     case R.id.transferButton:
 
                     case R.id.reportButton:
+                        Intent email = new Intent(Intent.ACTION_SEND);
+                        email.setType("plain/text");
+                        String[] address = {"email@address.com"};
+                        email.putExtra(Intent.EXTRA_EMAIL, address);
+                        email.putExtra(Intent.EXTRA_SUBJECT, "");
+                        email.putExtra(Intent.EXTRA_TEXT, "잘못된 정보를 입력해주세요.");
+                        startActivity(email);
+                        break;
                 }
             }
         };
