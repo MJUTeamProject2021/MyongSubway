@@ -46,9 +46,9 @@ public class ShortestPathActivity extends AppCompatActivity {
     private ArrayList<ArrayList<Integer>> allCosts; // 소요시간, 소요거리, 소요비용을 저장하는 리스트, 순서대로 최소시간, 최단거리, 최소비용의 경우가 저장됨
     private final int TYPE_COUNT = 3;               // SearchType 의 경우의 수 (최소시간, 최단거리, 최소비용)
 
-    private CustomAppGraph graph;                   // 액티비티 간에 공유되는 데이터를 담는 클래스
+    private Button bookmarkButton, setAlarmButton;  // 경로 즐겨찾기 버튼, 도착알람 설정 버튼
 
-    private MinTimePathFragment minTimePathFragment;
+    private CustomAppGraph graph;                   // 액티비티 간에 공유되는 데이터를 담는 클래스
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +56,26 @@ public class ShortestPathActivity extends AppCompatActivity {
         setContentView(R.layout.activity_shortest_path);
 
         // 초기화
+        init();
+
+        // 버튼 리스너 설정
+        registerListener();
+
+        // 툴바 설정
+        setToolbar();
+
+        // 다익스트라 알고리즘을 통해 경로탐색, 3가지 SearchType 을 모두 수행한다.
+        dijkstra(graph.getMap().get(departure), CustomAppGraph.SearchType.MIN_TIME);
+        dijkstra(graph.getMap().get(departure), CustomAppGraph.SearchType.MIN_DISTANCE);
+        dijkstra(graph.getMap().get(departure), CustomAppGraph.SearchType.MIN_COST);
+
+        // 뷰페이저2, 탭레이아웃 설정
+        setPagerAndTabLayout();
+    }
+
+    // 초기화하는 메소드
+    private void init() {
+        // 변수  초기화
         graph = (CustomAppGraph) getApplicationContext();       // 액티비티 간에 공유되는 데이터를 담는 클래스의 객체.
         if (graph == null) return;
 
@@ -69,11 +89,8 @@ public class ShortestPathActivity extends AppCompatActivity {
             allCosts.add(new ArrayList<Integer>(3));
         }
 
-        // 툴바 설정
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("지하철 경로 탐색");
-        toolbar.setTitleTextColor(Color.WHITE);
-        setSupportActionBar(toolbar);
+        bookmarkButton = findViewById(R.id.bookmarkButton);
+        setAlarmButton = findViewById(R.id.setAlarmButton);
 
         // MainActivity 가 전송한 데이터 받기
         Intent intent = getIntent();
@@ -84,13 +101,43 @@ public class ShortestPathActivity extends AppCompatActivity {
             departure = "101";
             arrival = "501";
         }
+    }
 
+    // 툴바를 설정하는 메소드
+    private void setToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("지하철 경로 탐색");
+        toolbar.setTitleTextColor(Color.WHITE);
+        setSupportActionBar(toolbar);
+    }
 
-        // 다익스트라 알고리즘을 통해 경로탐색, 3가지 SearchType 을 모두 수행한다.
-        dijkstra(graph.getMap().get(departure), CustomAppGraph.SearchType.MIN_TIME);
-        dijkstra(graph.getMap().get(departure), CustomAppGraph.SearchType.MIN_DISTANCE);
-        dijkstra(graph.getMap().get(departure), CustomAppGraph.SearchType.MIN_COST);
+    // 버튼에 클릭리스너를 등록하는 메소드
+    private void registerListener() {
+        View.OnClickListener onClickListener = new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.bookmarkButton:
+                        if (graph.isLogined())
+                            Log.d("test", "Currently Logined");
+                        else
+                            Log.d("test", "Not Currently Logined");
 
+                        break;
+                    case R.id.setAlarmButton:
+                        Log.d("test", "setAlarmButton is pressed");
+
+                        break;
+                }
+            }
+        };
+        
+        bookmarkButton.setOnClickListener(onClickListener);
+        setAlarmButton.setOnClickListener(onClickListener);
+    }
+
+    // 뷰페이저2, 탭레이아웃 설정
+    private void setPagerAndTabLayout() {
         // 뷰페이저2와 어댑터를 연결 (반드시 TabLayoutMediator 선언 전에 선행되어야 함)
         viewPager = findViewById(R.id.viewPager);
         pagerAdapter = new VPAdapter(this);
@@ -131,7 +178,6 @@ public class ShortestPathActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
     // 툴바의 액션버튼을 설정하는 메소드
