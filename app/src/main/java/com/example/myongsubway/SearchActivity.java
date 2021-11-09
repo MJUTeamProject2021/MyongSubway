@@ -32,10 +32,6 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        // 액션바 숨기기
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
-
         // 뒤로가기 버튼
         backButton = findViewById(R.id.Search_Button_back);
         backButton.setOnClickListener(new View.OnClickListener() {

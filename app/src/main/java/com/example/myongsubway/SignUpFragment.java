@@ -26,38 +26,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link SignUpFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * 회원가입 프래그먼트
+ * 이메일과 비밀번호를 통해 문서ID를 만들고 생성합니다.
  */
 public class SignUpFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private String mParam1;
+    private String mParam2;
 
     public EditText email;
     public EditText password;
     public Button complete;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     public SignUpFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SignUpFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static SignUpFragment newInstance(String param1, String param2) {
         SignUpFragment fragment = new SignUpFragment();
         Bundle args = new Bundle();
@@ -91,32 +79,33 @@ public class SignUpFragment extends Fragment {
 
         DocumentReference docRef = db.collection("users").document(getUserData());
 
+        // 문서를 만듭니다.(회원가입)
         ArrayList<String> list;
         HashMap<String, ArrayList<String>> map;
 
-        // Create a new user
         list = new ArrayList<String>();
         map = new HashMap<String, ArrayList<String>>();
 
         complete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Add a new document with a generated ID
+                // 새 문서와 새 아이디 생성
                 db.collection("users").document(getUserData())
                         .set(map)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                //Toast.makeText(getApplicationContext(), "DocumentSnapshot successfully written!", Toast.LENGTH_SHORT).show();
+                                System.out.println("DocumentSnapshot successfully written!");
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                //Toast.makeText(getApplicationContext(), "Error writing document", Toast.LENGTH_SHORT).show();
+                                System.out.println("Error writing document");
                             }
                         });
 
+                // 버튼 클릭 후 마지막으로 프래그먼트 종료
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 fragmentManager.beginTransaction().remove(SignUpFragment.this).commit();
             }
