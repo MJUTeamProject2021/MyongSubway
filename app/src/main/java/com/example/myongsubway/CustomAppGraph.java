@@ -13,8 +13,9 @@ import jxl.Workbook;
 
 // TODO : 그래프, 역 등의 데이터 사용하는 방법 by 이하윤
 /*
-이 클래스는 모든 액티비티에서 접근할 수 있는 데이터를 모아두는 클래스입니다. 
+이 클래스는 모든 액티비티에서 접근할 수 있는 데이터를 모아두는 클래스입니다.
 모든 코드는 추후 변경 가능합니다. 필요한 기능, 데이터, getter 메소드 등은 다같이 얘기해보고 정하면 좋을 것 같습니다.
+해당 객체는 앱이 실행 시 딱 한번만 생성되기 때문에 모든 액티비티에서 같은 객체를 사용합니다.
 해당 클래스의 데이터를 사용하기 위해선 액티비티에서 해당 클래스의 객체가 필요합니다.
 해당 클래스의 객체는 (CustomAppGraph) getApplicationContext(); 을 통해 얻을 수 있습니다. (따로 변수에 할당하여 사용하는 것을 추천합니다.)
 (좀 더 상세한 사용방법은 ShortestPathActivity.java 의 onCreate() 함수의 초기화 부분을 참고)
@@ -39,8 +40,20 @@ TODO) final int EDGE_COUNT : 간선의 개수를 나타내는 심볼릭 상수, 
         산출 기준은 엑셀파일 stations.xls 의 행의 개수 * 2 입니다. (틀릴 수 있음)
  */
 
+// TODO : 로그인 관련 데이터 사용하는 법
+/*
+초기에 해당 객체가 생성되면 아이디와 비밀번호를 나타내는 email, password 변수가 생성되고 null 을 초기값으로 가집니다.
+
+TODO) 초기에 로그인 시 계정 정보를 설정하기
+    로그인이 성공적으로 된다면 setAccount() 메소드를 통해 현재 앱에 로그인한 계정 정보를 설정할 수 있습니다.
+
+TODO) 현재 로그인 상태인지 확인하기
+    또한 현재 앱이 로그인 상태인지를 확인하기 위해선 isLogined() 메소드를 통해 boolean 으로 확인할 수 있습니다.
+*/
+
 // 액티비티 간에 공유되는 데이터를 담는 클래스
 // 그래프 자료구조, 다익스트라 알고리즘에 필요한 데이터를 모아두는 클래스
+// 로그인과 관련된 데이터를 담는 클래스
 public class CustomAppGraph extends Application {
     public enum SearchType {
         MIN_TIME,       // 최소 시간
@@ -113,8 +126,11 @@ public class CustomAppGraph extends Application {
     private ArrayList<Vertex> vertices;                               // 역의 정보를 저장하는 리스트
     private ArrayList<ArrayList<Edge>> adjacent;                      // 역 사이의 정보를 저장하는 리스트
 
-    private final int STATION_COUNT = 111;       // 역의 개수
-    private final int EDGE_COUNT = 278;          // edge 의 개수 (엑셀의 row * 2)
+    private final int STATION_COUNT = 111;          // 역의 개수
+    private final int EDGE_COUNT = 278;             // edge 의 개수 (엑셀의 row * 2)
+    
+    private String email = null;                    // 로그인에 필요한 아이디
+    private String password = null;                 // 로그인에 필요한 비밀번호
 
 
     @Override
@@ -126,7 +142,7 @@ public class CustomAppGraph extends Application {
     }
 
     // 초기화, 그래프를 생성하는 함수
-    public void createGraph() {
+    private void createGraph() {
         // 그래프에 필요한 리스트들의 초기화
         adjacent = new ArrayList<ArrayList<Edge>>(EDGE_COUNT);
         vertices = new ArrayList<Vertex>(STATION_COUNT);
@@ -237,7 +253,29 @@ public class CustomAppGraph extends Application {
         }
     }
 
-    // getter
+    // 로그인 관련 setter
+    // email 과 password 는 초기에 null 이지만 해당 setter 가 수행되면 email 과 password 는 값이 생기게 된다.
+    public boolean setAccount(String _email, String _password) {
+        if (_email == null || _password == null || _email == "" || _password == "") {
+            return false;
+        }
+
+        email = _email;
+        password = _password;
+
+        return true;
+    }
+
+    // email 과 password 가 하나라도 null 이면 로그인되지 않은 상태
+    public boolean isLogined() {
+        if (email == null || password == null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    // 그래프, 알고리즘 관련 getter
     public ArrayList<Vertex> getVertices() { return vertices; }
     public ArrayList<ArrayList<Edge>> getAdjacent() { return adjacent; }
     public HashMap<String, Integer> getMap() { return map; }
