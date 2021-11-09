@@ -107,6 +107,8 @@ public class LoginActivity extends AppCompatActivity {
                                 bookmarkedRoute = (ArrayList) document.get("즐겨찾는 경로");
                                 System.out.println(bookmarkedStation);
                                 System.out.println(bookmarkedRoute);
+
+                                ((CustomAppGraph) getApplicationContext()).setAccount(getEmail(), getPassword(), bookmarkedStation, bookmarkedRoute);
                             } else {
                                 // 없으면 빈 배열 채로 이동
                                 System.out.println("No such document");
