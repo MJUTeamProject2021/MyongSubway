@@ -49,11 +49,11 @@ TODO) 초기에 로그인 시 계정 정보를 설정하기
     로그인이 성공적으로 된다면 setAccount() 메소드를 통해 현재 앱에 로그인한 계정 정보를 설정할 수 있습니다.
     또한 파이어베이스 에서 받아온 즐찾 역, 즐찾 경로 리스트들을 인자로 전달받아 setter 를 사용해 초기화합니다.
 
- TODO) 내부의 즐겨찾는 역, 즐겨찾는 경로 리스트를 변경하는 법
+ TODO) 내부의 즐겨찾는 역, 즐겨찾는 경로 리스트를 변경하기
     setBookmarkedStation() , setBookmarkedRoute() 의 인자로 바꾸고자 하는 리스트를 전달하여 변경합니다.
     이때 전달한 리스트로 통째로 변경됩니다.
  
- TODO) 내부의 즐겨찾는 역, 즐겨찾는 경로 리스트를 참조하는 법
+ TODO) 내부의 즐겨찾는 역, 즐겨찾는 경로 리스트를 참조하기
     getBookmarkedStation() , getBookmarkedRoute() 를 이용해 ArrayList<String> 변수를 얻을 수 있습니다.
     이때 복사값이 아닌 리스트 자체가 넘어가기 때문에 변경할 수 있습니다. 이왕이면 setter 를 이용해 주세요
     참고로 반환되는 리스트는 final 이기 때문에 getBookmarkedStation() = new ArrayList<String>() ... 와 같이 직접 대입은 불가능합니다.
@@ -61,6 +61,9 @@ TODO) 초기에 로그인 시 계정 정보를 설정하기
 
 TODO) 현재 로그인 상태인지 확인하기
     또한 현재 앱이 로그인 상태인지를 확인하기 위해선 isLogined() 메소드를 통해 boolean 으로 확인할 수 있습니다.
+ 
+ TODO) 해당 객체에 저장되어 있는 계정정보 데이터를 지우기
+    clearAccount() 메소드를 통해 아이디, 비밀번호, 두개의 리스트를 초기화할 수 있다.
 */
 
 // 액티비티 간에 공유되는 데이터를 담는 클래스
@@ -143,17 +146,16 @@ public class CustomAppGraph extends Application {
     
     private String email = null;                    // 로그인에 필요한 아이디
     private String password = null;                 // 로그인에 필요한 비밀번호
-    private ArrayList<String> bookmarkedStation;    // 즐겨찾기에 저장된 역
-    private ArrayList<String> bookmarkedRoute;      // 즐겨찾기에 저장된 경로
+    private ArrayList<String> bookmarkedStation
+            = new ArrayList<String>();              // 즐겨찾기에 저장된 역
+    private ArrayList<String> bookmarkedRoute
+            = new ArrayList<String>();              // 즐겨찾기에 저장된 경로
 
 
     @Override
     public void onCreate() {
         // 그래프 생성
         createGraph();
-
-        bookmarkedStation = new ArrayList<String>();
-        bookmarkedRoute = new ArrayList<String>();
 
         super.onCreate();
     }
@@ -288,6 +290,8 @@ public class CustomAppGraph extends Application {
 
     // 전달된 리스트로 완전히 대체된다.
     public void setBookmarkedStation(ArrayList<String> _bookmarkedStation) {
+        if (_bookmarkedStation == null) return;
+
         // Deep Copy
         bookmarkedStation.clear();
 
@@ -298,6 +302,8 @@ public class CustomAppGraph extends Application {
 
     // 전달된 리스트로 완전히 대체된다.
     public void setBookmarkedRoute(ArrayList<String> _bookmarkedRoute) {
+        if (_bookmarkedRoute == null) return;
+
         // Deep Copy
         bookmarkedRoute.clear();
 
@@ -313,6 +319,14 @@ public class CustomAppGraph extends Application {
         }
 
         return true;
+    }
+
+    // 어플에 저장되는 계정 정보를 비운다.
+    public void clearAccount() {
+        email = null;
+        password = null;
+        bookmarkedStation.clear();
+        bookmarkedRoute.clear();
     }
 
     // 로그인 관련 getter

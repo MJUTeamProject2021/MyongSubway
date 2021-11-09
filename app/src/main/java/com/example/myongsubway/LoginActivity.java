@@ -147,6 +147,10 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
                 dlg.show();*/
+
+                ((CustomAppGraph) getApplicationContext()).clearAccount();
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
             }
         });
 
