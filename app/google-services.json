@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "33753148430",
+    "firebase_url": "https://myongsubway-default-rtdb.firebaseio.com",
+    "project_id": "myongsubway",
+    "storage_bucket": "myongsubway.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:33753148430:android:3568c971c364577ab5205f",
+        "android_client_info": {
+          "package_name": "com.example.myongsubway"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "33753148430-ptf6lddcc4u91vcre2vnsvsb6anmdtd7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.myongsubway",
+            "certificate_hash": "7cd90bdba5b2f868db4d0cb8b83a44e1710b513c"
+          }
+        },
+        {
+          "client_id": "33753148430-hlspe55e243811aamdh09q4u52a8fksv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLteGhLlaWUwYhVxo5m07AsqKL1yHnIhQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "33753148430-hlspe55e243811aamdh09q4u52a8fksv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
