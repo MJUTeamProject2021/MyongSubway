@@ -2,8 +2,10 @@ package com.example.myongsubway;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -33,27 +35,23 @@ import static android.content.ContentValues.TAG;
 
 public class BookmarkActivity extends AppCompatActivity  {
 
-   /* private EditText departStation;
-    private EditText destination;
-    private Button bookmarkOn;
-    private EditText station;
-
-    private ArrayList <String> list;
-    private HashMap<String, ArrayList<String>> map;
-
-    private String User = ((LoginActivity)LoginActivity.context_login).getID() + "_" + ((LoginActivity)LoginActivity.context_login).getPassword();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bookmark);
 
-        departStation = findViewById(R.id.textView2);
-        destination = findViewById(R.id.textView11);
-        bookmarkOn = findViewById(R.id.button);
-        station = findViewById(R.id.sample_EditText);
+        Toolbar toolbarStation = findViewById(R.id.bookmark_toolbar_station);
+        toolbarStation.setTitle("즐겨찾는 역");
+        toolbarStation.setTitleTextColor(Color.WHITE);
+        setSupportActionBar(toolbarStation);
 
+        Toolbar toolbarRoute = findViewById(R.id.bookmark_toolbar_route);
+        toolbarRoute.setTitle("즐겨찾는 경로");
+        toolbarRoute.setTitleTextColor(Color.WHITE);
+        setSupportActionBar(toolbarRoute);
+    }
 
+/*
         DocumentReference docRef = db.collection("users").document(User);
 
 
@@ -69,7 +67,6 @@ public class BookmarkActivity extends AppCompatActivity  {
                     if (document.exists()) {
                         Toast.makeText(getApplicationContext(), "DocumentSnapshot data: " + document.getData(), Toast.LENGTH_SHORT).show();
                         System.out.println(document.getData().get("즐겨찾는역"));
-                        // TODO : document.getData()값을 변환해서 list에 추가
                     } else {
                         Toast.makeText(getApplicationContext(), "No such document" + document.getData(), Toast.LENGTH_SHORT).show();
                     }

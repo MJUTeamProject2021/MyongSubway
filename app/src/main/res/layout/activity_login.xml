@@ -1,82 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_constraintlayout_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".LoginActivity">
 
-    <TextView
-        android:id="@+id/login_textview_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:text="Login"
-        android:textSize="24dp"/>
-
-    <ImageView
-        android:id="@+id/login_imageView_image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@null"
-        tools:srcCompat="@tools:sample/avatars"
-        android:layout_gravity="center"/>
-
-    <TextView
-        android:id="@+id/login_edittext_email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Email" />
-
-    <EditText
-        android:id="@+id/login_edittext_emailinput"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:hint="abc@gmail.com" />
-
-    <TextView
-        android:id="@+id/login_textview_pawssword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Password" />
-
-    <EditText
-        android:id="@+id/login_edittext_passwordinput"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:hint="********************" />
-
-    <Button
-        android:id="@+id/login_button_login"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="Log in" />
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="10">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/login_textview_findpassword"
+            android:id="@+id/login_textview_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="로그인"
+            android:textSize="24dp" />
+
+        <ImageView
+            android:id="@+id/login_imageView_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_weight="5"
-            android:textSize="18dp"
-            android:text="Forgot Password?" />
+            android:layout_gravity="center"
+            android:background="@null"
+            android:src="@mipmap/ic_launcher" />
 
         <TextView
-            android:id="@+id/login_textview_signup"
+            android:id="@+id/login_edittext_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="이메일 입력" />
+
+        <EditText
+            android:id="@+id/login_edittext_emailinput"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="user@gmail.com" />
+
+        <TextView
+            android:id="@+id/login_textview_pawssword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="비밀번호 입력" />
+
+        <EditText
+            android:id="@+id/login_edittext_passwordinput"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="****" />
+
+        <Button
+            android:id="@+id/login_button_login"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:text="로그인" />
+
+        <TextView
+            android:id="@+id/login_textview_or"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:gravity="center"
-            android:layout_weight="5"
-            android:textSize="18dp"
-            android:text="Create Account?" />
+            android:text="또는"
+            android:textSize="14dp" />
+
+        <Button
+            android:id="@+id/login_button_withoutlogin"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:text="로그인 없이 시작" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <TextView
+                android:id="@+id/login_textview_findpassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:gravity="center"
+                android:text="비밀번호 찾기"
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/login_textview_signup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:gravity="center"
+                android:text="계정 생성"
+                android:textSize="18dp" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
