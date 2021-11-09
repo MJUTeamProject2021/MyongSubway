@@ -2,7 +2,11 @@ package com.example.myongsubway;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.RippleDrawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -10,10 +14,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -21,6 +29,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -30,20 +39,23 @@ public class MinTimePathFragment extends Fragment {
     CustomAppGraph graph;                           // 액티비티 간에 공유되는 데이터를 담는 클래스
     ArrayList<CustomAppGraph.Vertex> vertices;      // 역들의 정보를 담는 클래스인 Vertex 객체들을 저장하는 리스트
     ArrayList<Integer> btnBackgrounds;              // 역을 나타내는 버튼들의 background xml 파일의 id를 저장하는 리스트
+    ArrayList<Integer> lineColors;                  // 호선의 색들을 담고있는 리스트
 
     Button departureButton, arrivalButton;          // 출발역과 도착역을 나타내는 버튼
-    Button zoomButton, transferButton;              // 확대, 환승 버튼
+    ImageButton zoomButton;                         // 확대 버튼
     Button reportButton;                            // 잘못된 정보 신고 버튼
     TextView departureLine, arrivalLine;            // 출발역과 도착역의 호선을 나타내는 텍스트뷰
     TextView costTime, costDistance, costCost;      // 각각 소요시간, 소요거리, 소요비용을 나타내는 텍스트뷰
+    ImageView midLine;                              // 역버튼 사이의 선을 나타내는 뷰
 
-    public MinTimePathFragment(ArrayList<Integer>path, ArrayList<Integer> _costs, CustomAppGraph _graph) {
+    public MinTimePathFragment(ArrayList<Integer>path, ArrayList<Integer> _costs, CustomAppGraph _graph, ArrayList<Integer> _btnBackgrounds, ArrayList<Integer> _lineColors) {
         minTimePath = path;
         costs = _costs;
         graph = _graph;
+        btnBackgrounds = _btnBackgrounds;
+        lineColors = _lineColors;
 
         vertices = graph.getVertices();
-        initializeBtnBackgrounds();
     }
 
     @Nullable
@@ -57,6 +69,9 @@ public class MinTimePathFragment extends Fragment {
         // 각각 departureButton , arrivalButton 의 중간에 오도록
         // departureLine , arrivalLine 의 marginLeft, marginRight 를 설정한다.
         setLineTextViewMargin();
+
+        // midLine 에 그라데이션 넣기
+        setMidLineGradient();
 
         // 소요시간, 소요거리, 소요비용을 텍스트뷰에 적용시킨다.
         setCostTextView();
@@ -100,8 +115,10 @@ public class MinTimePathFragment extends Fragment {
 
         // 확대, 환승, 잘못된 정보 신고 버튼 참조
         zoomButton = v.findViewById(R.id.zoomButton);
-        transferButton = v.findViewById(R.id.transferButton);
         reportButton = v.findViewById(R.id.reportButton);
+        
+        // 역버튼 사이의 선을 나타내는 뷰 참조
+        midLine = v.findViewById(R.id.midLine);
     }
 
     // 버튼에 클릭리스너를 등록하는 메소드
@@ -114,12 +131,14 @@ public class MinTimePathFragment extends Fragment {
                     case R.id.departureButton:
                         ((ShortestPathActivity) getActivity()).generateStationInformationFragment(graph.getVertices().get(minTimePath.get(0)));
                         break;
+
                     case R.id.arrivalButton:
                         ((ShortestPathActivity) getActivity()).generateStationInformationFragment(graph.getVertices().get(minTimePath.get(minTimePath.size() - 1)));
                         break;
-                    case R.id.zoomButton:
 
-                    case R.id.transferButton:
+                    case R.id.zoomButton:
+                        ((ShortestPathActivity) getActivity()).generateStationInformationFragment(minTimePath, btnBackgrounds);
+                        break;
 
                     case R.id.reportButton:
                         Intent email = new Intent(Intent.ACTION_SEND);
@@ -137,7 +156,6 @@ public class MinTimePathFragment extends Fragment {
         departureButton.setOnClickListener(onClickListener);
         arrivalButton.setOnClickListener(onClickListener);
         zoomButton.setOnClickListener(onClickListener);
-        transferButton.setOnClickListener(onClickListener);
         reportButton.setOnClickListener(onClickListener);
     }
 
@@ -147,15 +165,27 @@ public class MinTimePathFragment extends Fragment {
         float density = this.getResources().getDisplayMetrics().density;        // dp 와 px 사이를 변환할 때 필요한 변수
 
         ConstraintLayout.LayoutParams dLayoutParams = (ConstraintLayout.LayoutParams) departureButton.getLayoutParams();
-        int halfDepartureWidth = (int)(dLayoutParams.width / density + 0.5) / 2;            // dp
+        int halfDepartureWidth = (int)(dLayoutParams.width / density + 0.5) / 2;            // px to dp
 
         ConstraintLayout.LayoutParams dLineLayoutParams = (ConstraintLayout.LayoutParams) departureLine.getLayoutParams();
         ConstraintLayout.LayoutParams aLineLayoutParams = (ConstraintLayout.LayoutParams) arrivalLine.getLayoutParams();
-        int halfDepartureLineWidth = (int)(dLineLayoutParams.width / density + 0.5) / 2;    // dp
-        int margin = (25 + halfDepartureWidth) - halfDepartureLineWidth;                    // dp
+        int halfDepartureLineWidth = (int)(dLineLayoutParams.width / density + 0.5) / 2;    // px to dp
+        int margin = (25 + halfDepartureWidth) - halfDepartureLineWidth;                    // px to dp
 
         dLineLayoutParams.setMarginStart((int)(margin * density + 0.5));
         aLineLayoutParams.setMarginEnd((int)(margin * density + 0.5));
+
+    }
+
+    // midLine 에 그라데이션을 넣는 메소드. 출발역의 호선색 ~ 도착역의 호선색
+    private void setMidLineGradient() {
+        int departureLine = Integer.parseInt(departureButton.getText().toString()) / 100;
+        int arrivalLine = Integer.parseInt(arrivalButton.getText().toString()) / 100;
+
+        GradientDrawable bgShape = (GradientDrawable) midLine.getBackground();
+        bgShape.setGradientType(GradientDrawable.LINEAR_GRADIENT);
+        int[] colors = { lineColors.get(departureLine), lineColors.get(arrivalLine) };
+        bgShape.setColors(colors);
     }
 
     // 소요시간, 소요거리, 소요비용을 텍스트뷰에 적용시킨다.
@@ -195,6 +225,7 @@ public class MinTimePathFragment extends Fragment {
             output += time / 3600 + "시간 ";
             time %= 3600;
         }
+
         if (time >= 60) {
             output += time / 60 + "분 ";
             time %= 60;
@@ -238,18 +269,5 @@ public class MinTimePathFragment extends Fragment {
         return sb.toString();
     }
 
-    // 호선에 따른 역버튼 배경 xml 을 담는 메소드
-    private void initializeBtnBackgrounds() {
-        btnBackgrounds = new ArrayList<Integer>(10);
-        btnBackgrounds.add(-1);
-        btnBackgrounds.add(R.drawable.round_button_1);
-        btnBackgrounds.add(R.drawable.round_button_2);
-        btnBackgrounds.add(R.drawable.round_button_3);
-        btnBackgrounds.add(R.drawable.round_button_4);
-        btnBackgrounds.add(R.drawable.round_button_5);
-        btnBackgrounds.add(R.drawable.round_button_6);
-        btnBackgrounds.add(R.drawable.round_button_7);
-        btnBackgrounds.add(R.drawable.round_button_8);
-        btnBackgrounds.add(R.drawable.round_button_9);
-    }
+
 }

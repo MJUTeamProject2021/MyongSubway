@@ -2,12 +2,38 @@
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
     android:color="#123123">
     <item>
-        <shape android:shape="oval">
+        <shape android:shape="rectangle">
             <solid android:color="@color/line1Color" />
             <stroke
                 android:color="@color/line1Color"
                 android:width="2.5dp"/>
-
+            <corners
+                android:radius="35dp"/>
         </shape>
     </item>
+
+    <item
+        android:top="12dp"
+        android:bottom="12dp"
+        android:left="12dp"
+        android:right="12dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/white"/>
+            <stroke
+                android:color="@color/white"
+                android:width="2.5dp"/>
+            <corners
+                android:radius="35dp"/>
+        </shape>
+    </item>
+
+    <!--<item>
+        <shape android:shape="ring"
+            android:thickness="15dp"
+            android:innerRadius="10dp"
+            android:useLevel="false">
+            <solid android:color="@color/line1Color"/>
+        </shape>
+    </item>-->
+
 </ripple>

@@ -73,7 +73,7 @@ public class CustomAppGraph extends Application {
     public enum SearchType {
         MIN_TIME,       // 최소 시간
         MIN_DISTANCE,   // 최소 거리
-        MIN_COST,       // 최소 비용
+        MIN_COST        // 최소 비용
     }
 
     public class Edge {

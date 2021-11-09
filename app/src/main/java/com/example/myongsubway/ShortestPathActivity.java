@@ -1,12 +1,10 @@
 package com.example.myongsubway;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
@@ -20,27 +18,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.PriorityQueue;
 
@@ -60,6 +47,9 @@ public class ShortestPathActivity extends AppCompatActivity {
 
     private CustomAppGraph graph;                   // 액티비티 간에 공유되는 데이터를 담는 클래스
 
+    private ArrayList<Integer> btnBackgrounds;              // 역을 나타내는 버튼들의 background xml 파일의 id를 저장하는 리스트
+    private ArrayList<Integer> lineColors;                  // 호선의 색들을 담고있는 리스트
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +60,10 @@ public class ShortestPathActivity extends AppCompatActivity {
 
         // 버튼 리스너 설정
         registerListener();
+
+        // 프래그먼트에서 사용할 데이터를 초기화
+        initializeBtnBackgrounds();
+        initializeLineColors();
 
         // 툴바 설정
         setToolbar();
@@ -155,6 +149,7 @@ public class ShortestPathActivity extends AppCompatActivity {
         viewPager.setAdapter(pagerAdapter);
         tabLayout = findViewById(R.id.tabLayout);
 
+
         // 뷰페이저2와 탭레이아웃을 연동
         // 탭과 뷰페이저를 연결, 여기서 새로운 탭을 다시 만드므로 레이아웃에서 꾸미지말고 여기서 꾸며야함
         new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
@@ -232,14 +227,14 @@ public class ShortestPathActivity extends AppCompatActivity {
         // 해당 리스트의 역들은 발견만 한 역일뿐 아직 방문하지 않은 상태이다.
         PriorityQueue<VertexCost> discovered = new PriorityQueue<VertexCost>();
 
-        ArrayList<Integer> best = new ArrayList<Integer>(graph.getEdgeCount());     // 각 역으로 가는 최단거리를 저장하는 리스트
-        ArrayList<Integer> parent = new ArrayList<Integer>(graph.getEdgeCount());   // 각 역의 이전 역을 저장하는 리스트
+        ArrayList<Integer> best = new ArrayList<Integer>(graph.getStationCount());     // 각 역으로 가는 최단거리를 저장하는 리스트
+        ArrayList<Integer> parent = new ArrayList<Integer>(graph.getStationCount());   // 각 역의 이전 역을 저장하는 리스트
 
         // 리스트 초기화
-        for (int i = 0; i < graph.getEdgeCount(); i++) {
+        for (int i = 0; i < graph.getStationCount(); i++) {
             best.add(Integer.MAX_VALUE);
         }
-        for (int i = 0; i < graph.getEdgeCount(); i++) {
+        for (int i = 0; i < graph.getStationCount(); i++) {
             parent.add(-1);
         }
 
@@ -302,16 +297,21 @@ public class ShortestPathActivity extends AppCompatActivity {
     private void calculateAllCosts(ArrayList<Integer> path, CustomAppGraph.SearchType TYPE, int best) {
         switch (TYPE) {
             case MIN_TIME:
+                Log.d("test", "MIN_TIME" + TYPE.ordinal());
                 allCosts.get(TYPE.ordinal()).add(best);
                 allCosts.get(TYPE.ordinal()).add(calculateElapsed(path, CustomAppGraph.SearchType.MIN_DISTANCE));
                 allCosts.get(TYPE.ordinal()).add(calculateElapsed(path, CustomAppGraph.SearchType.MIN_COST));
                 break;
+
             case MIN_DISTANCE:
+                Log.d("test", "MIN_DISTANCE" + TYPE.ordinal());
                 allCosts.get(TYPE.ordinal()).add(calculateElapsed(path, CustomAppGraph.SearchType.MIN_TIME));
                 allCosts.get(TYPE.ordinal()).add(best);
                 allCosts.get(TYPE.ordinal()).add(calculateElapsed(path, CustomAppGraph.SearchType.MIN_COST));
                 break;
+
             case MIN_COST:
+                Log.d("test", "MIN_COST" + TYPE.ordinal());
                 allCosts.get(TYPE.ordinal()).add(calculateElapsed(path, CustomAppGraph.SearchType.MIN_TIME));
                 allCosts.get(TYPE.ordinal()).add(calculateElapsed(path, CustomAppGraph.SearchType.MIN_DISTANCE));
                 allCosts.get(TYPE.ordinal()).add(best);
@@ -337,9 +337,51 @@ public class ShortestPathActivity extends AppCompatActivity {
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
-        transaction.replace(R.id.fragment_container, frag);
+        transaction.replace(R.id.station_info_fragment_container, frag);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+    
+    // 확대경로 프래그먼트를 띄우는 메소드
+    public void generateStationInformationFragment(ArrayList<Integer> path, ArrayList<Integer> btnBackgrounds) {
+        // 역정보 프래그먼트를 띄운다.
+        ZoomPathFragment frag = new ZoomPathFragment(path, btnBackgrounds);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        transaction.replace(R.id.zoom_path_fragment_container, frag);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    // 호선에 따른 역버튼 배경 xml 을 담는 메소드
+    private void initializeBtnBackgrounds() {
+        btnBackgrounds = new ArrayList<Integer>(10);
+        btnBackgrounds.add(-1);
+        btnBackgrounds.add(R.drawable.round_button_1);
+        btnBackgrounds.add(R.drawable.round_button_2);
+        btnBackgrounds.add(R.drawable.round_button_3);
+        btnBackgrounds.add(R.drawable.round_button_4);
+        btnBackgrounds.add(R.drawable.round_button_5);
+        btnBackgrounds.add(R.drawable.round_button_6);
+        btnBackgrounds.add(R.drawable.round_button_7);
+        btnBackgrounds.add(R.drawable.round_button_8);
+        btnBackgrounds.add(R.drawable.round_button_9);
+    }
+
+    private void initializeLineColors() {
+        lineColors = new ArrayList<Integer>(10);
+        lineColors.add(-1);
+        lineColors.add(getResources().getColor(R.color.line1Color, null));
+        lineColors.add(getResources().getColor(R.color.line2Color, null));
+        lineColors.add(getResources().getColor(R.color.line3Color, null));
+        lineColors.add(getResources().getColor(R.color.line4Color, null));
+        lineColors.add(getResources().getColor(R.color.line5Color, null));
+        lineColors.add(getResources().getColor(R.color.line6Color, null));
+        lineColors.add(getResources().getColor(R.color.line7Color, null));
+        lineColors.add(getResources().getColor(R.color.line8Color, null));
+        lineColors.add(getResources().getColor(R.color.line9Color, null));
+
     }
 
     // 뷰페이저 어댑터 클래스
@@ -349,15 +391,12 @@ public class ShortestPathActivity extends AppCompatActivity {
         public VPAdapter(FragmentActivity fa) {
             super(fa);
             items = new ArrayList<Fragment>();
-
             items.add(new MinTimePathFragment(paths.get(CustomAppGraph.SearchType.MIN_TIME.ordinal()),
-                    allCosts.get(CustomAppGraph.SearchType.MIN_TIME.ordinal()), graph));
-
+                    allCosts.get(CustomAppGraph.SearchType.MIN_TIME.ordinal()), graph, btnBackgrounds, lineColors));
             items.add(new MinDistancePathFragment(paths.get(CustomAppGraph.SearchType.MIN_DISTANCE.ordinal()),
-                    allCosts.get(CustomAppGraph.SearchType.MIN_DISTANCE.ordinal()), graph));
-
+                    allCosts.get(CustomAppGraph.SearchType.MIN_DISTANCE.ordinal()), graph, btnBackgrounds, lineColors));
             items.add(new MinCostPathFragment(paths.get(CustomAppGraph.SearchType.MIN_COST.ordinal()),
-                    allCosts.get(CustomAppGraph.SearchType.MIN_TIME.ordinal()), graph));
+                    allCosts.get(CustomAppGraph.SearchType.MIN_COST.ordinal()), graph, btnBackgrounds, lineColors));
         }
 
         @NonNull
