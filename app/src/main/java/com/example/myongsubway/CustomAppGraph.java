@@ -11,6 +11,7 @@ import java.util.HashMap;
 
 import jxl.Sheet;
 import jxl.Workbook;
+import jxl.Cell;
 
 // TODO : 그래프, 역 등의 데이터 사용하는 방법 by 이하윤
 /**
@@ -96,6 +97,7 @@ public class CustomAppGraph extends Application {
         private String vertex;                          // 역의 이름 (ex. "101")
         private ArrayList<Integer> adjacent;            // 역과 연결된 역을 저장하는 리스트
         private int line;                               // 호선
+        private ArrayList<Integer> lines;               // 호선들
         private boolean toilet;                         // 역 내 화장실 유무
         private String number;                          // 역 전화번호
         private String doorDirection;                   // 내리는 문 방향
@@ -107,6 +109,7 @@ public class CustomAppGraph extends Application {
             adjacent = new ArrayList<Integer>();
             vertex = _vertex;
             line = _line;
+            lines = new ArrayList<Integer>();
         }
 
         // 역과 연결된 역을 등록하는 메소드
@@ -128,6 +131,7 @@ public class CustomAppGraph extends Application {
         public String getVertex() { return vertex; }
         public ArrayList<Integer> getAdjacent() { return adjacent; }
         public int getLine() { return line; }
+        public ArrayList<Integer> getLines() { return lines; }
         public boolean getToilet() { return toilet; }
         public String getNumber() { return number; }
         public String getDoorDirection() { return doorDirection; }
@@ -141,15 +145,17 @@ public class CustomAppGraph extends Application {
     private ArrayList<Vertex> vertices;                               // 역의 정보를 저장하는 리스트
     private ArrayList<ArrayList<Edge>> adjacent;                      // 역 사이의 정보를 저장하는 리스트
 
-    private final int STATION_COUNT = 111;          // 역의 개수
-    private final int EDGE_COUNT = 278;             // edge 의 개수 (엑셀의 row * 2)
-    
-    private String email = null;                    // 로그인에 필요한 아이디
-    private String password = null;                 // 로그인에 필요한 비밀번호
+    private final int STATION_COUNT = 111;              // 역의 개수
+    private final int EDGE_COUNT = 278;                 // edge 의 개수 (엑셀의 row * 2)
+
+    private String email = null;                        // 로그인에 필요한 아이디
+    private String password = null;                     // 로그인에 필요한 비밀번호
     private ArrayList<String> bookmarkedStation
-            = new ArrayList<String>();              // 즐겨찾기에 저장된 역
+            = new ArrayList<String>();                       // 즐겨찾기에 저장된 역
     private ArrayList<String> bookmarkedRoute
-            = new ArrayList<String>();              // 즐겨찾기에 저장된 경로
+            = new ArrayList<String>();                       // 즐겨찾기에 저장된 경로
+
+    private final int LINE_COUNT = 9;                   // 호선의 개수
 
 
     @Override
@@ -189,11 +195,16 @@ public class CustomAppGraph extends Application {
             InputStream dataIs = getBaseContext().getResources().getAssets().open("data.xls");
             Workbook dataWb = Workbook.getWorkbook(dataIs);
 
-            if (stationWb != null && dataWb != null) {
+            // data.xls 역 정보 읽기
+            InputStream linesIs = getBaseContext().getResources().getAssets().open("lines.xls");
+            Workbook linesWb = Workbook.getWorkbook(linesIs);
+
+            if (stationWb != null && dataWb != null && linesWb != null) {
                 Sheet stationsSheet = stationWb.getSheet(0);
                 Sheet dataSheet = dataWb.getSheet(0);
+                Sheet linesSheet = linesWb.getSheet(0);
 
-                if (stationsSheet != null && dataSheet != null) {
+                if (stationsSheet != null && dataSheet != null && linesSheet != null) {
                     // stations.xls 를 읽어서 초기화
                     {
                         int colTotal = stationsSheet.getColumns();
@@ -264,6 +275,22 @@ public class CustomAppGraph extends Application {
                             vertices.get(map.get(index)).addInformation(toilet, number, doorDirection, stationFacilities, nearbyRestaurants, nearbyFacilities);
                         }
                     }
+
+                    // 추가로 lines.xls 를 읽어서 각 역의 호선 업데이트
+                    {
+                        for (int row = 1; row <= LINE_COUNT; row++) {
+                            int col = 1;
+                            int line = row;
+                            while (true) {
+                                try {
+                                    Cell c = linesSheet.getCell(col++, row);
+                                    vertices.get(map.get(c.getContents())).getLines().add(line);
+                                } catch (Exception e) {
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
@@ -271,6 +298,22 @@ public class CustomAppGraph extends Application {
             e.printStackTrace();
         }
     }
+
+    /* TODO : 디버깅용 코드
+    void printLines() {
+        for (Vertex vertex : vertices) {
+            String output = vertex.getVertex() + " 인접역 : ";
+            for (int index : vertex.getAdjacent()) {
+                output += reverseMap.get(index) + " ";
+            }
+            output += "호선 : ";
+            for (int line : vertex.getLines()) {
+                output += line + " ";
+            }
+
+            Log.d("test", output);
+        }
+    }*/
 
     // 로그인 관련 setter
     // email 과 password 는 초기에 null 이지만 해당 setter 가 수행되면 email 과 password 는 값이 생기게 된다.

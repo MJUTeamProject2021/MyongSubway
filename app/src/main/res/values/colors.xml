@@ -8,6 +8,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="rippleColor">#BEBEBE</color>
+
     <!--tab Color-->
     <color name="tabSelectedColor">#FFFFFF</color>
     <color name="tabUnSelectedColor">#000000</color>

@@ -103,7 +103,7 @@ public class ShortestPathActivity extends AppCompatActivity {
         // TODO : 디버깅용 코드
         if (departure == null) {
             departure = "101";
-            arrival = "501";
+            arrival = "216";
         }
     }
 
@@ -122,14 +122,15 @@ public class ShortestPathActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.bookmarkButton:
-                        if (graph.isLogined())
+
+                        /*if (graph.isLogined())
                             Log.d("test", "Currently Logined");
                         else
-                            Log.d("test", "Not Currently Logined");
+                            Log.d("test", "Not Currently Logined");*/
 
                         break;
                     case R.id.setAlarmButton:
-                        Log.d("test", "setAlarmButton is pressed");
+                        //Log.d("test", "setAlarmButton is pressed");
 
 
                         break;
@@ -297,21 +298,18 @@ public class ShortestPathActivity extends AppCompatActivity {
     private void calculateAllCosts(ArrayList<Integer> path, CustomAppGraph.SearchType TYPE, int best) {
         switch (TYPE) {
             case MIN_TIME:
-                Log.d("test", "MIN_TIME" + TYPE.ordinal());
                 allCosts.get(TYPE.ordinal()).add(best);
                 allCosts.get(TYPE.ordinal()).add(calculateElapsed(path, CustomAppGraph.SearchType.MIN_DISTANCE));
                 allCosts.get(TYPE.ordinal()).add(calculateElapsed(path, CustomAppGraph.SearchType.MIN_COST));
                 break;
 
             case MIN_DISTANCE:
-                Log.d("test", "MIN_DISTANCE" + TYPE.ordinal());
                 allCosts.get(TYPE.ordinal()).add(calculateElapsed(path, CustomAppGraph.SearchType.MIN_TIME));
                 allCosts.get(TYPE.ordinal()).add(best);
                 allCosts.get(TYPE.ordinal()).add(calculateElapsed(path, CustomAppGraph.SearchType.MIN_COST));
                 break;
 
             case MIN_COST:
-                Log.d("test", "MIN_COST" + TYPE.ordinal());
                 allCosts.get(TYPE.ordinal()).add(calculateElapsed(path, CustomAppGraph.SearchType.MIN_TIME));
                 allCosts.get(TYPE.ordinal()).add(calculateElapsed(path, CustomAppGraph.SearchType.MIN_DISTANCE));
                 allCosts.get(TYPE.ordinal()).add(best);
@@ -345,7 +343,7 @@ public class ShortestPathActivity extends AppCompatActivity {
     // 확대경로 프래그먼트를 띄우는 메소드
     public void generateStationInformationFragment(ArrayList<Integer> path, ArrayList<Integer> btnBackgrounds) {
         // 역정보 프래그먼트를 띄운다.
-        ZoomPathFragment frag = new ZoomPathFragment(path, btnBackgrounds);
+        ZoomPathFragment frag = new ZoomPathFragment(path, btnBackgrounds, lineColors);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
@@ -369,6 +367,7 @@ public class ShortestPathActivity extends AppCompatActivity {
         btnBackgrounds.add(R.drawable.round_button_9);
     }
 
+    // 호선에 따른 색을 담는 메소드
     private void initializeLineColors() {
         lineColors = new ArrayList<Integer>(10);
         lineColors.add(-1);

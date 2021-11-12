@@ -155,23 +155,18 @@
             app:layout_constraintTop_toBottomOf="@id/costCostNotice"
             app:layout_constraintBottom_toBottomOf="@id/guideline2"/>
 
-        <View
-            android:background="#d3d3d3"
-            android:layout_width="match_parent"
-            android:layout_height="2px"
-            android:layout_marginBottom="30dp"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/reportButton"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            style="?android:attr/borderlessButtonStyle"
+            android:layout_height="40dp"
+            android:background="@drawable/ripple_report_button"
+            android:paddingLeft="10dp"
             android:text="잘못된 정보 신고 >"
             android:gravity="left|center_vertical"
             android:textColor="#808487"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"/>
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline1"
