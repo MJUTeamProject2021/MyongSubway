@@ -21,6 +21,7 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"></androidx.appcompat.widget.Toolbar>
 
         <ListView
+            android:id="@+id/bookmark_listview_station"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1" />
@@ -34,6 +35,7 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"></androidx.appcompat.widget.Toolbar>
 
         <ListView
+            android:id="@+id/bookmark_listview_route"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1" />

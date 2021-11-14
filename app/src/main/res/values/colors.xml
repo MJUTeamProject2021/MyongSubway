@@ -8,6 +8,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="rippleColor">#BEBEBE</color>
+
     <!--tab Color-->
     <color name="tabSelectedColor">#FFFFFF</color>
     <color name="tabUnSelectedColor">#000000</color>
@@ -16,15 +18,15 @@
     <color name="basicColor">#536AE8</color>
 
     <!--각 호선의 색-->
-    <color name="line1Color">#009688</color>
-    <color name="line2Color">#3F51B5</color>
-    <color name="line3Color">#800A01</color>
-    <color name="line4Color">#F44336</color>
-    <color name="line5Color">#2196F3</color>
-    <color name="line6Color">#FFC107</color>
-    <color name="line7Color">#8BC34A</color>
-    <color name="line8Color">#03A9F4</color>
-    <color name="line9Color">#673AB7</color>
+    <color name="line1Color">#FF009688</color>
+    <color name="line2Color">#FF3F51B5</color>
+    <color name="line3Color">#FF800A01</color>
+    <color name="line4Color">#FFF44336</color>
+    <color name="line5Color">#FF2196F3</color>
+    <color name="line6Color">#FFFFC107</color>
+    <color name="line7Color">#FF8BC34A</color>
+    <color name="line8Color">#FF03A9F4</color>
+    <color name="line9Color">#FF673AB7</color>
 
     <!--약간 바뀐 각 호선의 색 for StationReportFragment.java-->
     <color name="frag1Color">#40A940</color>

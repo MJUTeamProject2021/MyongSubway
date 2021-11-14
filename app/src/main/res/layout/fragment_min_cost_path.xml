@@ -8,51 +8,43 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:id="@+id/relativeLayout">
+        android:layout_weight="3">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/departureButton"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="120dp"
+            android:layout_height="60dp"
             android:text="101"
             android:layout_marginLeft="25dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/linear"
+        <ImageView
+            android:id="@+id/midLine"
+            android:background="@drawable/simple_line"
+            android:layerType="software"
+            android:layout_width="0dp"
+            android:layout_height="5dp"
             app:layout_constraintLeft_toRightOf="@id/departureButton"
             app:layout_constraintRight_toLeftOf="@id/arrivalButton"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/zoomButton"
-                android:layout_width="80dp"
-                android:layout_height="50dp"
-                android:text="확대"
-                android:textStyle="bold"
-                android:background="@drawable/ripple_up_btn"/>
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/transferButton"
-                android:layout_width="80dp"
-                android:layout_height="50dp"
-                android:text="환승"
-                android:textStyle="bold"
-                android:background="@drawable/ripple_down_btn"/>
-
-        </LinearLayout>
+        <ImageButton
+            android:id="@+id/zoomButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@mipmap/ic_zoom_foreground"
+            android:background="@drawable/bg_white_ripple"
+            app:layout_constraintBottom_toTopOf="@id/midLine"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/arrivalButton"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="120dp"
+            android:layout_height="60dp"
             android:text="201"
             android:layout_marginRight="25dp"
             app:layout_constraintRight_toRightOf="parent"
@@ -68,9 +60,10 @@
             android:textColor="@color/black"
             android:textStyle="bold"
             android:gravity="center"
-            app:layout_constraintTop_toBottomOf="@id/departureButton"
+            android:layout_marginTop="40dp"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toTopOf="@+id/departureButton"/>
 
         <TextView
             android:id="@+id/arrivalLine"
@@ -80,9 +73,10 @@
             android:textColor="@color/black"
             android:textStyle="bold"
             android:gravity="center"
-            app:layout_constraintTop_toBottomOf="@id/arrivalButton"
+            android:layout_marginTop="40dp"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toTopOf="@+id/arrivalButton"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -161,30 +155,25 @@
             app:layout_constraintTop_toBottomOf="@id/costCostNotice"
             app:layout_constraintBottom_toBottomOf="@id/guideline2"/>
 
-        <View
-            android:background="#d3d3d3"
-            android:layout_width="match_parent"
-            android:layout_height="2px"
-            android:layout_marginBottom="30dp"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/reportButton"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/ripple_report_button"
+            android:paddingLeft="10dp"
             android:text="잘못된 정보 신고 >"
+            android:gravity="left|center_vertical"
             android:textColor="#808487"
-            android:layout_marginLeft="10dp"
-            android:background="#00FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"/>
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="40dp"/>
+            app:layout_constraintGuide_begin="20dp"/>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline2"
