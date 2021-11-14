@@ -1,6 +1,5 @@
 package com.example.myongsubway;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,16 +21,18 @@ public class SearchActivity extends AppCompatActivity {
     private ListView stationListView; // 역 리스트를 보여주는 ListView
     private EditText editStation; // 역 검색창
     private SearchAdapter searchAdapter; // ListView 와 연결해주는 Adapter
-    private ArrayList<String> stationList; // 모든 역 리스트
     private List<String> searchedStationList; // 이전에 검색된 역 리스트
     private List<String> viewedStationList; // ListView 에서 보여질 역 리스트
     private Button backButton; // 뒤로가기 버튼
+    private CustomAppGraph graph; // CustomAppGraph
+    private ArrayList<CustomAppGraph.Vertex> vertices; // 모든 정점(역) 리스트
+    private Button removeSearchHistoryButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-
+        
         // 뒤로가기 버튼
         backButton = findViewById(R.id.Search_Button_back);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -41,18 +42,19 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
+        // CustomAppGraph 설정 및 Vertex 설정
+        graph = (CustomAppGraph) getApplicationContext();
+        vertices = graph.getVertices();
 
         // 검색창, 리스트뷰 연결
         editStation = findViewById(R.id.Search_EditText_editStation);
         stationListView = findViewById(R.id.Search_ListView_stationListView);
 
-        // 모든 역 리스트 생성 및 설정
-        stationList = new ArrayList<>();
-        settingList();
 
         // 리스트뷰에 보여질 역 리스트, 이전에 검색된 역 리스트 생성
         viewedStationList = new ArrayList<>();
         searchedStationList = new ArrayList<>();
+
 
         // SearchAdapter 생성 및 설정
         searchAdapter = new SearchAdapter(viewedStationList, this);
@@ -84,7 +86,11 @@ public class SearchActivity extends AppCompatActivity {
                     // 맞다면 검색된 역에 해당 역을 추가하고, 메인으로 넘어가 메소드 호출!!
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // 앱을 껐다 키면 초기화
+                        // 메인에서 Fragment 호출.
+                        // vertices.get(map.get(viewedStationList.get(pos))) -> 클릭된 vertex
+                        // 예시
+                        // ((MainActivity)MainAcitivity.context변수).함수이름(viewedStationList.get(pos));
+                        // 해당 Activity 가 종료되면 같이 초기화되는 문제점..
                         addSearchedStation(viewedStationList.get(pos));
                     }
                 });
@@ -92,6 +98,22 @@ public class SearchActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
+        // 전체삭제 버튼을 눌렀을 때
+        removeSearchHistoryButton = (Button) findViewById(R.id.Search_Button_removeSearchHistory);
+        removeSearchHistoryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               removeSearchHistory();
+           }
+        });
+    }
+    public void removeSearchHistory(){
+        for(int i = searchedStationList.size() - 1; i >= 0; i--){
+            searchedStationList.remove(i);
+        }
+        viewedStationList.clear();
+        // 리스트 데이터 변경으로 Adapter 갱신
+        searchAdapter.notifyDataSetChanged();
     }
     public void search(String text){
         // 문자가 입력될 때마다 ListView를 새로 지정해야 함
@@ -100,38 +122,18 @@ public class SearchActivity extends AppCompatActivity {
             // 문자 입력이 없을 때 이전 검색된 역 리스트 보여줌
             viewedStationList.addAll(searchedStationList);
         } else {
-            // 문자 입력이 있을 때
-            for(int i = 0; i < stationList.size(); i++){
-                // 검색창에 입력된 text로 시작하는 역을 ListView에 띄운다.
-                if(stationList.get(i).startsWith(text)){
-                    viewedStationList.add(stationList.get(i));
+            // text로 시작되는 정점이 있다면
+            for(int i = 0; i < graph.getStationCount(); i++){
+                if(vertices.get(i).getVertex().startsWith(text)){
+                    // viewedStationList 에 추가
+                    viewedStationList.add(vertices.get(i).getVertex());
                 }
             }
         }
         // 리스트 데이터 변경으로 Adapter 갱신
         searchAdapter.notifyDataSetChanged();
     }
-    public void settingList() {
-        // 1xx
-        for(int i = 101; i <= 123; i++) stationList.add(Integer.toString(i));
-        // 2xx
-        for(int i = 201; i <= 217; i++) stationList.add(Integer.toString(i));
-        // 3xx
-        for(int i = 301; i <= 308; i++) stationList.add(Integer.toString(i));
-        // 4xx
-        for(int i = 401; i <= 417; i++) stationList.add(Integer.toString(i));
-        // 5xx
-        for(int i = 501; i <= 507; i++) stationList.add(Integer.toString(i));
-        // 6xx
-        for(int i = 601; i <= 622; i++) stationList.add(Integer.toString(i));
-        // 7xx
-        for(int i = 701; i <= 707; i++) stationList.add(Integer.toString(i));
-        // 8xx
-        for(int i = 801; i <= 806; i++) stationList.add(Integer.toString(i));
-        // 9xx
-        for(int i = 901; i <= 904; i++) stationList.add(Integer.toString(i));
-        //System.out.println("총 역 수는 " + Search_StationList.size());
-    }
+
     public void addSearchedStation(String str){
         // 이전에 검색된 역 리스트에 추가
         if(!searchedStationList.contains(str)) {
