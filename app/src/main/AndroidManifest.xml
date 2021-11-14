@@ -17,7 +17,8 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".ShortestPathActivity" />
         <activity android:name=".SettingsActivity" />
-        <activity android:name=".SearchActivity" />
+        <activity android:name=".SearchActivity"
+            android:windowSoftInputMode="adjustNothing"/>
         <activity android:name=".BookmarkActivity" />
         <activity android:name=".MainActivity" />
         <activity
