@@ -35,7 +35,7 @@ public class MinDistancePathFragment extends Fragment {
     TextView costTime, costDistance, costCost;      // 각각 소요시간, 소요거리, 소요비용을 나타내는 텍스트뷰
     ImageView midLine;                              // 역버튼 사이의 선을 나타내는 뷰
 
-    public MinDistancePathFragment(ArrayList<Integer>path, ArrayList<Integer> _costs, CustomAppGraph _graph, ArrayList<Integer> _btnBackgrounds, ArrayList<Integer> _lineColors) {
+    public MinDistancePathFragment(ArrayList<Integer> path, ArrayList<Integer> _costs, CustomAppGraph _graph, ArrayList<Integer> _btnBackgrounds, ArrayList<Integer> _lineColors) {
         minDistancePath = path;
         costs = _costs;
         graph = _graph;

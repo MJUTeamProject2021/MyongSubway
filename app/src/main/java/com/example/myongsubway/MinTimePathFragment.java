@@ -45,10 +45,10 @@ public class MinTimePathFragment extends Fragment {
     ImageButton zoomButton;                         // 확대 버튼
     Button reportButton;                            // 잘못된 정보 신고 버튼
     TextView departureLine, arrivalLine;            // 출발역과 도착역의 호선을 나타내는 텍스트뷰
-    TextView costTime, costDistance, costCost;      // 각각 소요시간, 소요거리, 소요비용을 나타내는 텍스트뷰
+    TextView costTime, costDistance, costCost;      // 각각 소요시간, 소요거리, 소요비용을 나타내는  텍스트뷰
     ImageView midLine;                              // 역버튼 사이의 선을 나타내는 뷰
 
-    public MinTimePathFragment(ArrayList<Integer>path, ArrayList<Integer> _costs, CustomAppGraph _graph, ArrayList<Integer> _btnBackgrounds, ArrayList<Integer> _lineColors) {
+    public MinTimePathFragment(ArrayList<Integer> path, ArrayList<Integer> _costs, CustomAppGraph _graph, ArrayList<Integer> _btnBackgrounds, ArrayList<Integer> _lineColors) {
         minTimePath = path;
         costs = _costs;
         graph = _graph;

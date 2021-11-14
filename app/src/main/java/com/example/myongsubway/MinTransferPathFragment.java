@@ -18,8 +18,8 @@ import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 
-public class MinCostPathFragment extends Fragment {
-    ArrayList<Integer> minCostPath;                 // 최소시간을 기준으로 탐색한 경로
+public class MinTransferPathFragment extends Fragment {
+    ArrayList<Integer> minTransferPath;                 // 최소시간을 기준으로 탐색한 경로
     ArrayList<Integer> costs;                       // 순서대로 소요시간, 소요거리, 소요비용을 저장하는 리스트
     CustomAppGraph graph;                           // 액티비티 간에 공유되는 데이터를 담는 클래스
     ArrayList<CustomAppGraph.Vertex> vertices;      // 역들의 정보를 담는 클래스인 Vertex 객체들을 저장하는 리스트
@@ -30,24 +30,23 @@ public class MinCostPathFragment extends Fragment {
     ImageButton zoomButton;                         // 확대 버튼
     Button reportButton;                            // 잘못된 정보 신고 버튼
     TextView departureLine, arrivalLine;            // 출발역과 도착역의 호선을 나타내는 텍스트뷰
-    TextView costTime, costDistance, costCost;      // 각각 소요시간, 소요거리, 소요비용을 나타내는 텍스트뷰
+    TextView costTime, costDistance, costCost;      // 각각 소요시간, 소요거리, 소요비용을 나타내는  텍스트뷰
     ImageView midLine;                              // 역버튼 사이의 선을 나타내는 뷰
 
-    public MinCostPathFragment(ArrayList<Integer> path, ArrayList<Integer> _costs, CustomAppGraph _graph, ArrayList<Integer> _btnBackgrounds, ArrayList<Integer> _lineColors) {
-        minCostPath = path;
+    public MinTransferPathFragment(ArrayList<Integer> path, ArrayList<Integer> _costs, CustomAppGraph _graph, ArrayList<Integer> _btnBackgrounds, ArrayList<Integer> _lineColors) {
+        minTransferPath = path;
         costs = _costs;
         graph = _graph;
         btnBackgrounds = _btnBackgrounds;
         lineColors = _lineColors;
 
         vertices = graph.getVertices();
-        initializeBtnBackgrounds();
     }
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v =  inflater.inflate(R.layout.fragment_min_cost_path, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater,@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View v =  inflater.inflate(R.layout.fragment_min_transfer_path, container, false);
 
         // 초기화한다.
         init(v);
@@ -75,8 +74,8 @@ public class MinCostPathFragment extends Fragment {
         arrivalButton = v.findViewById(R.id.arrivalButton);
 
         // 출발역, 도착역의 Vertex 객체
-        CustomAppGraph.Vertex departure = graph.getVertices().get(minCostPath.get(0));
-        CustomAppGraph.Vertex arrival = graph.getVertices().get(minCostPath.get(minCostPath.size() - 1));
+        CustomAppGraph.Vertex departure = graph.getVertices().get(minTransferPath.get(0));
+        CustomAppGraph.Vertex arrival = graph.getVertices().get(minTransferPath.get(minTransferPath.size() - 1));
 
         // 역버튼의 이름을 설정한다.
         departureButton.setText(departure.getVertex());
@@ -115,13 +114,15 @@ public class MinCostPathFragment extends Fragment {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.departureButton:
-                        ((ShortestPathActivity) getActivity()).generateStationInformationFragment(graph.getVertices().get(minCostPath.get(0)));
+                        ((ShortestPathActivity) getActivity()).generateStationInformationFragment(graph.getVertices().get(minTransferPath.get(0)));
                         break;
+
                     case R.id.arrivalButton:
-                        ((ShortestPathActivity) getActivity()).generateStationInformationFragment(graph.getVertices().get(minCostPath.get(minCostPath.size() - 1)));
+                        ((ShortestPathActivity) getActivity()).generateStationInformationFragment(graph.getVertices().get(minTransferPath.get(minTransferPath.size() - 1)));
                         break;
+
                     case R.id.zoomButton:
-                        ((ShortestPathActivity) getActivity()).generateStationInformationFragment(minCostPath, btnBackgrounds);
+                        ((ShortestPathActivity) getActivity()).generateStationInformationFragment(minTransferPath, btnBackgrounds);
                         break;
 
                     case R.id.reportButton:
@@ -149,15 +150,16 @@ public class MinCostPathFragment extends Fragment {
         float density = this.getResources().getDisplayMetrics().density;        // dp 와 px 사이를 변환할 때 필요한 변수
 
         ConstraintLayout.LayoutParams dLayoutParams = (ConstraintLayout.LayoutParams) departureButton.getLayoutParams();
-        int halfDepartureWidth = (int)(dLayoutParams.width / density + 0.5) / 2;            // dp
+        int halfDepartureWidth = (int)(dLayoutParams.width / density + 0.5) / 2;            // px to dp
 
         ConstraintLayout.LayoutParams dLineLayoutParams = (ConstraintLayout.LayoutParams) departureLine.getLayoutParams();
         ConstraintLayout.LayoutParams aLineLayoutParams = (ConstraintLayout.LayoutParams) arrivalLine.getLayoutParams();
-        int halfDepartureLineWidth = (int)(dLineLayoutParams.width / density + 0.5) / 2;    // dp
-        int margin = (25 + halfDepartureWidth) - halfDepartureLineWidth;                    // dp
+        int halfDepartureLineWidth = (int)(dLineLayoutParams.width / density + 0.5) / 2;    // px to dp
+        int margin = (25 + halfDepartureWidth) - halfDepartureLineWidth;                    // px to dp
 
         dLineLayoutParams.setMarginStart((int)(margin * density + 0.5));
         aLineLayoutParams.setMarginEnd((int)(margin * density + 0.5));
+
     }
 
     // midLine 에 그라데이션을 넣는 메소드. 출발역의 호선색 ~ 도착역의 호선색
@@ -208,6 +210,7 @@ public class MinCostPathFragment extends Fragment {
             output += time / 3600 + "시간 ";
             time %= 3600;
         }
+
         if (time >= 60) {
             output += time / 60 + "분 ";
             time %= 60;
@@ -251,18 +254,5 @@ public class MinCostPathFragment extends Fragment {
         return sb.toString();
     }
 
-    // 호선에 따른 역버튼 배경 xml 을 담는 메소드
-    private void initializeBtnBackgrounds() {
-        btnBackgrounds = new ArrayList<Integer>(10);
-        btnBackgrounds.add(-1);
-        btnBackgrounds.add(R.drawable.round_button_1);
-        btnBackgrounds.add(R.drawable.round_button_2);
-        btnBackgrounds.add(R.drawable.round_button_3);
-        btnBackgrounds.add(R.drawable.round_button_4);
-        btnBackgrounds.add(R.drawable.round_button_5);
-        btnBackgrounds.add(R.drawable.round_button_6);
-        btnBackgrounds.add(R.drawable.round_button_7);
-        btnBackgrounds.add(R.drawable.round_button_8);
-        btnBackgrounds.add(R.drawable.round_button_9);
-    }
+
 }
