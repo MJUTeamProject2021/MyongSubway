@@ -38,6 +38,7 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
     private String mParam1;
     private String mParam2;
 
+
     private LinearLayout menuLinearLayout;
     private LinearLayout addLinearLayout;
     private Button opaqueButton;
@@ -45,7 +46,6 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
     private Button destinationButton;
     private Button closeButton;
     private Button informationButton;
-    private Button touristButton;
     private Button bookmarkButton;
     private Button nameButton;
     private Button leftButton;
@@ -90,7 +90,6 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
         destinationButton= v.findViewById(R.id.fragment_report_desti);
         closeButton= v.findViewById(R.id.fragment_report_close);
         informationButton = v.findViewById(R.id.fragment_report_information);
-        touristButton= v.findViewById(R.id.fragment_report_tourist);
         bookmarkButton= v.findViewById(R.id.fragment_report_bookmark);
         leftButton= v.findViewById(R.id.fragment_report_left);
         rightButton= v.findViewById(R.id.fragment_report_right);
@@ -102,12 +101,12 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
         addLinearLayout = v.findViewById(R.id.fragment_report_addlayout);
         menuLinearLayout = v.findViewById(R.id.fragment_report_menulayout);
 
+
         opaqueButton.setOnClickListener(this);
         departureButton.setOnClickListener(this);
         destinationButton.setOnClickListener(this);
         closeButton.setOnClickListener(this);
         informationButton.setOnClickListener(this);
-        touristButton.setOnClickListener(this);
         bookmarkButton.setOnClickListener(this);
         nameButton.setOnClickListener(this);
         nameButton2.setOnClickListener(this);
@@ -120,17 +119,19 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
 
         //하단 메뉴 설정
         nameButton.setText(vertex.getVertex()+"역");
+
+
         lineTextView.setText(line+"호선");
         nameButton2.setText(vertex.getVertex()+"역");
-        if(line==1){menuLinearLayout.setBackgroundResource(R.drawable.round_button_1);}
-        else if(line==2){menuLinearLayout.setBackgroundResource(R.drawable.round_button_2);}
-        else if(line==3){menuLinearLayout.setBackgroundResource(R.drawable.round_button_3);}
-        else if(line==4){menuLinearLayout.setBackgroundResource(R.drawable.round_button_4);}
-        else if(line==5){menuLinearLayout.setBackgroundResource(R.drawable.round_button_5);}
-        else if(line==6){menuLinearLayout.setBackgroundResource(R.drawable.round_button_6);}
-        else if(line==7){menuLinearLayout.setBackgroundResource(R.drawable.round_button_7);}
-        else if(line==8){menuLinearLayout.setBackgroundResource(R.drawable.round_button_8);}
-        else if(line==9){menuLinearLayout.setBackgroundResource(R.drawable.round_button_9);}
+        if(line==1){menuLinearLayout.setBackgroundResource(R.drawable.round_button_1);nameButton.setBackgroundResource(R.drawable.round_button_1);}
+        else if(line==2){menuLinearLayout.setBackgroundResource(R.drawable.round_button_2);nameButton.setBackgroundResource(R.drawable.round_button_2);}
+        else if(line==3){menuLinearLayout.setBackgroundResource(R.drawable.round_button_3);nameButton.setBackgroundResource(R.drawable.round_button_3);}
+        else if(line==4){menuLinearLayout.setBackgroundResource(R.drawable.round_button_4);nameButton.setBackgroundResource(R.drawable.round_button_4);}
+        else if(line==5){menuLinearLayout.setBackgroundResource(R.drawable.round_button_5);nameButton.setBackgroundResource(R.drawable.round_button_5);}
+        else if(line==6){menuLinearLayout.setBackgroundResource(R.drawable.round_button_6);nameButton.setBackgroundResource(R.drawable.round_button_6);}
+        else if(line==7){menuLinearLayout.setBackgroundResource(R.drawable.round_button_7);nameButton.setBackgroundResource(R.drawable.round_button_7);}
+        else if(line==8){menuLinearLayout.setBackgroundResource(R.drawable.round_button_8);nameButton.setBackgroundResource(R.drawable.round_button_8);}
+        else if(line==9){menuLinearLayout.setBackgroundResource(R.drawable.round_button_9);nameButton.setBackgroundResource(R.drawable.round_button_9);}
 
         //주변역들 보여주기
         for(int i=0;i<vertex.getAdjacent().size();i++) {
@@ -184,6 +185,8 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
             doorButton.setText("내리는문:\t\t양쪽");
         }
 
+
+
         return v;
     }
 
@@ -193,11 +196,7 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
         mFragmentTransaction.remove(_fragment);
         mFragmentTransaction.commit();
     }
-    public void removeSurroundingFragment(SurroundingFragment _fragment){
-        FragmentTransaction mFragmentTransaction = getChildFragmentManager().beginTransaction();
-        mFragmentTransaction.remove(_fragment);
-        mFragmentTransaction.commit();
-    }
+
 
     @Override
     public void onClick(View view) {
@@ -265,11 +264,7 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
                 mFragmentTransaction.add(R.id.fragment_report_framelayout,informationfragment);
                 mFragmentTransaction.commit();
                 break;
-            case R.id.fragment_report_tourist:      //역정보 터치
-                SurroundingFragment surroundingfragment = new SurroundingFragment(vertex,graph);
-                mFragmentTransaction.add(R.id.fragment_report_framelayout,surroundingfragment);
-                mFragmentTransaction.commit();
-                break;
+
             case R.id.fragment_report_opaque:
                 ((MainActivity) getActivity()).destroyFragment();
                 break;

@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 
 import android.os.StrictMode;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,8 @@ public class StationInformationFragment extends Fragment implements View.OnClick
     private String mParam1;
     private String mParam2;
 
+    private LinearLayout buildingLayout;
+    private LinearLayout restuarentLayout;
     private LinearLayout adjacentLayout;
     private LinearLayout facilitiesLayout;
     private TextView vertexName;
@@ -84,6 +87,8 @@ public class StationInformationFragment extends Fragment implements View.OnClick
         pmq = v.findViewById(R.id.fragment_information_pmq);
         airstate = v.findViewById(R.id.fragment_information_airstate);
         update = v.findViewById(R.id.fragment_information_update);
+        buildingLayout = v.findViewById(R.id.fragment_surrounding_building);
+        restuarentLayout = v.findViewById(R.id.fragment_surrounding_restuarent);
 
         number.setOnClickListener(this);
         closeButton.setOnClickListener(this);
@@ -119,6 +124,24 @@ public class StationInformationFragment extends Fragment implements View.OnClick
             toilet.setText("있음");
         }
         door.setText(vertex.getDoorDirection());
+
+        facilities = vertex.getNearbyFacilities();
+        for(int i=0;i<facilities.length;i++){
+            TextView tv = new TextView(getContext());
+            tv.setTextColor(Color.rgb(0,0,0));
+            tv.setGravity(Gravity.CENTER);
+            tv.setText(facilities[i]);
+            buildingLayout.addView(tv);
+        }
+
+        facilities = vertex.getNearbyRestaurants();
+        for(int i=0;i<facilities.length;i++){
+            TextView tv = new TextView(getContext());
+            tv.setTextColor(Color.rgb(0,0,0));
+            tv.setGravity(Gravity.CENTER);
+            tv.setText(facilities[i]);
+            restuarentLayout.addView(tv);
+        }
 
         AirThread at = new AirThread();
         at.start();
