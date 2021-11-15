@@ -21,6 +21,10 @@
             android:windowSoftInputMode="adjustNothing"/>
         <activity android:name=".BookmarkActivity" />
         <activity android:name=".MainActivity" />
+        <activity android:name=".BoardModifyActivity" />
+        <activity android:name=".BoardWatchActivity" />
+        <activity android:name=".BoardReadActivity" />
+        <activity android:name=".BoardWriteActivity" />
         <activity
             android:name=".SignInActivity"
             android:theme="@style/SplashTheme">

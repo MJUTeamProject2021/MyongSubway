@@ -4,14 +4,22 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,18 +29,19 @@ public class SearchActivity extends AppCompatActivity {
     private ListView stationListView; // 역 리스트를 보여주는 ListView
     private EditText editStation; // 역 검색창
     private SearchAdapter searchAdapter; // ListView 와 연결해주는 Adapter
-    private List<String> searchedStationList; // 이전에 검색된 역 리스트
-    private List<String> viewedStationList; // ListView 에서 보여질 역 리스트
+    private ArrayList<String> searchedStationList; // 이전에 검색된 역 리스트
+    private ArrayList<String> viewedStationList; // ListView 에서 보여질 역 리스트
     private Button backButton; // 뒤로가기 버튼
     private CustomAppGraph graph; // CustomAppGraph
     private ArrayList<CustomAppGraph.Vertex> vertices; // 모든 정점(역) 리스트
     private Button removeSearchHistoryButton;
+    private Gson gson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        
+
         // 뒤로가기 버튼
         backButton = findViewById(R.id.Search_Button_back);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -41,6 +50,7 @@ public class SearchActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
 
         // CustomAppGraph 설정 및 Vertex 설정
         graph = (CustomAppGraph) getApplicationContext();
@@ -56,9 +66,14 @@ public class SearchActivity extends AppCompatActivity {
         searchedStationList = new ArrayList<>();
 
 
+
         // SearchAdapter 생성 및 설정
         searchAdapter = new SearchAdapter(viewedStationList, this);
         stationListView.setAdapter(searchAdapter);
+
+        //검색했던 데이터 로드
+        loadSearchData();
+        viewedStationList.addAll(searchedStationList);
 
         // 검색창에 텍스트를 입력했을 때 리스너 설정
         editStation.addTextChangedListener(new TextWatcher() {
@@ -86,12 +101,11 @@ public class SearchActivity extends AppCompatActivity {
                     // 맞다면 검색된 역에 해당 역을 추가하고, 메인으로 넘어가 메소드 호출!!
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // 메인에서 Fragment 호출.
-                        // vertices.get(map.get(viewedStationList.get(pos))) -> 클릭된 vertex
-                        // 예시
-                        // ((MainActivity)MainAcitivity.context변수).함수이름(viewedStationList.get(pos));
-                        // 해당 Activity 가 종료되면 같이 초기화되는 문제점..
                         addSearchedStation(viewedStationList.get(pos));
+                        saveSearchData();
+                        System.out.println(viewedStationList.size());
+                        ((MainActivity)MainActivity.mcontext).launchReport(viewedStationList.get(pos));
+                        finish();
                     }
                 });
                 dialog.setNegativeButton("아니오", null);
@@ -112,12 +126,14 @@ public class SearchActivity extends AppCompatActivity {
             searchedStationList.remove(i);
         }
         viewedStationList.clear();
+        saveSearchData();
         // 리스트 데이터 변경으로 Adapter 갱신
         searchAdapter.notifyDataSetChanged();
     }
     public void search(String text){
         // 문자가 입력될 때마다 ListView를 새로 지정해야 함
-        viewedStationList.clear();
+         viewedStationList.clear();
+
         if (text.length() == 0) {
             // 문자 입력이 없을 때 이전 검색된 역 리스트 보여줌
             viewedStationList.addAll(searchedStationList);
@@ -140,4 +156,29 @@ public class SearchActivity extends AppCompatActivity {
             searchedStationList.add(0, str);
         }
     }
+    public void saveSearchData(){
+
+        SharedPreferences sp = getSharedPreferences("search", MODE_PRIVATE);
+        SharedPreferences.Editor mEdit= sp.edit();
+
+        mEdit.putInt("search_size",searchedStationList.size());
+
+        for(int i=0;i<searchedStationList.size();i++)
+        {
+            mEdit.remove("search" + i);
+            mEdit.putString("search" + i, searchedStationList.get(i));
+        }
+        mEdit.commit();
+    }
+
+    public void loadSearchData(){
+
+        SharedPreferences prefs = getSharedPreferences("search", MODE_PRIVATE);
+        int size = prefs.getInt("search_size", 0);
+        for(int i=0;i<size;i++)
+        {
+            searchedStationList.add(prefs.getString("search" + i, null));
+        }
+    }
+
 }

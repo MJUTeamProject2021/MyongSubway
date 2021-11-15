@@ -38,8 +38,6 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
     private String mParam1;
     private String mParam2;
 
-
-
     private LinearLayout menuLinearLayout;
     private LinearLayout addLinearLayout;
     private Button opaqueButton;
@@ -69,6 +67,7 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
         vertices = _vertices;
         graph = _graph;
         line = _line;
+        System.out.println(line);
     }
 
     @Override
@@ -121,51 +120,53 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
 
         //하단 메뉴 설정
         nameButton.setText(vertex.getVertex()+"역");
-        lineTextView.setText(vertex.getLine()+"호선");
+        lineTextView.setText(line+"호선");
         nameButton2.setText(vertex.getVertex()+"역");
-        if(vertex.getLine()==1){menuLinearLayout.setBackgroundColor(getResources().getColor(R.color.frag1Color, null));}
-        else if(vertex.getLine()==2){menuLinearLayout.setBackgroundColor(getResources().getColor(R.color.frag2Color, null));}
-        else if(vertex.getLine()==3){menuLinearLayout.setBackgroundColor(getResources().getColor(R.color.frag3Color, null));}
-        else if(vertex.getLine()==4){menuLinearLayout.setBackgroundColor(getResources().getColor(R.color.frag4Color, null));}
-        else if(vertex.getLine()==5){menuLinearLayout.setBackgroundColor(getResources().getColor(R.color.frag5Color, null));}
-        else if(vertex.getLine()==6){menuLinearLayout.setBackgroundColor(getResources().getColor(R.color.frag6Color, null));}
-        else if(vertex.getLine()==7){menuLinearLayout.setBackgroundColor(getResources().getColor(R.color.frag7Color, null));}
-        else if(vertex.getLine()==8){menuLinearLayout.setBackgroundColor(getResources().getColor(R.color.frag8Color, null));}
-        else if(vertex.getLine()==9){menuLinearLayout.setBackgroundColor(getResources().getColor(R.color.frag9Color, null));}
+        if(line==1){menuLinearLayout.setBackgroundResource(R.drawable.round_button_1);}
+        else if(line==2){menuLinearLayout.setBackgroundResource(R.drawable.round_button_2);}
+        else if(line==3){menuLinearLayout.setBackgroundResource(R.drawable.round_button_3);}
+        else if(line==4){menuLinearLayout.setBackgroundResource(R.drawable.round_button_4);}
+        else if(line==5){menuLinearLayout.setBackgroundResource(R.drawable.round_button_5);}
+        else if(line==6){menuLinearLayout.setBackgroundResource(R.drawable.round_button_6);}
+        else if(line==7){menuLinearLayout.setBackgroundResource(R.drawable.round_button_7);}
+        else if(line==8){menuLinearLayout.setBackgroundResource(R.drawable.round_button_8);}
+        else if(line==9){menuLinearLayout.setBackgroundResource(R.drawable.round_button_9);}
 
-        //주변과 환승역들 보여주기
+        //주변역들 보여주기
         for(int i=0;i<vertex.getAdjacent().size();i++) {
-            int adjName = Integer.parseInt(vertices.get(vertex.getAdjacent().get(i)).getVertex());
-            int verName = Integer.parseInt(vertex.getVertex());
-            int lineName = vertices.get(vertex.getAdjacent().get(i)).getLine();
+            if(vertices.get(vertex.getAdjacent().get(i)).getLines().contains(line)) {
+                int adjName = Integer.parseInt(vertices.get(vertex.getAdjacent().get(i)).getVertex());
 
-            if (vertex.getAdjacent().size() == 1 && adjName + 1 == verName) {
-                leftButton.setText(Integer.toString(adjName) + "역");
-                break;
-            } else if (vertex.getAdjacent().size() == 1 && adjName - 1 == verName) {
-                rightButton.setText(Integer.toString(adjName) + "역");
-                break;
-            } else if (i == 0) {
-                leftButton.setText(Integer.toString(adjName) + "역");
-            } else if (i == 1) {
-                rightButton.setText(Integer.toString(adjName) + "역");
-            }else {
-                final Button btn = new Button(getContext());
-                btn.setId(i*10);
-                btn.setText(Integer.toString(adjName) + "역");
-                btn.setBackgroundColor(Color.rgb(250,200,200));
-                btn.setOnClickListener(this);
-                addLinearLayout.addView(btn);
-                addButtonList.add(btn);
+                if (leftButton.getText().equals("")) {
+                    leftButton.setText(Integer.toString(adjName) + "역");
+                } else if (rightButton.getText().equals("")) {
+                    rightButton.setText(Integer.toString(adjName) + "역");
+                }
             }
          }
-
-
-        //거꾸로 나오는 현상 거르기
+             //거꾸로 나오는 현상 거르기
         if(Integer.parseInt(leftButton.getText().subSequence(0,leftButton.getText().length()-1).toString())-1 == Integer.parseInt(vertex.getVertex())){
             String s = leftButton.getText().toString();
             leftButton.setText(rightButton.getText());
             rightButton.setText(s);
+        }
+
+        for(int i=0;i<vertex.getLines().size();i++) {
+            final Button btn = new Button(getContext());
+            btn.setId(i * 10);
+            btn.setText(vertex.getLines().get(i).toString());
+            if(btn.getText().equals("1")){btn.setBackgroundResource(R.drawable.round_button_1);}
+            else if((btn.getText().equals("2"))){btn.setBackgroundResource(R.drawable.round_button_2);}
+            else if((btn.getText().equals("3"))){btn.setBackgroundResource(R.drawable.round_button_3);}
+            else if((btn.getText().equals("4"))){btn.setBackgroundResource(R.drawable.round_button_4);}
+            else if((btn.getText().equals("5"))){btn.setBackgroundResource(R.drawable.round_button_5);}
+            else if((btn.getText().equals("6"))){btn.setBackgroundResource(R.drawable.round_button_6);}
+            else if((btn.getText().equals("7"))){btn.setBackgroundResource(R.drawable.round_button_7);}
+            else if((btn.getText().equals("8"))){btn.setBackgroundResource(R.drawable.round_button_8);}
+            else if((btn.getText().equals("9"))){btn.setBackgroundResource(R.drawable.round_button_9);}
+            btn.setOnClickListener(this);
+            addLinearLayout.addView(btn);
+            addButtonList.add(btn);
         }
 
         //화장실 여부
@@ -203,13 +204,12 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
         int index;
         FragmentTransaction transaction;                    //환승역 클릭시 교체
         FragmentTransaction mFragmentTransaction = getChildFragmentManager().beginTransaction();
-        for(int i=0;i<vertex.getAdjacent().size()-2;i++) {
-            if(view.getId() == 20+i*10){
+        for(int i=0;i<addButtonList.size();i++) {
+            if(view.getId() == i*10){
                 Button btn = addButtonList.get(i);
                 if(btn.getText()==""){break;}
                 ((MainActivity) getActivity()).destroyFragment();
-                index = graph.getMap().get(btn.getText().subSequence(0,btn.getText().length()-1));
-                ((MainActivity) getActivity()).fragment = new StationReportFragment(vertices.get(index),vertices,graph,line);
+                ((MainActivity) getActivity()).fragment = new StationReportFragment(vertex,vertices,graph,Integer.parseInt(btn.getText().toString()));
                 transaction = ((MainActivity)getActivity()).getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.Main_ConstraintLayout_Main, ((MainActivity) getActivity()).fragment);
                 transaction.commit();
