@@ -3,6 +3,7 @@ package com.example.myongsubway;
 import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,8 @@ public class ZoomPathFragment extends Fragment {
     private ArrayList<Integer> btnBackgrounds;      // 역을 나타내는 버튼들의 background xml 파일의 id를 저장하는 리스트
     private ArrayList<Integer> lineColors;          // 호선의 색들을 담고있는 리스트
 
+    private CustomAppGraph graph;
+
     final int stationButtonWidthDpBig = 100;        // 큰 역 버튼의 가로 dp 값
     final int stationButtonWidthDpSmall = 60;       // 작은 역 버튼의 가로 dp 값
     final int stationButtonHeightDp = 60;           // 역 버튼의 세로 dp 값
@@ -44,6 +47,7 @@ public class ZoomPathFragment extends Fragment {
         path = _path;
         btnBackgrounds = _btnBackgrounds;
         lineColors = _lineColors;
+
     }
 
     @Nullable
@@ -52,7 +56,7 @@ public class ZoomPathFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_zoom_path, container, false);
 
         // 역 버튼을 생성한다.
-        createStationButton(v);
+        createStation(v);
 
         // 잘못된 정보 신고 버튼의 클릭 이벤트를 등록한다.
         registerListener(v);
@@ -60,116 +64,167 @@ public class ZoomPathFragment extends Fragment {
         return v;
     }
 
-    private void createStationButton(View v) {
-        CustomAppGraph graph = (CustomAppGraph) getActivity().getApplicationContext();
+    // 확대 프래그먼트에 들어갈 역 버튼과 선을 그려주는 메소드
+    private void createStation(View v) {
+        graph = (CustomAppGraph) getActivity().getApplicationContext();                 // 그래프 데이터에 접근하기 위한 graph 변수
+
         float density = this.getResources().getDisplayMetrics().density;                // dp 와 px 사이를 변환할 때 필요한 변수
 
-        int prevLine = -1;      // 이전의 역 버튼이 가르키는 호선
-
-        LinearLayout btnContainer = (LinearLayout) v.findViewById(R.id.btnContainer);   // 버튼들을 담는 리니어레이아웃
-
         for (int i = 0; i < path.size(); i++) {
-
-            // 현재 역 버튼이 나타내는 Vertex 객체
-            CustomAppGraph.Vertex vertex = graph.getVertices().get(path.get(i));
-
-            // 역 버튼 만들기
-            Button btn = new AppCompatButton(getActivity());
-            btn.setText(vertex.getVertex());
-            btn.setBackgroundResource(btnBackgrounds.get(vertex.getLine()));
-
-            // 역 버튼을 누르면 해당 역의 정보를 나타내는 프래그먼트를 호출한다.
-            btn.setOnClickListener(new Button.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((ShortestPathActivity) getActivity()).generateStationInformationFragment(vertex);
-                }
-            });
-
-            // 역 버튼을 연결하는 Line
-            ImageView line = new AppCompatImageView(getActivity());
-
-            // 역 버튼과 그 사이를 연결하는 선의 상세사항을 설정하기 위한 LayoutParams
-            LinearLayout.LayoutParams btnParams = null;
-
-            // 환승을 나타낼 때만 필요한 뷰
-            RelativeLayout midLinear = null;
-            TextView textView = null;
-            ImageView walkIcon = null;
-
-            // 환승 처리
-            if (vertex.getLine() != prevLine) {
-                // 큰 역 버튼의 LayoutParams 설정
-                btnParams = new LinearLayout.LayoutParams((int)(stationButtonWidthDpBig * density + 0.5), (int)(stationButtonHeightDp * density + 0.5));
-
-                midLinear = new RelativeLayout(getActivity());
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                midLinear.setLayoutParams(layoutParams);
-
-                // 이전역에서 환승하고 새로운 호선이므로 점선을 그려줌
-                line.setBackgroundResource(R.drawable.dotted_line_vertical);
-                line.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-                RelativeLayout.LayoutParams lineParams = new RelativeLayout.LayoutParams((int)(dottedLineHeightDp * density + 0.5), (int)(dottedLineHeightDp * density + 0.5));
-                lineParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-                lineParams.topMargin = (int)(dottedLineMarginDp * density + 0.5);
-                lineParams.bottomMargin = (int)(dottedLineMarginDp * density + 0.5);
-                line.setLayoutParams(lineParams);
-                line.setId(i);
-
-                textView = new AppCompatTextView(getActivity());
-                textView.setText("내리는문 " + vertex.getDoorDirection());
-                RelativeLayout.LayoutParams textParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, (int)(dottedLineHeightDp * density + 0.5));
-                textView.setGravity(Gravity.CENTER);
-                textParams.addRule(RelativeLayout.RIGHT_OF, line.getId());
-                textView.setLayoutParams(textParams);
-
-                walkIcon = new AppCompatImageView(getActivity());
-                walkIcon.setBackgroundResource(R.mipmap.ic_walk_foreground);
-                RelativeLayout.LayoutParams iconParams = new RelativeLayout.LayoutParams((int) (dottedLineHeightDp * density + 0.5), (int) (dottedLineHeightDp * density + 0.5));
-                iconParams.addRule(RelativeLayout.LEFT_OF, line.getId());
-                walkIcon.setLayoutParams(iconParams);
+            if (i == path.size() - 1) {
+                // 마지막 역버튼
+                createButton(v, i, density, stationButtonWidthDpBig, stationButtonHeightDp);
             } else {
-                // 작은 역 버튼의 LayoutParams 설정, 마지막 역 버튼이면 큰 역 버튼으로 설정
-                // 현재 역버튼이 마지막 역버튼이면 || 뒤의 조건은 검사하지 않으므로 IndexOutOfBoundsException 예외가 발생하지 않는다.
-                if (i == path.size() - 1 || vertex.getLine() != graph.getVertices().get(path.get(i + 1)).getLine())
-                    btnParams = new LinearLayout.LayoutParams((int)(stationButtonWidthDpBig * density + 0.5), (int)(stationButtonHeightDp * density + 0.5));
-                else
-                    btnParams = new LinearLayout.LayoutParams((int)(stationButtonWidthDpSmall * density + 0.5), (int)(stationButtonHeightDp * density + 0.5));
-
-                // 현재 역의 호선과 이전 역의 호선은 동일하므로 같은색의 선 그림
-                line.setBackgroundResource(R.drawable.simple_line);
-                ((GradientDrawable) line.getBackground()).setColor(lineColors.get(vertex.getLine()));
-                LinearLayout.LayoutParams lineParams = new LinearLayout.LayoutParams((int)(simpleLineWidthDp * density + 0.5), (int)(simpleLineHeightDp * density + 0.5));
-                line.setLayoutParams(lineParams);
-            }
-
-            // 뷰의 LayoutParams 를 설정해준다.
-            btn.setLayoutParams(btnParams);
-
-            
-            // 이전 역의 호선을 업데이트
-            prevLine = vertex.getLine();
-
-            // 역 버튼의 위에 선을 올린다, 첫번째 역버튼은 선을 제거
-            if (midLinear == null) {
-                if (i == 0) line = null;
-                else btnContainer.addView(line);
-            } else {
-                if (i == 0) {
-                    line = null;
-                    textView = null;
+                if (graph.getVertices().get(path.get(i)).getLine() != graph.getVertices().get(path.get(i + 1)).getLine()) {
+                    // 환승일 경우 (다음 역과 다른 호선일 경우)
+                    createTransferButton(v, i, density);
                 } else {
-                    midLinear.addView(line);
-                    midLinear.addView(textView);
-                    midLinear.addView(walkIcon);
-                    btnContainer.addView(midLinear);
+                    if (i == 0) {
+                        // 첫번째 역버튼
+                        createButton(v, i, density, stationButtonWidthDpBig, stationButtonHeightDp);
+                    } else {
+                        // 같은 호선일 경우
+                        createButton(v, i, density, stationButtonWidthDpSmall, stationButtonHeightDp);
+                    }
+                    createSimpleLine(v, i, density);
                 }
             }
-
-            btnContainer.addView(btn);
         }
     }
 
+    // 역버튼을 생성하는 메소드.
+    private void createButton(View v, int index, float density, int width, int height) {
+        LinearLayout btnContainer = (LinearLayout) v.findViewById(R.id.btnContainer);   // 버튼들을 담는 리니어레이아웃
+        CustomAppGraph.Vertex vertex = graph.getVertices().get(path.get(index));        // 현재 역 버튼이 나타내는 Vertex 객체
+
+        // 역 버튼 만들기
+        Button btn = new AppCompatButton(getActivity());
+        btn.setText(vertex.getVertex());
+        btn.setBackgroundResource(btnBackgrounds.get(vertex.getLine()));
+        LinearLayout.LayoutParams btnParams = new LinearLayout.LayoutParams((int)(width * density + 0.5), (int)(height * density + 0.5));
+        btn.setLayoutParams(btnParams);
+
+        // 역 버튼을 누르면 해당 역의 정보를 나타내는 프래그먼트를 호출한다.
+        btn.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((ShortestPathActivity) getActivity()).generateStationInformationFragment(vertex);
+            }
+        });
+
+        // 뷰를 레이아웃에 추가한다.
+        btnContainer.addView(btn);
+    }
+
+    // 역버튼을 다른 호선의 색으로 생성하는 메소드
+    private void createButton(View v, int index, float density, int width, int height, int nextLine) {
+        LinearLayout btnContainer = (LinearLayout) v.findViewById(R.id.btnContainer);   // 버튼들을 담는 리니어레이아웃
+        CustomAppGraph.Vertex vertex = graph.getVertices().get(path.get(index));        // 현재 역 버튼이 나타내는 Vertex 객체
+
+        // 역 버튼 만들기
+        Button btn = new AppCompatButton(getActivity());
+        btn.setText(vertex.getVertex());
+        btn.setBackgroundResource(btnBackgrounds.get(nextLine));
+        LinearLayout.LayoutParams btnParams = new LinearLayout.LayoutParams((int)(width * density + 0.5), (int)(height * density + 0.5));
+        btn.setLayoutParams(btnParams);
+
+        // 역 버튼을 누르면 해당 역의 정보를 나타내는 프래그먼트를 호출한다.
+        btn.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((ShortestPathActivity) getActivity()).generateStationInformationFragment(vertex);
+            }
+        });
+
+        // 뷰를 레이아웃에 추가한다.
+        btnContainer.addView(btn);
+    }
+
+    // 같은 호선내의 역버튼을 잇는 선을 생성하는 메소드
+    private void createSimpleLine(View v, int index, float density) {
+        LinearLayout btnContainer = (LinearLayout) v.findViewById(R.id.btnContainer);   // 버튼들을 담는 리니어레이아웃
+        CustomAppGraph.Vertex vertex = graph.getVertices().get(path.get(index));        // 현재 역 버튼이 나타내는 Vertex 객체
+
+        // 역 버튼을 잇는 선
+        ImageView line = new AppCompatImageView(getActivity());
+        line.setBackgroundResource(R.drawable.simple_line);
+        ((GradientDrawable) line.getBackground()).setColor(lineColors.get(vertex.getLine()));
+        LinearLayout.LayoutParams lineParams = new LinearLayout.LayoutParams((int)(simpleLineWidthDp * density + 0.5), (int)(simpleLineHeightDp * density + 0.5));
+        line.setLayoutParams(lineParams);
+
+        // 뷰를 레이아웃에 추가한다.
+        btnContainer.addView(line);
+    }
+
+    // 역버튼을 잇는 선을 다른 호선의 색으로 생성하는 메소드
+    private void createSimpleLine(View v, int index, float density, int nextLine) {
+        LinearLayout btnContainer = (LinearLayout) v.findViewById(R.id.btnContainer);   // 버튼들을 담는 리니어레이아웃
+        CustomAppGraph.Vertex vertex = graph.getVertices().get(path.get(index));        // 현재 역 버튼이 나타내는 Vertex 객체
+
+        // 역 버튼을 잇는 선
+        ImageView line = new AppCompatImageView(getActivity());
+        line.setBackgroundResource(R.drawable.simple_line);
+        ((GradientDrawable) line.getBackground()).setColor(lineColors.get(nextLine));
+        LinearLayout.LayoutParams lineParams = new LinearLayout.LayoutParams((int)(simpleLineWidthDp * density + 0.5), (int)(simpleLineHeightDp * density + 0.5));
+        line.setLayoutParams(lineParams);
+
+        // 뷰를 레이아웃에 추가한다.
+        btnContainer.addView(line);
+    }
+
+    // 환승하는 역버튼을 생성하는 메소드
+    private void createTransferButton(View v, int index, float density) {
+        int nextLine = graph.getVertices().get(path.get(index + 1)).getLine();      // 현재 역의 다음 역의 호선
+
+        createButton(v, index, density, stationButtonWidthDpBig, stationButtonHeightDp);
+
+        createMidLayout(v, index, density);
+
+        createButton(v, index, density, stationButtonWidthDpBig, stationButtonHeightDp, nextLine);
+        createSimpleLine(v, index, density, nextLine);
+    }
+
+    // 환승을 나타내는 레이아웃을 생성하는 메소드
+    private void createMidLayout(View v, int index, float density) {
+        CustomAppGraph.Vertex vertex = graph.getVertices().get(path.get(index));        // 환승하는 역을 나타내는 vertex
+
+        LinearLayout btnContainer = (LinearLayout) v.findViewById(R.id.btnContainer);   // 버튼들을 담는 리니어레이아웃
+        RelativeLayout midLinear = new RelativeLayout(getActivity());                   // 아이콘, 점선, 텍스트를 담는 레이아웃
+
+        // 점선을 그리는 이미지뷰를 생성
+        ImageView dottedLine = new AppCompatImageView(getActivity());
+        dottedLine.setId(index + 1);
+        dottedLine.setBackgroundResource(R.drawable.dotted_line_vertical);
+        dottedLine.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        RelativeLayout.LayoutParams lineParams = new RelativeLayout.LayoutParams((int)(dottedLineHeightDp * density + 0.5), (int)(dottedLineHeightDp * density + 0.5));
+        lineParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+        lineParams.topMargin = (int)(dottedLineMarginDp * density + 0.5);
+        lineParams.bottomMargin = (int)(dottedLineMarginDp * density + 0.5);
+        dottedLine.setLayoutParams(lineParams);
+
+        // 내리는문을 나타내는 텍스트뷰
+        TextView textView = new AppCompatTextView(getActivity());
+        textView.setText("내리는문 " + vertex.getDoorDirection());
+        RelativeLayout.LayoutParams textParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, (int)(dottedLineHeightDp * density + 0.5));
+        textView.setGravity(Gravity.CENTER);
+        textParams.addRule(RelativeLayout.RIGHT_OF, dottedLine.getId());
+        textView.setLayoutParams(textParams);
+
+        // 걷는 아이콘을 나타내는 이미지뷰
+        ImageView walkIcon = new AppCompatImageView(getActivity());
+        walkIcon.setBackgroundResource(R.mipmap.ic_walk_foreground);
+        RelativeLayout.LayoutParams iconParams = new RelativeLayout.LayoutParams((int) (dottedLineHeightDp * density + 0.5), (int) (dottedLineHeightDp * density + 0.5));
+        iconParams.addRule(RelativeLayout.LEFT_OF, dottedLine.getId());
+        walkIcon.setLayoutParams(iconParams);
+
+        // 뷰와 레이아웃을 레이아웃에 추가한다.
+        midLinear.addView(walkIcon);
+        midLinear.addView(dottedLine);
+        midLinear.addView(textView);
+        btnContainer.addView(midLinear);
+    }
+
+    // 버튼의 클릭이벤트를 등록하는 메소드
     private void registerListener(View v) {
         Button reportButton = v.findViewById(R.id.reportButton);
         reportButton.setOnClickListener(new Button.OnClickListener() {

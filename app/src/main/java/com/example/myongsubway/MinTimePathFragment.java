@@ -44,11 +44,15 @@ public class MinTimePathFragment extends Fragment {
     Button departureButton, arrivalButton;          // 출발역과 도착역을 나타내는 버튼
     ImageButton zoomButton;                         // 확대 버튼
     Button reportButton;                            // 잘못된 정보 신고 버튼
+    ImageButton bookmarkButton;                     // 즐겨찾기 등록 버튼
+    boolean isSelected = false;                     // 즐겨찾기 버튼이 눌렸는지를 나타내는 상태변수
     TextView departureLine, arrivalLine;            // 출발역과 도착역의 호선을 나타내는 텍스트뷰
-    TextView costTime, costDistance, costCost;      // 각각 소요시간, 소요거리, 소요비용을 나타내는 텍스트뷰
+    TextView costTime, costDistance, costCost,
+            costTransfer;                           // 각각 소요시간, 소요거리, 소요비용, 환승횟수를 나타내는  텍스트뷰
     ImageView midLine;                              // 역버튼 사이의 선을 나타내는 뷰
 
-    public MinTimePathFragment(ArrayList<Integer>path, ArrayList<Integer> _costs, CustomAppGraph _graph, ArrayList<Integer> _btnBackgrounds, ArrayList<Integer> _lineColors) {
+
+    public MinTimePathFragment(ArrayList<Integer> path, ArrayList<Integer> _costs, CustomAppGraph _graph, ArrayList<Integer> _btnBackgrounds, ArrayList<Integer> _lineColors) {
         minTimePath = path;
         costs = _costs;
         graph = _graph;
@@ -108,14 +112,16 @@ public class MinTimePathFragment extends Fragment {
         departureLine.setText(departure.getLine() + "호선");
         arrivalLine.setText(arrival.getLine() + "호선");
 
-        // 소요시간, 소요거리, 소요비용을 나타내는 텍스트뷰 참조
+        // 소요시간, 소요거리, 소요비용, 환승횟수를 나타내는 텍스트뷰 참조
         costTime = v.findViewById(R.id.costTime);
         costDistance = v.findViewById(R.id.costDistance);
         costCost = v.findViewById(R.id.costCost);
+        costTransfer = v.findViewById(R.id.costTransfer);
 
-        // 확대, 환승, 잘못된 정보 신고 버튼 참조
+        // 확대, 잘못된 정보 신고, 즐겨찾기 등록 버튼 참조
         zoomButton = v.findViewById(R.id.zoomButton);
         reportButton = v.findViewById(R.id.reportButton);
+        bookmarkButton = v.findViewById(R.id.bookmarkButton);
         
         // 역버튼 사이의 선을 나타내는 뷰 참조
         midLine = v.findViewById(R.id.midLine);
@@ -149,6 +155,13 @@ public class MinTimePathFragment extends Fragment {
                         email.putExtra(Intent.EXTRA_TEXT, "잘못된 정보를 입력해주세요.");
                         startActivity(email);
                         break;
+
+                    case R.id.bookmarkButton:
+                        // TODO : 즐겨찾기 등록 기능
+                        isSelected = !isSelected;
+                        if (isSelected) bookmarkButton.setBackgroundResource(R.mipmap.ic_star_selected_foreground);
+                        else bookmarkButton.setBackgroundResource(R.mipmap.ic_star_unselected_foreground);
+                        break;
                 }
             }
         };
@@ -157,6 +170,7 @@ public class MinTimePathFragment extends Fragment {
         arrivalButton.setOnClickListener(onClickListener);
         zoomButton.setOnClickListener(onClickListener);
         reportButton.setOnClickListener(onClickListener);
+        bookmarkButton.setOnClickListener(onClickListener);
     }
 
     // 각각 departureButton , arrivalButton 의 중간에 오도록
@@ -188,7 +202,7 @@ public class MinTimePathFragment extends Fragment {
         bgShape.setColors(colors);
     }
 
-    // 소요시간, 소요거리, 소요비용을 텍스트뷰에 적용시킨다.
+    // 소요시간, 소요거리, 소요비용, 환승횟수를 텍스트뷰에 적용시킨다.
     private void setCostTextView() {
         String time = convertTime(costs.get(CustomAppGraph.SearchType.MIN_TIME.ordinal()));
         costTime.setText(time);
@@ -198,6 +212,9 @@ public class MinTimePathFragment extends Fragment {
 
         String cost = convertCost(costs.get(CustomAppGraph.SearchType.MIN_COST.ordinal()));
         costCost.setText(cost);
+
+        String transfer = costs.get(CustomAppGraph.SearchType.MIN_TRANSFER.ordinal()) + "번";
+        costTransfer.setText(transfer);
     }
 
     // 초를 시간, 분, 초로 변환하는 메소드

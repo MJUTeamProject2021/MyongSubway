@@ -203,7 +203,7 @@ public class StationInformationFragment extends Fragment implements View.OnClick
                 parserEvent = parser.next();
             }
         } catch(Exception e){
-             airstate.setText("정보를 불러오지 못했습니다.(인터넷 연결를 확인하세요)");return;
+            airstate.setText("정보를 불러오지 못했습니다.(인터넷 연결를 확인하세요)"); return;
         }
         if(pMq==null){
             airstate.post(new Runnable() {
