@@ -1,10 +1,12 @@
 package com.example.myongsubway;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -48,6 +50,7 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
     ArrayList<CommentFragment> commentList = new ArrayList();
     CardItem item;
     private CustomAppGraph graph;
+    private InputMethodManager imm;
 
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
@@ -57,6 +60,7 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board_read);
 
+            imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         graph = (CustomAppGraph)getApplicationContext();
         Intent intent = getIntent();
         item = (CardItem)intent.getSerializableExtra("item");
@@ -157,34 +161,19 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
                                 db = FirebaseDatabase.getInstance();
                                 dr = db.getReference("Boards").child(item.getId());
                                 dr.removeValue();
-                                finish();
-                                Toast.makeText(getApplicationContext(), "글을 삭제하였습니다.", Toast.LENGTH_SHORT).show();
 
                                 dr = db.getReference();
                                 Query filterQuery = dr.child("Comments").orderByChild("boardid").equalTo(item.getId());
-                                filterQuery.addChildEventListener(new ChildEventListener() {
+                                filterQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
-                                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                        dataSnapshot.getRef().setValue(null);
+                                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                        for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                                            dataSnapshot.getRef().removeValue();
+                                        }
                                     }
 
                                     @Override
-                                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                                    }
-
-                                    @Override
-                                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                                    }
-
-                                    @Override
-                                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
+                                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
                                     }
                                 });
@@ -234,12 +223,17 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
                         databaseReference.child("writer").setValue("작성자: "+graph.getEmail());
                         databaseReference.child("time").setValue("작성시간: "+new SimpleDateFormat("yyyy-MM-dd hh:mm").format(new Date(System.currentTimeMillis())));
                         setCommentRefresh();
+                        commentText.setText("");
                     }
                     @Override
                     public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
                     }
                 });
+                InputMethodManager keyboard = imm;
+                if(keyboard != null){
+                    keyboard.hideSoftInputFromWindow(this.commentbutton.getWindowToken(), 0);
+                }
                 break;
         }
     }

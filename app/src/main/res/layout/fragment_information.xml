@@ -63,12 +63,17 @@
             android:layout_height="wrap_content"
             android:background="@drawable/round_layout"
             android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingTop="15dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="15dp"
             android:weightSum="3">
 
             <LinearLayout
                 android:id="@+id/fragment_information_adjacent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
@@ -93,6 +98,7 @@
                     android:id="@+id/textView18"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
                     android:text="개찰구 내 화장실"
                     android:textColor="#191515"
                     android:textSize="20sp"
@@ -103,6 +109,7 @@
                     android:id="@+id/fragment_information_toilet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
                     android:text="있음"
                     android:textAlignment="center" />
 
@@ -110,6 +117,7 @@
                     android:id="@+id/textView20"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
                     android:text="내리는 문 방향"
                     android:textColor="#191515"
                     android:textSize="20sp"
@@ -120,6 +128,7 @@
                     android:id="@+id/fragment_information_door"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
                     android:text="오른쪽"
                     android:textAlignment="center" />
             </LinearLayout>
@@ -147,8 +156,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@drawable/round_layout"
             android:orientation="vertical"
-            android:background="@drawable/round_layout">
+            android:paddingLeft="10dp"
+            android:paddingTop="15dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="15dp">
 
             <TextView
                 android:id="@+id/textView11"
@@ -200,6 +213,61 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textColor="#000000" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/fragment_surrounding_restuarent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/round_layout"
+                android:orientation="vertical"
+                android:paddingBottom="13dp">
+
+                <Button
+                    android:id="@+id/button5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#00FFFFFF"
+                    android:backgroundTint="@empty"
+                    android:text="주변식당"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:icon="@drawable/ic_restuarent"
+                    app:iconGravity="textEnd"
+                    app:iconTint="#000000" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/fragment_surrounding_building"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/round_layout"
+                android:orientation="vertical"
+                android:paddingBottom="13dp">
+
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#00FFFFFF"
+                    android:backgroundTint="@empty"
+                    android:text="주변건물"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:icon="@drawable/ic_building"
+                    app:iconGravity="textEnd"
+                    app:iconTint="#000000" />
             </LinearLayout>
         </LinearLayout>
 

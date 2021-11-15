@@ -20,42 +20,6 @@
             android:background="#00FFFFFF" />
 
         <Button
-            android:id="@+id/fragment_report_tourist"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="#00472A2A"
-            android:backgroundTint="@null"
-            android:text="주변 식당\n시설"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:translationX="-90dp"
-            android:translationY="-5dp"
-            app:icon="@drawable/ic_restuarent"
-            app:iconGravity="top"
-            app:iconPadding="0dp"
-            app:iconSize="50dp"
-            app:iconTint="#2196F3" />
-
-        <Button
-            android:id="@+id/fragment_report_bookmark"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="#00472A2A"
-            android:backgroundTint="@null"
-            android:text="즐겨찾기"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:translationX="90dp"
-            android:translationY="-8dp"
-            app:icon="@drawable/ic_bookmark"
-            app:iconGravity="top"
-            app:iconPadding="0dp"
-            app:iconSize="50dp"
-            app:iconTint="#2196F3" />
-
-        <Button
             android:id="@+id/fragment_report_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -82,8 +46,7 @@
             android:text="도착역"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
-            android:translationX="60dp"
-            android:translationY="70dp"
+            android:translationX="70dp"
             app:icon="@drawable/ic_desti"
             app:iconGravity="top"
             app:iconPadding="0dp"
@@ -100,8 +63,7 @@
             android:text="출발역"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
-            android:translationX="-60dp"
-            android:translationY="70dp"
+            android:translationX="-70dp"
             app:icon="@drawable/ic_depart"
             app:iconGravity="top"
             app:iconPadding="0dp"
@@ -123,7 +85,7 @@
             app:iconGravity="top"
             app:iconPadding="0dp"
             app:iconSize="50dp"
-            app:iconTint="#2196F3" />
+            app:iconTint="#FFFFFF" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/fragment_report_name"
@@ -151,16 +113,37 @@
                 android:layout_marginTop="15dp"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/fragment_report_line"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#32FFFFFF"
-                    android:text="1호선"
-                    android:textAlignment="center"
-                    android:textColor="#000000"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
+                    android:layout_height="30dp">
+
+                    <TextView
+                        android:id="@+id/fragment_report_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#00FFFFFF"
+                        android:text="1호선"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/fragment_report_bookmark"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:background="#00472A2A"
+                        android:backgroundTint="@null"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        android:translationX="150dp"
+                        app:icon="@mipmap/ic_star_unselected_foreground"
+                        app:iconGravity="textTop"
+                        app:iconPadding="0dp"
+                        app:iconSize="50dp"
+                        app:iconTint="#000000" />
+                </FrameLayout>
 
                 <LinearLayout
                     android:id="@+id/fragment_report_addlayout"
