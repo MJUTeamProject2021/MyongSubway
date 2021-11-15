@@ -125,17 +125,30 @@
             app:iconSize="50dp"
             app:iconTint="#2196F3" />
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/fragment_report_name"
+            android:layout_width="75dp"
+            android:layout_height="74dp"
+            android:layout_gravity="center"
+            android:background="@drawable/round_button"
+            android:backgroundTint="@null"
+            android:drawableTint="@null"
+            android:text="101역"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
         <LinearLayout
             android:id="@+id/fragment_report_menulayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="#F3825F"
+            android:background="@drawable/round_button_1"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -153,6 +166,8 @@
                     android:id="@+id/fragment_report_addlayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
                     android:orientation="horizontal" />
 
             </LinearLayout>
@@ -160,7 +175,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="#FFFFFF"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@drawable/round_layout"
                 android:orientation="horizontal"
                 android:weightSum="5">
 
@@ -180,7 +197,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="#ECE8E8"
+                    android:background="@drawable/round_layout"
                     android:backgroundTint="@null"
                     android:text="101역"
                     android:textColor="#000000"
@@ -203,6 +220,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="57dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5dp"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <Button
@@ -213,15 +233,15 @@
                     android:background="#00FFFFFF"
                     android:backgroundTint="#00FFFFFF"
                     android:text="내부\n화장실: X"
-                    android:textAlignment="viewStart"
+                    android:textAlignment="viewEnd"
                     android:textAllCaps="false"
                     android:textColor="#000000"
-                    android:textSize="14sp"
+                    android:textSize="13sp"
                     android:textStyle="bold"
                     app:icon="@mipmap/ic_toilet_foreground"
                     app:iconGravity="end"
                     app:iconPadding="1dp"
-                    app:iconSize="80dp"
+                    app:iconSize="60dp"
                     app:iconTint="#000000" />
 
                 <Button
@@ -245,18 +265,6 @@
 
             </LinearLayout>
         </LinearLayout>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/fragment_report_name"
-            android:layout_width="75dp"
-            android:layout_height="74dp"
-            android:layout_gravity="center"
-            android:background="@drawable/round_button"
-            android:backgroundTint="@null"
-            android:drawableTint="@null"
-            android:text="101역"
-            android:textSize="14sp"
-            android:textStyle="bold" />
 
     </FrameLayout>
 

@@ -7,6 +7,7 @@ import androidx.core.view.MotionEventCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -43,7 +44,7 @@ import java.util.Map;
 
 public class    MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-
+    public static Context mcontext;
     public StationReportFragment fragment;
     private Button findButton;
     private Button changeButton;
@@ -51,6 +52,7 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
     private Button gotoBookmark;
     private Button gotoSearch;
     private Button gotoSetting;
+    private Button gotoBoard;
     private TextView departText;
     private TextView destiText;
     private Intent intent;
@@ -67,10 +69,7 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //액션바 가리기   + 액션바 없앤 테마로 바꿔서 주석처리함 지워도 됨 by 이하윤
-        //ActionBar actionBar = getSupportActionBar();
-        //actionBar.hide();
-
+        mcontext = this;
         graph = (CustomAppGraph) getApplicationContext();        //공유되는 데이터 담는 객체
         mainVertices = graph.getVertices();
 
@@ -92,7 +91,7 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
         gotoSearch = findViewById(R.id.Main_Button_GotoSearch);
         gotoSetting = findViewById(R.id.Main_Button_GotoSetting);
         gotoShort = findViewById(R.id.Main_Button_GotoShort);
-
+        gotoBoard = findViewById((R.id.Main_Button_GotoBoard));
         //클릭리스너등록
         findButton.setOnClickListener(this);
         changeButton.setOnClickListener(this);
@@ -100,6 +99,7 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
         gotoSearch.setOnClickListener(this);
         gotoSetting.setOnClickListener(this);
         gotoShort.setOnClickListener(this);
+        gotoBoard.setOnClickListener(this);
     }
 
 
@@ -111,6 +111,15 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
         isFragment=false;
     }
 
+
+    void launchReport(String string){
+        int i  =graph.getMap().get(string);
+        fragment = new StationReportFragment(mainVertices.get(i),mainVertices,graph,mainVertices.get(i).getLines().get(0));
+        FragmentTransaction transaction  = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.Main_ConstraintLayout_Main, fragment);
+        transaction.commitAllowingStateLoss();
+        isFragment = true;
+    }
     //터치할시에
     @Override
     public void onClick(View view) {
@@ -118,7 +127,7 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
         //역 버튼을 클릭했는지 확인하는 반복문
         for(int i=0;i<graph.getStationCount();i++) {
             if(view.getId() ==stationButtonList.get(i).getId()) {
-                fragment = new StationReportFragment(mainVertices.get(i),mainVertices,graph,mainVertices.get(i).getLine());
+                fragment = new StationReportFragment(mainVertices.get(i),mainVertices,graph,mainVertices.get(i).getLines().get(0));
                 FragmentTransaction transaction  = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.Main_ConstraintLayout_Main, fragment);
                 transaction.commit();
@@ -161,6 +170,15 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.Main_Button_GotoShort:
                 intent = new Intent(this,ShortestPathActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.Main_Button_GotoBoard:
+                if(graph.isLogined()){
+                    intent = new Intent(this,BoardWatchActivity.class);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(this, "로그인을 해야 이용하실 수 있습니다.", Toast.LENGTH_SHORT).show();
+                }
+             
                 break;
         }
     }
