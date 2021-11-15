@@ -27,6 +27,7 @@ import java.util.ArrayList;
 
 public class ZoomPathFragment extends Fragment {
     private ArrayList<Integer> path;                // 탐색한 경로를 담고있는 리스트
+    private ArrayList<Integer> lines;               // 경로의 각 역의 호선을 담고있는 리스트
     private ArrayList<Integer> btnBackgrounds;      // 역을 나타내는 버튼들의 background xml 파일의 id를 저장하는 리스트
     private ArrayList<Integer> lineColors;          // 호선의 색들을 담고있는 리스트
 
@@ -43,11 +44,11 @@ public class ZoomPathFragment extends Fragment {
     final int simpleLineWidthDp = 10;               // 역버튼 사이의 선의 가로 dp 값
     final int simpleLineHeightDp = 40;              // 역버튼 사이의 선의 세로 dp 값
     
-    public ZoomPathFragment(ArrayList<Integer> _path, ArrayList<Integer> _btnBackgrounds, ArrayList<Integer> _lineColors) {
+    public ZoomPathFragment(ArrayList<Integer> _path, ArrayList<Integer> _lines, ArrayList<Integer> _btnBackgrounds, ArrayList<Integer> _lineColors) {
         path = _path;
+        lines = _lines;
         btnBackgrounds = _btnBackgrounds;
         lineColors = _lineColors;
-
     }
 
     @Nullable
@@ -74,18 +75,16 @@ public class ZoomPathFragment extends Fragment {
             if (i == path.size() - 1) {
                 // 마지막 역버튼
                 createButton(v, i, density, stationButtonWidthDpBig, stationButtonHeightDp);
+            } else if (i == 0) {
+                createButton(v, i, density, stationButtonWidthDpBig, stationButtonHeightDp);
+                createSimpleLine(v, i, density);
             } else {
-                if (graph.getVertices().get(path.get(i)).getLine() != graph.getVertices().get(path.get(i + 1)).getLine()) {
-                    // 환승일 경우 (다음 역과 다른 호선일 경우)
+                // 환승
+                if (lines.get(i) != lines.get(i - 1)) {
+                    createButton(v, i, density, stationButtonWidthDpBig, stationButtonHeightDp, lines.get(i - 1));
                     createTransferButton(v, i, density);
                 } else {
-                    if (i == 0) {
-                        // 첫번째 역버튼
-                        createButton(v, i, density, stationButtonWidthDpBig, stationButtonHeightDp);
-                    } else {
-                        // 같은 호선일 경우
-                        createButton(v, i, density, stationButtonWidthDpSmall, stationButtonHeightDp);
-                    }
+                    createButton(v, i, density, stationButtonWidthDpSmall, stationButtonHeightDp);
                     createSimpleLine(v, i, density);
                 }
             }
@@ -100,7 +99,7 @@ public class ZoomPathFragment extends Fragment {
         // 역 버튼 만들기
         Button btn = new AppCompatButton(getActivity());
         btn.setText(vertex.getVertex());
-        btn.setBackgroundResource(btnBackgrounds.get(vertex.getLine()));
+        btn.setBackgroundResource(btnBackgrounds.get(lines.get(index)));
         LinearLayout.LayoutParams btnParams = new LinearLayout.LayoutParams((int)(width * density + 0.5), (int)(height * density + 0.5));
         btn.setLayoutParams(btnParams);
 
@@ -117,14 +116,14 @@ public class ZoomPathFragment extends Fragment {
     }
 
     // 역버튼을 다른 호선의 색으로 생성하는 메소드
-    private void createButton(View v, int index, float density, int width, int height, int nextLine) {
+    private void createButton(View v, int index, float density, int width, int height, int _line) {
         LinearLayout btnContainer = (LinearLayout) v.findViewById(R.id.btnContainer);   // 버튼들을 담는 리니어레이아웃
         CustomAppGraph.Vertex vertex = graph.getVertices().get(path.get(index));        // 현재 역 버튼이 나타내는 Vertex 객체
 
         // 역 버튼 만들기
         Button btn = new AppCompatButton(getActivity());
         btn.setText(vertex.getVertex());
-        btn.setBackgroundResource(btnBackgrounds.get(nextLine));
+        btn.setBackgroundResource(btnBackgrounds.get(_line));
         LinearLayout.LayoutParams btnParams = new LinearLayout.LayoutParams((int)(width * density + 0.5), (int)(height * density + 0.5));
         btn.setLayoutParams(btnParams);
 
@@ -148,7 +147,7 @@ public class ZoomPathFragment extends Fragment {
         // 역 버튼을 잇는 선
         ImageView line = new AppCompatImageView(getActivity());
         line.setBackgroundResource(R.drawable.simple_line);
-        ((GradientDrawable) line.getBackground()).setColor(lineColors.get(vertex.getLine()));
+        ((GradientDrawable) line.getBackground()).setColor(lineColors.get(lines.get(index)));
         LinearLayout.LayoutParams lineParams = new LinearLayout.LayoutParams((int)(simpleLineWidthDp * density + 0.5), (int)(simpleLineHeightDp * density + 0.5));
         line.setLayoutParams(lineParams);
 
@@ -157,14 +156,14 @@ public class ZoomPathFragment extends Fragment {
     }
 
     // 역버튼을 잇는 선을 다른 호선의 색으로 생성하는 메소드
-    private void createSimpleLine(View v, int index, float density, int nextLine) {
+    private void createSimpleLine(View v, int index, float density, int _line) {
         LinearLayout btnContainer = (LinearLayout) v.findViewById(R.id.btnContainer);   // 버튼들을 담는 리니어레이아웃
         CustomAppGraph.Vertex vertex = graph.getVertices().get(path.get(index));        // 현재 역 버튼이 나타내는 Vertex 객체
 
         // 역 버튼을 잇는 선
         ImageView line = new AppCompatImageView(getActivity());
         line.setBackgroundResource(R.drawable.simple_line);
-        ((GradientDrawable) line.getBackground()).setColor(lineColors.get(nextLine));
+        ((GradientDrawable) line.getBackground()).setColor(lineColors.get(_line));
         LinearLayout.LayoutParams lineParams = new LinearLayout.LayoutParams((int)(simpleLineWidthDp * density + 0.5), (int)(simpleLineHeightDp * density + 0.5));
         line.setLayoutParams(lineParams);
 
@@ -174,14 +173,9 @@ public class ZoomPathFragment extends Fragment {
 
     // 환승하는 역버튼을 생성하는 메소드
     private void createTransferButton(View v, int index, float density) {
-        int nextLine = graph.getVertices().get(path.get(index + 1)).getLine();      // 현재 역의 다음 역의 호선
-
-        createButton(v, index, density, stationButtonWidthDpBig, stationButtonHeightDp);
-
         createMidLayout(v, index, density);
-
-        createButton(v, index, density, stationButtonWidthDpBig, stationButtonHeightDp, nextLine);
-        createSimpleLine(v, index, density, nextLine);
+        createButton(v, index, density, stationButtonWidthDpBig, stationButtonHeightDp);
+        createSimpleLine(v, index, density);
     }
 
     // 환승을 나타내는 레이아웃을 생성하는 메소드
