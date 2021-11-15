@@ -161,35 +161,19 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
                                 db = FirebaseDatabase.getInstance();
                                 dr = db.getReference("Boards").child(item.getId());
                                 dr.removeValue();
-                                finish();
-                                Toast.makeText(getApplicationContext(), "글을 삭제하였습니다.", Toast.LENGTH_SHORT).show();
 
                                 dr = db.getReference();
                                 Query filterQuery = dr.child("Comments").orderByChild("boardid").equalTo(item.getId());
-                                filterQuery.addChildEventListener(new ChildEventListener() {
+                                filterQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
-                                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                        System.out.println("ㅋ");
-                                        dataSnapshot.getRef().setValue(null);
+                                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                        for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                                            dataSnapshot.getRef().removeValue();
+                                        }
                                     }
 
                                     @Override
-                                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                                    }
-
-                                    @Override
-                                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                                    }
-
-                                    @Override
-                                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
+                                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
                                     }
                                 });
@@ -240,13 +224,16 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
                         databaseReference.child("time").setValue("작성시간: "+new SimpleDateFormat("yyyy-MM-dd hh:mm").format(new Date(System.currentTimeMillis())));
                         setCommentRefresh();
                         commentText.setText("");
-
                     }
                     @Override
                     public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
                     }
                 });
+                InputMethodManager keyboard = imm;
+                if(keyboard != null){
+                    keyboard.hideSoftInputFromWindow(this.commentbutton.getWindowToken(), 0);
+                }
                 break;
         }
     }

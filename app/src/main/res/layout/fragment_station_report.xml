@@ -115,7 +115,7 @@
 
                 <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="30dp">
 
                     <TextView
                         android:id="@+id/fragment_report_line"
@@ -130,21 +130,19 @@
 
                     <Button
                         android:id="@+id/fragment_report_bookmark"
-                        android:layout_width="33dp"
-                        android:layout_height="36dp"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
                         android:layout_gravity="center"
                         android:background="#00472A2A"
                         android:backgroundTint="@null"
-                        android:text="즐겨찾기"
                         android:textColor="#FFFFFF"
                         android:textStyle="bold"
                         android:translationX="150dp"
-                        android:translationY="-10dp"
-                        app:icon="@drawable/ic_bookmark"
-                        app:iconGravity="top"
+                        app:icon="@mipmap/ic_star_unselected_foreground"
+                        app:iconGravity="textTop"
                         app:iconPadding="0dp"
-                        app:iconSize="30dp"
-                        app:iconTint="#FDC600" />
+                        app:iconSize="50dp"
+                        app:iconTint="#000000" />
                 </FrameLayout>
 
                 <LinearLayout
