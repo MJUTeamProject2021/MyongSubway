@@ -202,7 +202,7 @@ public class StationInformationFragment extends Fragment implements View.OnClick
                 parserEvent = parser.next();
             }
         } catch(Exception e){
-            airstate.setText("정보를 불러오지 못했습니다    .");
+            airstate.setText("정보를 불러오지 못했습니다.(네트워크 연결 실패)"); return;
         }
         double tempPmq = Double.parseDouble(pMq);
         airstate.post(new Runnable() {

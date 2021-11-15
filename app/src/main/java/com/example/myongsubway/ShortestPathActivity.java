@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
@@ -43,17 +44,27 @@ public class ShortestPathActivity extends AppCompatActivity {
     private ArrayList<ArrayList<Integer>> allCosts; // 소요시간, 소요거리, 소요비용을 저장하는 리스트, 순서대로 최소시간, 최단거리, 최소비용의 경우가 저장됨
     private final int TYPE_COUNT = 4;               // SearchType 의 경우의 수 (최소시간, 최단거리, 최소비용)
 
-    private Button bookmarkButton, setAlarmButton;  // 경로 즐겨찾기 버튼, 도착알람 설정 버튼
+    private ImageButton setAlarmButton;             // 도착알람 설정 버튼
 
     private CustomAppGraph graph;                   // 액티비티 간에 공유되는 데이터를 담는 클래스
 
-    private ArrayList<Integer> btnBackgrounds;              // 역을 나타내는 버튼들의 background xml 파일의 id를 저장하는 리스트
-    private ArrayList<Integer> lineColors;                  // 호선의 색들을 담고있는 리스트
+    private ArrayList<Integer> btnBackgrounds;      // 역을 나타내는 버튼들의 background xml 파일의 id를 저장하는 리스트
+    private ArrayList<Integer> lineColors;          // 호선의 색들을 담고있는 리스트
+
+    boolean isAlreadyButtonClicked = false;
+
+    boolean time = false;
+    boolean distance = false;
+    boolean cost = false;
+    boolean transfer = false;
+
+    ArrayList<Integer> alarmButtonRes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shortest_path);
+
 
         // 초기화
         init();
@@ -74,7 +85,11 @@ public class ShortestPathActivity extends AppCompatActivity {
         dijkstra(graph.getMap().get(departure), CustomAppGraph.SearchType.MIN_COST);
         dijkstra(graph.getMap().get(departure), CustomAppGraph.SearchType.MIN_TRANSFER);
 
-        printMinTransfer();
+        // 각 경로의 역의 호선을 저장한다.
+        getPathLines(CustomAppGraph.SearchType.MIN_TIME);
+        getPathLines(CustomAppGraph.SearchType.MIN_DISTANCE);
+        getPathLines(CustomAppGraph.SearchType.MIN_COST);
+        getPathLines(CustomAppGraph.SearchType.MIN_TRANSFER);
 
         // 뷰페이저2, 탭레이아웃 설정
         setPagerAndTabLayout();
@@ -93,11 +108,13 @@ public class ShortestPathActivity extends AppCompatActivity {
 
         allCosts = new ArrayList<ArrayList<Integer>>(TYPE_COUNT);
         for (int i = 0; i < TYPE_COUNT; i++) {
-            allCosts.add(new ArrayList<Integer>(3));
+            allCosts.add(new ArrayList<Integer>(4));
         }
 
-        bookmarkButton = findViewById(R.id.bookmarkButton);
+        alarmButtonRes = new ArrayList<Integer>(4);
+
         setAlarmButton = findViewById(R.id.setAlarmButton);
+        setAlarmButton.setColorFilter(getResources().getColor(R.color.rippleColor, null));
 
         // MainActivity 가 전송한 데이터 받기
         Intent intent = getIntent();
@@ -124,24 +141,19 @@ public class ShortestPathActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
-                    case R.id.bookmarkButton:
-
-                        /*if (graph.isLogined())
-                            Log.d("test", "Currently Logined");
-                        else
-                            Log.d("test", "Not Currently Logined");*/
-
-                        break;
                     case R.id.setAlarmButton:
-                        //Log.d("test", "setAlarmButton is pressed");
+                        // TODO : 알람 설정 기능
 
+                        if (!isAlreadyButtonClicked) {
+                            setAlarmButton.setColorFilter(Color.RED);
+                            isAlreadyButtonClicked = true;
+                        }
 
                         break;
                 }
             }
         };
         
-        bookmarkButton.setOnClickListener(onClickListener);
         setAlarmButton.setOnClickListener(onClickListener);
     }
 
@@ -258,7 +270,7 @@ public class ShortestPathActivity extends AppCompatActivity {
             // 더 짧은 경로가 존재한다면 스킵 (새로 찾은 현재 역까지의 비용이 기존의 현재 역까지의 비용보다 크면 스킵)
             if (best.get(here) < cost)
                 continue;
-            
+
             // 방문
             // here 에 해당하는 Vertex 객체에서 연결되어 있는 역 정보를 받아와서 방문할 수 있는 모든 역을 발견
             for (int there : graph.getVertices().get(here).getAdjacent()) {
@@ -266,10 +278,45 @@ public class ShortestPathActivity extends AppCompatActivity {
                 int nextCost = 0;
 
                 if (TYPE == CustomAppGraph.SearchType.MIN_TRANSFER) {
-                    nextCost = best.get(here);
 
-                    if (graph.getVertices().get(here).getLine() != graph.getVertices().get(there).getLine()) {
-                        nextCost += 1;
+                    // 현재 역이 출발 역이라면
+                    if (parent.get(here) == here) {
+
+                    } else {
+                        ArrayList<Integer> prevLines = graph.getVertices().get(parent.get(here)).getLines();
+                        ArrayList<Integer> hereLines = graph.getVertices().get(here).getLines();
+                        ArrayList<Integer> thereLines = graph.getVertices().get(there).getLines();
+
+                        int hereLine = 0;
+
+                        for (int pLine : prevLines) {
+                            for (int hLine : hereLines) {
+                                if (pLine == hLine) {
+                                    hereLine = pLine;
+                                    break;
+                                }
+                            }
+                        }
+                        //if (hereLine == 0) Log.d("test", "hereLine is 0 , here : " + here);
+
+                        int thereLine = 0;
+
+                        for (int hLine : hereLines) {
+                            for (int tLine : thereLines) {
+                                if (hLine == tLine) {
+                                    thereLine = hLine;
+                                    break;
+                                }
+                            }
+                        }
+                         //if (thereLine == 0) Log.d("test", "thereLine is 0 , there : " + there);
+
+                        if (hereLine != thereLine) {
+                            // 환승
+                            nextCost = best.get(here) + 1;
+                        } else {
+                            nextCost = best.get(here);
+                        }
                     }
                 } else {
                     nextCost = best.get(here) + graph.getAdjacent().get(here).get(there).getCost(TYPE);
@@ -308,111 +355,8 @@ public class ShortestPathActivity extends AppCompatActivity {
         calculateAllCosts(paths.get(TYPE.ordinal()), TYPE, best.get(graph.getMap().get(arrival)));
     }
 
-    private void dijkstraMinTransfer(int here, CustomAppGraph.SearchType TYPE) {
-        // 역과 비용을 관리하는 VertexCost 클래스
-        class VertexCost implements Comparable<VertexCost> {
-            int vertex;     // 역
-            int cost;       // 비용
-
-            public VertexCost(int _vertex, int _cost) {
-                vertex = _vertex;
-                cost = _cost;
-            }
-
-            @Override
-            public int compareTo(VertexCost vc) {
-                if (this.cost > vc.cost)
-                    return 1;
-                else if (this.cost < vc.cost)
-                    return -1;
-                else
-                    return 0;
-            }
-        }
-
-        // 각 역에서 갈 수 있는 역을 저장하는 리스트
-        // 해당 리스트의 역들은 발견만 한 역일뿐 아직 방문하지 않은 상태이다.
-        PriorityQueue<VertexCost> discovered = new PriorityQueue<VertexCost>();
-
-        ArrayList<Integer> best = new ArrayList<Integer>(graph.getStationCount());     // 각 역으로 가는 최단거리를 저장하는 리스트
-        ArrayList<Integer> parent = new ArrayList<Integer>(graph.getStationCount());   // 각 역의 이전 역을 저장하는 리스트
-
-        // 리스트 초기화
-        for (int i = 0; i < graph.getStationCount(); i++) {
-            best.add(Integer.MAX_VALUE);
-        }
-        for (int i = 0; i < graph.getStationCount(); i++) {
-            parent.add(-1);
-        }
-
-        // 처음 위치의 정보를 저장
-        discovered.add(new VertexCost(here, 0));
-        best.set(here, 0);
-        parent.set(here, here);
-
-        // 출발역부터 갈 수 있는 모든 정점을 탐색한다.
-        while (!discovered.isEmpty()) {
-            // 발견한 후보 중 cost 가 가장 작은, 방문할 후보를 찾는다.
-            VertexCost bestVC = discovered.remove();
-
-            int cost = bestVC.cost;     // 현재 방문할 역까지의 비용을 저장
-            here = bestVC.vertex;       // 현재 방문할 역을 찾은 후보로 변경
-
-            // 더 짧은 경로가 존재한다면 스킵 (새로 찾은 현재 역까지의 비용이 기존의 현재 역까지의 비용보다 크면 스킵)
-            if (best.get(here) < cost)
-                continue;
-
-            // 방문
-            // here 에 해당하는 Vertex 객체에서 연결되어 있는 역 정보를 받아와서 방문할 수 있는 모든 역을 발견
-            for (int there : graph.getVertices().get(here).getAdjacent()) {
-
-                int nextCost = best.get(here);
-
-                if (graph.getVertices().get(here).getLine() != graph.getVertices().get(there).getLine()) {
-                    nextCost += 1;
-                }
-
-                // 더 좋은 경로를 과거에 찾았으면 스킵
-                if (nextCost >= best.get(there))
-                    continue;
-
-                // 현재 역에서 발견한 역을 등록
-                discovered.add(new VertexCost(there, nextCost));
-                best.set(there, nextCost);
-                parent.set(there, here);
-            }
-        }
-
-        // 경로탐색이 끝남
-
-        // paths 중 인자로 전달된 SearchType 에 맞는 리스트에 저장함
-        // 도착역부터 각 역에 등록된 parent 를 찾아 출발역까지 거슬러올라감
-        int pos = graph.getMap().get(arrival);
-        while (true) {
-            paths.get(TYPE.ordinal()).add(pos);
-
-            // 출발지에 다다름
-            if (pos == parent.get(pos))
-                break;
-
-            pos = parent.get(pos);
-        }
-
-        // 경로가 저장된 리스트를 뒤집는다.
-        Collections.reverse(paths.get(TYPE.ordinal()));
-
-        // 소요시간, 소요거리, 소요비용을 저장한다.
-        calculateAllCosts(paths.get(TYPE.ordinal()), TYPE, best.get(graph.getMap().get(arrival)));
-    }
-
-    private void printMinTransfer() {
-        for (int item : paths.get(CustomAppGraph.SearchType.MIN_TRANSFER.ordinal())) {
-            Log.d("test", graph.getVertices().get(item).getVertex());
-        }
-        Log.d("test", "소요시간 : " + allCosts.get(CustomAppGraph.SearchType.MIN_TRANSFER.ordinal()).get(0));
-        Log.d("test", "소요거리 : " + allCosts.get(CustomAppGraph.SearchType.MIN_TRANSFER.ordinal()).get(1));
-        Log.d("test", "소요비용 : " + allCosts.get(CustomAppGraph.SearchType.MIN_TRANSFER.ordinal()).get(2));
-
+    private void getPathLines(CustomAppGraph.SearchType TYPE) {
+        ArrayList<Integer> path = paths.get(TYPE.ordinal());
     }
 
     // 소요시간, 소요거리, 소요비용을 계산하는 메소드
@@ -422,24 +366,28 @@ public class ShortestPathActivity extends AppCompatActivity {
                 allCosts.get(TYPE.ordinal()).add(best);
                 allCosts.get(TYPE.ordinal()).add(calculateElapsed(path, CustomAppGraph.SearchType.MIN_DISTANCE));
                 allCosts.get(TYPE.ordinal()).add(calculateElapsed(path, CustomAppGraph.SearchType.MIN_COST));
+                allCosts.get(TYPE.ordinal()).add(calculateElapsed(path, CustomAppGraph.SearchType.MIN_TRANSFER));
                 break;
 
             case MIN_DISTANCE:
                 allCosts.get(TYPE.ordinal()).add(calculateElapsed(path, CustomAppGraph.SearchType.MIN_TIME));
                 allCosts.get(TYPE.ordinal()).add(best);
                 allCosts.get(TYPE.ordinal()).add(calculateElapsed(path, CustomAppGraph.SearchType.MIN_COST));
+                allCosts.get(TYPE.ordinal()).add(calculateElapsed(path, CustomAppGraph.SearchType.MIN_TRANSFER));
                 break;
 
             case MIN_COST:
                 allCosts.get(TYPE.ordinal()).add(calculateElapsed(path, CustomAppGraph.SearchType.MIN_TIME));
                 allCosts.get(TYPE.ordinal()).add(calculateElapsed(path, CustomAppGraph.SearchType.MIN_DISTANCE));
                 allCosts.get(TYPE.ordinal()).add(best);
+                allCosts.get(TYPE.ordinal()).add(calculateElapsed(path, CustomAppGraph.SearchType.MIN_TRANSFER));
                 break;
 
             case MIN_TRANSFER:
                 allCosts.get(TYPE.ordinal()).add(calculateElapsed(path, CustomAppGraph.SearchType.MIN_TIME));
                 allCosts.get(TYPE.ordinal()).add(calculateElapsed(path, CustomAppGraph.SearchType.MIN_DISTANCE));
                 allCosts.get(TYPE.ordinal()).add(calculateElapsed(path, CustomAppGraph.SearchType.MIN_COST));
+                allCosts.get(TYPE.ordinal()).add(best);
                 break;
         }
     }
@@ -448,8 +396,16 @@ public class ShortestPathActivity extends AppCompatActivity {
     private int calculateElapsed(ArrayList<Integer> path, CustomAppGraph.SearchType TYPE) {
         int output = 0;
 
-        for (int pathIndex = 0; pathIndex < path.size() - 1; pathIndex++) {
-            output += graph.getAdjacent().get(path.get(pathIndex)).get(path.get(pathIndex + 1)).getCost(TYPE);
+        if (TYPE == CustomAppGraph.SearchType.MIN_TRANSFER) {
+            for (int pathIndex = 0; pathIndex < path.size() - 1; pathIndex++) {
+                if (graph.getVertices().get(path.get(pathIndex)).getLine() != graph.getVertices().get(path.get(pathIndex + 1)).getLine()) {
+                    output += 1;
+                }
+            }
+        } else {
+            for (int pathIndex = 0; pathIndex < path.size() - 1; pathIndex++) {
+                output += graph.getAdjacent().get(path.get(pathIndex)).get(path.get(pathIndex + 1)).getCost(TYPE);
+            }
         }
 
         return output;
@@ -477,6 +433,14 @@ public class ShortestPathActivity extends AppCompatActivity {
         transaction.replace(R.id.zoom_path_fragment_container, frag);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    public void changeAlarmButton(CustomAppGraph.SearchType TYPE) {
+        if (isAlreadyButtonClicked) {
+            setAlarmButton.setImageResource(R.mipmap.ic_alarm_another_selected_foreground);
+        } else {
+
+        }
     }
 
     // 호선에 따른 역버튼 배경 xml 을 담는 메소드

@@ -34,25 +34,27 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
+    <!--
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/bookmarkButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:text="경로 즐겨찾기"
         android:stateListAnimator="@null"
-        android:layout_marginLeft="50dp"
-        android:layout_marginBottom="70dp"
+        android:layout_marginBottom="210dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"/>-->
 
-    <androidx.appcompat.widget.AppCompatButton
+    <ImageButton
         android:id="@+id/setAlarmButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:text="도착알람 설정"
         android:stateListAnimator="@null"
-        android:layout_marginRight="50dp"
-        android:layout_marginBottom="70dp"
+        android:src="@mipmap/ic_alarm_foreground"
+        android:background="@drawable/bg_white_ripple_stroke"
+        android:layout_marginBottom="60dp"
+        android:layout_marginRight="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
 
