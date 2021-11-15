@@ -155,6 +155,7 @@ public class StationInformationFragment extends Fragment implements View.OnClick
             int parserEvent = parser.getEventType();
 
             while (parserEvent != XmlPullParser.END_DOCUMENT){
+
                 switch(parserEvent){
                     case XmlPullParser.START_TAG:
                         if(parser.getName().equals("CHECKDATE")){       //업데이트 날짜면 true
@@ -164,7 +165,7 @@ public class StationInformationFragment extends Fragment implements View.OnClick
                             isPMq = true;
                         }
                         if(parser.getName().equals("message")){
-                            airstate.setText("정보를 불러오지 못했습니다.");
+                            airstate.setText("정보를 불러오지 못했습니다.(네트워크 연결 실패)");return;
                         }
                         break;
 
@@ -202,8 +203,16 @@ public class StationInformationFragment extends Fragment implements View.OnClick
                 parserEvent = parser.next();
             }
         } catch(Exception e){
-            airstate.setText("정보를 불러오지 못했습니다.(네트워크 연결 실패)"); return;
+            airstate.setText("정보를 불러오지 못했습니다.(인터넷 연결를 확인하세요)"); return;
         }
+        if(pMq==null){
+            airstate.post(new Runnable() {
+            @Override
+            public void run() {
+                airstate.setText("정보를 불러오지 못했습니다.(데이터 제공 서버 오류)");return;
+            }
+        });}
+        else{
         double tempPmq = Double.parseDouble(pMq);
         airstate.post(new Runnable() {
             @Override
@@ -214,6 +223,7 @@ public class StationInformationFragment extends Fragment implements View.OnClick
                 else if(tempPmq>=76){airstate.setText("공기가 매우 나쁩니다");airstate.setTextColor(Color.rgb(255,0,0));}
             }
         });
+        }
     }
 
     class AirThread extends Thread{

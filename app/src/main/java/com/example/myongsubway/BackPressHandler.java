@@ -1,6 +1,7 @@
 package com.example.myongsubway;
 
 import android.app.Activity;
+import android.app.Application;
 import android.widget.Toast;
 
 public class BackPressHandler {
@@ -18,7 +19,9 @@ public class BackPressHandler {
             return;
         }
         if(System.currentTimeMillis() <= backPressedTime + 1800){
-            mainactivity.finish();
+            mainactivity.moveTaskToBack(true);
+            mainactivity.finishAndRemoveTask();
+            System.exit(0);
         }
     }
 }

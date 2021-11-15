@@ -40,8 +40,9 @@ public class ShortestPathActivity extends AppCompatActivity {
 
 
     private String departure, arrival;              // 출발역과 도착역
-    private ArrayList<ArrayList<Integer>> paths;    // 출발역 ~ 도착역의 경로를 저장하는 리스트, 순서대로 최소시간, 최단거리, 최소비용의 경로가 저장됨
-    private ArrayList<ArrayList<Integer>> allCosts; // 소요시간, 소요거리, 소요비용을 저장하는 리스트, 순서대로 최소시간, 최단거리, 최소비용의 경우가 저장됨
+    private ArrayList<ArrayList<Integer>> paths;    // 출발역 ~ 도착역의 경로를 저장하는 리스트, 순서대로 최소시간, 최단거리, 최소비용, 최소환승의 경로가 저장됨
+    private ArrayList<ArrayList<Integer>> allCosts; // 소요시간, 소요거리, 소요비용, 환승횟수를 저장하는 리스트, 순서대로 최소시간, 최단거리, 최소비용, 환승횟수의 경우가 저장됨
+    private ArrayList<ArrayList<Integer>> allLines; // 경로의 각 역의 호선을 저장하는 리스트
     private final int TYPE_COUNT = 4;               // SearchType 의 경우의 수 (최소시간, 최단거리, 최소비용)
 
     private ImageButton setAlarmButton;             // 도착알람 설정 버튼
@@ -109,6 +110,11 @@ public class ShortestPathActivity extends AppCompatActivity {
         allCosts = new ArrayList<ArrayList<Integer>>(TYPE_COUNT);
         for (int i = 0; i < TYPE_COUNT; i++) {
             allCosts.add(new ArrayList<Integer>(4));
+        }
+
+        allLines = new ArrayList<ArrayList<Integer>>(TYPE_COUNT);
+        for (int i = 0; i < TYPE_COUNT; i++) {
+            allLines.add(new ArrayList<Integer>());
         }
 
         alarmButtonRes = new ArrayList<Integer>(4);
@@ -289,11 +295,12 @@ public class ShortestPathActivity extends AppCompatActivity {
 
                         int hereLine = 0;
 
+                        Loop1 :
                         for (int pLine : prevLines) {
                             for (int hLine : hereLines) {
                                 if (pLine == hLine) {
                                     hereLine = pLine;
-                                    break;
+                                    break Loop1;
                                 }
                             }
                         }
@@ -301,11 +308,12 @@ public class ShortestPathActivity extends AppCompatActivity {
 
                         int thereLine = 0;
 
+                        Loop2 :
                         for (int hLine : hereLines) {
                             for (int tLine : thereLines) {
                                 if (hLine == tLine) {
                                     thereLine = hLine;
-                                    break;
+                                    break Loop2;
                                 }
                             }
                         }
@@ -356,10 +364,26 @@ public class ShortestPathActivity extends AppCompatActivity {
     }
 
     private void getPathLines(CustomAppGraph.SearchType TYPE) {
+        
         ArrayList<Integer> path = paths.get(TYPE.ordinal());
+
+        for (int index = 0; index < path.size() - 1; index++) {
+            int here = path.get(index);
+            int there = path.get(index + 1);
+
+            Loop1 :
+            for (int hereLine : graph.getVertices().get(here).getLines()) {
+                for (int thereLine : graph.getVertices().get(there).getLines()) {
+                    if (hereLine == thereLine) {
+                        allLines.get(TYPE.ordinal()).add(hereLine);
+                        break Loop1;
+                    }
+                }
+            }
+        }
     }
 
-    // 소요시간, 소요거리, 소요비용을 계산하는 메소드
+    // 소요시간, 소요거리, 소요비용, 환승횟수를 계산하는 메소드
     private void calculateAllCosts(ArrayList<Integer> path, CustomAppGraph.SearchType TYPE, int best) {
         switch (TYPE) {
             case MIN_TIME:

@@ -374,6 +374,7 @@ public class CustomAppGraph extends Application {
     }
 
     // 로그인 관련 getter
+    public String getEmail(){return email;}
     // getter() 로 얻은 리스트에 직접 대입은 불가능하다.
     public final ArrayList<String> getBookmarkedStation() {
         return bookmarkedStation;
