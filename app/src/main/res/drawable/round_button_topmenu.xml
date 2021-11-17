@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="#BEBEBE">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/line8Color" />
+            <stroke
+                android:color="@color/line8Color"
+                android:width="2.5dp"/>
+            <corners
+                android:radius="35dp"/>
+        </shape>
+    </item>
+
+    <item
+        android:top="12dp"
+        android:bottom="12dp"
+        android:left="12dp"
+        android:right="12dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/white"/>
+            <stroke
+                android:color="@color/white"
+                android:width="2.5dp"/>
+            <corners
+                android:radius="35dp"/>
+        </shape>
+    </item>
+
+</ripple>
