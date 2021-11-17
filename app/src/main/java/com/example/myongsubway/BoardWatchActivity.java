@@ -60,6 +60,7 @@ public class BoardWatchActivity extends AppCompatActivity implements BoardAdapte
         resetBoard();
     }
 
+    //게시글들을 갱신한다.
     public void resetBoard(){
 
         db = FirebaseDatabase.getInstance();

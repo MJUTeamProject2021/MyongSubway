@@ -104,7 +104,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="@drawable/round_button_1"
+            android:background="@drawable/round_button_main1"
             android:orientation="vertical">
 
             <LinearLayout
@@ -158,8 +158,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="12dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
                 android:background="@drawable/round_layout"
                 android:orientation="horizontal"
                 android:weightSum="5">
@@ -216,13 +216,13 @@
                     android:background="#00FFFFFF"
                     android:backgroundTint="#00FFFFFF"
                     android:text="내부\n화장실: X"
-                    android:textAlignment="viewEnd"
+                    android:textAlignment="center"
                     android:textAllCaps="false"
                     android:textColor="#000000"
                     android:textSize="13sp"
                     android:textStyle="bold"
-                    app:icon="@mipmap/ic_toilet_foreground"
-                    app:iconGravity="end"
+                    app:icon="@mipmap/ic_newtoilet_foreground"
+                    app:iconGravity="textStart"
                     app:iconPadding="1dp"
                     app:iconSize="60dp"
                     app:iconTint="#000000" />
@@ -240,8 +240,8 @@
                     android:textColor="#000000"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    app:icon="@null"
-                    app:iconGravity="end"
+                    app:icon="@mipmap/ic_slidedoor_foreground"
+                    app:iconGravity="textStart"
                     app:iconPadding="1dp"
                     app:iconSize="80dp"
                     app:iconTint="#000000" />

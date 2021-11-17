@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -42,6 +43,7 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
     TextView contentText;
     TextView writerandtimeText;
     TextView commentText;
+
     Button commentbutton;
     Button closeButton;
     Button deleteButton;
@@ -60,7 +62,7 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board_read);
 
-            imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         graph = (CustomAppGraph)getApplicationContext();
         Intent intent = getIntent();
         item = (CardItem)intent.getSerializableExtra("item");
@@ -68,6 +70,7 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
         titleText = findViewById(R.id.board_read_title);
         contentText = findViewById(R.id.board_read_content);
         writerandtimeText = findViewById(R.id.board_read_writerandtime);
+
         commentText = findViewById(R.id.board_read_commenttext);
         commentLayout = findViewById(R.id.board_read_commentlayout);
 
@@ -79,6 +82,7 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
         deleteButton.setOnClickListener(this);
         closeButton.setOnClickListener(this);
         commentbutton.setOnClickListener(this);
+
 
 
     }
@@ -127,10 +131,10 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
                 fragmentTransaction.commitAllowingStateLoss();              //commit으로 하려했으나 오류로인해 commitAllowingStateLoss사용 (구글검색해서 찾음 원인모름)
             }
 
-
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
             }
         });
+
     }
 
     @Override
@@ -138,7 +142,6 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
         super.onResume();
         setRefresh();
         setCommentRefresh();
-        System.out.println("재실행, Refresh");
     }
 
     @Override
@@ -174,7 +177,6 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
 
                                     @Override
                                     public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
                                     }
                                 });
 
@@ -200,11 +202,27 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
 
 
                 //댓글을 다는 과정
-
             case R.id.board_read_commentbutton:
+
+                //게시글에 댓글 개수를 늘려준다.
+
                 if(commentText.getText().toString().equals("")){
                     Toast.makeText(this, "내용을 입력하세요.", Toast.LENGTH_SHORT).show();break;} //내용을 채워야 댓글을 달 수 있다.
                 FirebaseDatabase db = FirebaseDatabase.getInstance();
+                dr = db.getReference("Boards").child(item.getId()).child("commentnumber");
+                dr.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                        int num = Integer.parseInt(snapshot.getValue().toString());
+                        num+=1;
+                       dr.setValue(Integer.toString(num));
+                    }
+                    @Override
+                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                    }
+                });
+
+                //댓글을 생성한다
                 DatabaseReference dr = db.getReference("Comments");
                 dr.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -227,13 +245,13 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
                     }
                     @Override
                     public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
                     }
                 });
                 InputMethodManager keyboard = imm;
                 if(keyboard != null){
                     keyboard.hideSoftInputFromWindow(this.commentbutton.getWindowToken(), 0);
                 }
+
                 break;
         }
     }

@@ -9,6 +9,7 @@ public class CardItem implements Serializable {
     private String content;
     private String time;
     private String writer;
+    private String commentnumber;
 
  public CardItem(){
     }
@@ -30,6 +31,8 @@ public class CardItem implements Serializable {
 
     public void setId(String id) {this.id = id; }
 
+    public void setCommentnumber(String commentnumber) {this.commentnumber = commentnumber; }
+
     public String getTitle() {
         return title;
     }
@@ -47,4 +50,6 @@ public class CardItem implements Serializable {
     }
 
     public String getId() { return id; }
+
+    public String getCommentnumber(){return commentnumber;}
 }
