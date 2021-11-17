@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Camera;
@@ -48,13 +49,15 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
     public StationReportFragment fragment;
     private Button findButton;
     private Button changeButton;
+    private Button departX;
+    private Button destiX;
     private Button gotoShort;
     private Button gotoBookmark;
     private Button gotoSearch;
     private Button gotoSetting;
     private Button gotoBoard;
-    private TextView departText;
-    private TextView destiText;
+    public TextView departText;
+    public TextView destiText;
     private Intent intent;
     private CustomAppGraph graph;
     public ArrayList<Button>stationButtonList = new ArrayList();
@@ -92,6 +95,8 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
         gotoSetting = findViewById(R.id.Main_Button_GotoSetting);
         gotoShort = findViewById(R.id.Main_Button_GotoShort);
         gotoBoard = findViewById((R.id.Main_Button_GotoBoard));
+        departX = findViewById(R.id.Main_Button_departX);
+        destiX = findViewById(R.id.Main_Button_DestiX);
         //클릭리스너등록
         findButton.setOnClickListener(this);
         changeButton.setOnClickListener(this);
@@ -100,6 +105,15 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
         gotoSetting.setOnClickListener(this);
         gotoShort.setOnClickListener(this);
         gotoBoard.setOnClickListener(this);
+        departX.setOnClickListener(this);
+        destiX.setOnClickListener(this);
+
+        departText.setText("출발역");
+        setDepartGray();
+        setDepartInvisible();
+        destiText.setText("도착역");
+        setDestiGray();
+        setDestiInvisible();
     }
 
 
@@ -138,7 +152,7 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
         //상단과 하단의 메뉴버튼들 클릭확인하는 스위치문
         switch (view.getId()) {
             case R.id.Main_Button_Find:                                             //출발역과 도착역 넘기기
-                if(destiText.length() ==0 || departText.length() ==0){
+                if(destiText.getText().equals("도착역") || departText.getText().equals("출발역")){
                     Toast.makeText(this, "출발역과 도착역을 모두 입력하지 않았습니다.", Toast.LENGTH_SHORT).show();
                 }
                 else{
@@ -154,6 +168,22 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
                     String temp = departText.getText().toString();
                     departText.setText(destiText.getText());
                     destiText.setText(temp);
+                    setDepartBlack();
+                    setDestiBlack();;
+                    setDepartvisible();
+                    setDestitvisible();
+                    if(departText.getText().equals("도착역")){departText.setText("출발역");setDepartGray();setDepartInvisible();}
+                    if(destiText.getText().equals("출발역")){destiText.setText("도착역");setDestiGray();setDestiInvisible();}
+                break;
+            case R.id.Main_Button_departX:
+                departText.setText("출발역");
+                setDepartGray();
+                setDepartInvisible();
+                break;
+            case R.id.Main_Button_DestiX:                                       //출발역과도착역 바꾸기
+                destiText.setText("도착역");
+                setDestiGray();
+                setDestiInvisible();
                 break;
             case R.id.Main_Button_GotoBookmark:
                 intent = new Intent(this,BookmarkActivity.class);
@@ -201,6 +231,14 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
     void setIsFragmentTrue(){
         isFragment=true;
     }
+    void setDepartInvisible(){departX.setVisibility(View.INVISIBLE);}
+    void setDepartvisible(){departX.setVisibility(View.VISIBLE);}
+    void setDestiInvisible(){destiX.setVisibility(View.INVISIBLE);}
+    void setDestitvisible(){destiX.setVisibility(View.VISIBLE);}
+    void setDepartGray(){departText.setTextColor(getColor(android.R.color.darker_gray));}
+    void setDepartBlack(){departText.setTextColor(getColor(android.R.color.black));}
+    void setDestiGray(){destiText.setTextColor(getColor(android.R.color.darker_gray));}
+    void setDestiBlack(){destiText.setTextColor(getColor(android.R.color.black));}
 
     @Override
     public void onBackPressed() {

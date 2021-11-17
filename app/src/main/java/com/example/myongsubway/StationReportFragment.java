@@ -123,15 +123,15 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
 
         lineTextView.setText(line+"호선");
         nameButton2.setText(vertex.getVertex()+"역");
-        if(line==1){menuLinearLayout.setBackgroundResource(R.drawable.round_button_1);nameButton.setBackgroundResource(R.drawable.round_button_1);}
-        else if(line==2){menuLinearLayout.setBackgroundResource(R.drawable.round_button_2);nameButton.setBackgroundResource(R.drawable.round_button_2);}
-        else if(line==3){menuLinearLayout.setBackgroundResource(R.drawable.round_button_3);nameButton.setBackgroundResource(R.drawable.round_button_3);}
-        else if(line==4){menuLinearLayout.setBackgroundResource(R.drawable.round_button_4);nameButton.setBackgroundResource(R.drawable.round_button_4);}
-        else if(line==5){menuLinearLayout.setBackgroundResource(R.drawable.round_button_5);nameButton.setBackgroundResource(R.drawable.round_button_5);}
-        else if(line==6){menuLinearLayout.setBackgroundResource(R.drawable.round_button_6);nameButton.setBackgroundResource(R.drawable.round_button_6);}
-        else if(line==7){menuLinearLayout.setBackgroundResource(R.drawable.round_button_7);nameButton.setBackgroundResource(R.drawable.round_button_7);}
-        else if(line==8){menuLinearLayout.setBackgroundResource(R.drawable.round_button_8);nameButton.setBackgroundResource(R.drawable.round_button_8);}
-        else if(line==9){menuLinearLayout.setBackgroundResource(R.drawable.round_button_9);nameButton.setBackgroundResource(R.drawable.round_button_9);}
+        if(line==1){menuLinearLayout.setBackgroundResource(R.drawable.round_button_main1);nameButton.setBackgroundResource(R.drawable.round_button_main1);}
+        else if(line==2){menuLinearLayout.setBackgroundResource(R.drawable.round_button_main2);nameButton.setBackgroundResource(R.drawable.round_button_main2);}
+        else if(line==3){menuLinearLayout.setBackgroundResource(R.drawable.round_button_main3);nameButton.setBackgroundResource(R.drawable.round_button_main3);}
+        else if(line==4){menuLinearLayout.setBackgroundResource(R.drawable.round_button_main4);nameButton.setBackgroundResource(R.drawable.round_button_main4);}
+        else if(line==5){menuLinearLayout.setBackgroundResource(R.drawable.round_button_main5);nameButton.setBackgroundResource(R.drawable.round_button_main5);}
+        else if(line==6){menuLinearLayout.setBackgroundResource(R.drawable.round_button_main6);nameButton.setBackgroundResource(R.drawable.round_button_main6);}
+        else if(line==7){menuLinearLayout.setBackgroundResource(R.drawable.round_button_main7);nameButton.setBackgroundResource(R.drawable.round_button_main7);}
+        else if(line==8){menuLinearLayout.setBackgroundResource(R.drawable.round_button_main8);nameButton.setBackgroundResource(R.drawable.round_button_main8);}
+        else if(line==9){menuLinearLayout.setBackgroundResource(R.drawable.round_button_main9);nameButton.setBackgroundResource(R.drawable.round_button_main9);}
 
         //주변역들 보여주기
         for(int i=0;i<vertex.getAdjacent().size();i++) {
@@ -156,15 +156,15 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
             final Button btn = new Button(getContext());
             btn.setId(i * 10);
             btn.setText(vertex.getLines().get(i).toString());
-            if(btn.getText().equals("1")){btn.setBackgroundResource(R.drawable.round_button_1);}
-            else if((btn.getText().equals("2"))){btn.setBackgroundResource(R.drawable.round_button_2);}
-            else if((btn.getText().equals("3"))){btn.setBackgroundResource(R.drawable.round_button_3);}
-            else if((btn.getText().equals("4"))){btn.setBackgroundResource(R.drawable.round_button_4);}
-            else if((btn.getText().equals("5"))){btn.setBackgroundResource(R.drawable.round_button_5);}
-            else if((btn.getText().equals("6"))){btn.setBackgroundResource(R.drawable.round_button_6);}
-            else if((btn.getText().equals("7"))){btn.setBackgroundResource(R.drawable.round_button_7);}
-            else if((btn.getText().equals("8"))){btn.setBackgroundResource(R.drawable.round_button_8);}
-            else if((btn.getText().equals("9"))){btn.setBackgroundResource(R.drawable.round_button_9);}
+            if(btn.getText().equals("1")){btn.setBackgroundResource(R.drawable.round_button_main1);}
+            else if((btn.getText().equals("2"))){btn.setBackgroundResource(R.drawable.round_button_main2);}
+            else if((btn.getText().equals("3"))){btn.setBackgroundResource(R.drawable.round_button_main3);}
+            else if((btn.getText().equals("4"))){btn.setBackgroundResource(R.drawable.round_button_main4);}
+            else if((btn.getText().equals("5"))){btn.setBackgroundResource(R.drawable.round_button_main5);}
+            else if((btn.getText().equals("6"))){btn.setBackgroundResource(R.drawable.round_button_main6);}
+            else if((btn.getText().equals("7"))){btn.setBackgroundResource(R.drawable.round_button_main7);}
+            else if((btn.getText().equals("8"))){btn.setBackgroundResource(R.drawable.round_button_main8);}
+            else if((btn.getText().equals("9"))){btn.setBackgroundResource(R.drawable.round_button_main9);}
             btn.setOnClickListener(this);
             addLinearLayout.addView(btn);
             addButtonList.add(btn);
@@ -225,6 +225,8 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
                     Toast.makeText(getContext(), "도착역에 이미 등록되어있습니다.", Toast.LENGTH_SHORT).show();
                 }
                 else {
+                    ((MainActivity) getActivity()).setDepartBlack();
+                    ((MainActivity) getActivity()).setDepartvisible();
                     ((MainActivity) getActivity()).setDepart(vertex.getVertex());
                     ((MainActivity) getActivity()).destroyFragment();
                 }
@@ -234,6 +236,8 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
                     Toast.makeText(getContext(), "출발역에 이미 등록되어있습니다.", Toast.LENGTH_SHORT).show();
                 }
                 else{
+                    ((MainActivity) getActivity()).setDestiBlack();
+                    ((MainActivity) getActivity()).setDestitvisible();
                     ((MainActivity)getActivity()).setDesti(vertex.getVertex());
                     ((MainActivity) getActivity()).destroyFragment();
                 }

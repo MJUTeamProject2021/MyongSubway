@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -49,8 +48,9 @@ public class BoardWriteActivity extends AppCompatActivity implements View.OnClic
     }
     @Override
     public void onClick(View v) {
-        FragmentManager fragmentManager;
         switch (v.getId()) {
+
+            //게시글을 쓰는 과정이다
             case R.id.write_Button_confirm:
                 if(titleText.getText().toString().equals("")){
                     Toast.makeText(this ,"제목을 입력하세요.", Toast.LENGTH_SHORT).show();
@@ -84,6 +84,7 @@ public class BoardWriteActivity extends AppCompatActivity implements View.OnClic
                                         databaseReference.child("content").setValue(contentText.getText().toString());
                                         databaseReference.child("writer").setValue("작성자: "+graph.getEmail());
                                         databaseReference.child("time").setValue("작성시간: "+new SimpleDateFormat("yyyy-MM-dd hh:mm").format(new Date(System.currentTimeMillis())));
+                                        databaseReference.child("commentnumber").setValue("0");
 
                                     }
                                     @Override

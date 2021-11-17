@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -47,6 +48,7 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.CustomViewHo
         holder.content.setText(item.getContent());
         holder.writer.setText(item.getWriter());
         holder.time.setText(item.getTime());
+        holder.commentnumber.setText(item.getCommentnumber());
     }
 
     @Override
@@ -59,13 +61,14 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.CustomViewHo
         TextView content;
         TextView time;
         TextView writer;
-
+        Button commentnumber;
         public CustomViewHolder(View itemView,final OnItemClickEventListener clicklistener){
             super(itemView);
             title = itemView.findViewById(R.id.board_title);
             content = itemView.findViewById(R.id.board_content);
             time = itemView.findViewById(R.id.board_time);
             writer = itemView.findViewById(R.id.board_writer);
+            commentnumber = itemView.findViewById(R.id.board_commentnumber);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

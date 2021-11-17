@@ -17,73 +17,98 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="#536AE8"
+            android:background="@drawable/round_button_topmenu"
             android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <Button
+                android:id="@+id/Main_Button_Change"
+                android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_weight="1"
-                android:text="출발역"
-                android:textStyle="bold"
-                android:translationX="3dp"
-                android:translationY="18dp" />
-
-            <TextView
-                android:id="@+id/Main_textView_Depstation"
-                android:layout_width="15dp"
-                android:layout_height="40dp"
-                android:layout_weight="2"
-                android:background="#FFFFFF"
-                android:gravity="center"
-                android:textAlignment="center"
-                android:textStyle="bold"
-                android:translationX="-20dp"
-                android:translationY="20dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_weight="1"
-                android:text="도착역"
-                android:textStyle="bold"
-                android:translationX="-5dp"
-                android:translationY="18dp" />
-
-            <TextView
-                android:id="@+id/Main_textView_Desstation"
-                android:layout_width="15dp"
-                android:layout_height="40dp"
-                android:layout_weight="2"
-                android:background="#FFFFFF"
-                android:gravity="center"
-                android:textAlignment="center"
-                android:textStyle="bold"
-                android:translationX="-30dp"
-                android:translationY="20dp" />
+                android:layout_gravity="center"
+                android:layout_weight="0"
+                android:background="#00FFFFFF"
+                app:icon="@drawable/ic_change"
+                app:iconGravity="textEnd"
+                app:iconTint="#858585" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:layout_weight="0"
                 android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/Main_Button_Find"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:backgroundTint="#513E3E"
-                    app:icon="@drawable/ic_stat_name" />
+                <TextView
+                    android:id="@+id/Main_textView_Depstation"
+                    android:layout_width="200dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="0"
+                    android:background="@drawable/round_button_topmenu"
+                    android:gravity="center"
+                    android:paddingLeft="5dp"
+                    android:text="출발역"
+                    android:textAlignment="textStart"
+                    android:textColor="@android:color/darker_gray"
+                    android:textStyle="bold"
+                    tools:text="출발역" />
+
+                <TextView
+                    android:id="@+id/Main_textView_Desstation"
+                    android:layout_width="200dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="0"
+                    android:background="@drawable/round_button_topmenu"
+                    android:gravity="center"
+                    android:paddingLeft="5dp"
+                    android:text="도착역"
+                    android:textAlignment="textStart"
+                    android:textColor="@android:color/darker_gray"
+                    android:textStyle="bold"
+                    tools:text="도착역" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_weight="0"
+                android:orientation="vertical"
+                android:translationY="15dp">
 
                 <Button
-                    android:id="@+id/Main_Button_Change"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:backgroundTint="#913333"
-                    app:icon="@drawable/ic_change" />
+                    android:id="@+id/Main_Button_departX"
+                    android:layout_width="25dp"
+                    android:layout_height="20dp"
+                    android:layout_weight="0"
+                    android:background="#00FFFFFF"
+                    app:icon="@drawable/ic_closex"
+                    app:iconGravity="textEnd"
+                    app:iconTint="#858585" />
+
+                <Button
+                    android:id="@+id/Main_Button_DestiX"
+                    android:layout_width="25dp"
+                    android:layout_height="20dp"
+                    android:layout_weight="0"
+                    android:background="#00FFFFFF"
+                    android:translationY="8dp"
+                    app:icon="@drawable/ic_closex"
+                    app:iconGravity="textEnd"
+                    app:iconTint="#858585" />
             </LinearLayout>
+
+            <Button
+                android:id="@+id/Main_Button_Find"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="#00F8F8F8"
+                android:text="탐색"
+                android:textColor="#000000"
+                android:translationX="40dp"
+                app:icon="@drawable/ic_stat_name"
+                app:iconGravity="top"
+                app:iconTint="#858585"
+                tools:text="탐색" />
 
         </LinearLayout>
 
@@ -127,22 +152,10 @@
                     android:textSize="20sp"
                     android:typeface="normal" />
 
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="明지하철"
-                    android:textColor="#00BCD4"
-                    android:textSize="70sp"
-                    android:textStyle="bold"
-                    android:translationX="100dp"
-                    android:translationY="60dp"
-                    android:typeface="serif" />
-
                 <Button
                     android:id="@+id/button2"
                     android:layout_width="70dp"
-                    android:layout_height="17dp"
+                    android:layout_height="14dp"
                     android:backgroundTint="@color/line1Color"
                     android:translationX="10dp"
                     android:translationY="552dp" />
@@ -160,7 +173,7 @@
                 <Button
                     android:id="@+id/button3"
                     android:layout_width="70dp"
-                    android:layout_height="17dp"
+                    android:layout_height="14dp"
                     android:backgroundTint="@color/line2Color"
                     android:translationX="10dp"
                     android:translationY="562dp" />
@@ -178,7 +191,7 @@
                 <Button
                     android:id="@+id/button4"
                     android:layout_width="70dp"
-                    android:layout_height="17dp"
+                    android:layout_height="14dp"
                     android:backgroundTint="@color/line3Color"
                     android:translationX="10dp"
                     android:translationY="572dp" />
@@ -196,7 +209,7 @@
                 <Button
                     android:id="@+id/button6"
                     android:layout_width="70dp"
-                    android:layout_height="17dp"
+                    android:layout_height="14dp"
                     android:backgroundTint="@color/line4Color"
                     android:translationX="10dp"
                     android:translationY="582dp" />
@@ -214,7 +227,7 @@
                 <Button
                     android:id="@+id/button7"
                     android:layout_width="70dp"
-                    android:layout_height="17dp"
+                    android:layout_height="14dp"
                     android:backgroundTint="@color/line5Color"
                     android:translationX="10dp"
                     android:translationY="592dp" />
@@ -232,7 +245,7 @@
                 <Button
                     android:id="@+id/button8"
                     android:layout_width="70dp"
-                    android:layout_height="17dp"
+                    android:layout_height="14dp"
                     android:backgroundTint="@color/line6Color"
                     android:translationX="10dp"
                     android:translationY="602dp" />
@@ -250,7 +263,7 @@
                 <Button
                     android:id="@+id/button9"
                     android:layout_width="70dp"
-                    android:layout_height="17dp"
+                    android:layout_height="14dp"
                     android:backgroundTint="@color/line7Color"
                     android:translationX="10dp"
                     android:translationY="612dp" />
@@ -268,7 +281,7 @@
                 <Button
                     android:id="@+id/button10"
                     android:layout_width="70dp"
-                    android:layout_height="17dp"
+                    android:layout_height="14dp"
                     android:backgroundTint="@color/line8Color"
                     android:translationX="10dp"
                     android:translationY="622dp" />
@@ -286,7 +299,7 @@
                 <Button
                     android:id="@+id/button11"
                     android:layout_width="70dp"
-                    android:layout_height="17dp"
+                    android:layout_height="14dp"
                     android:backgroundTint="@color/line9Color"
                     android:translationX="10dp"
                     android:translationY="632dp" />
@@ -1315,7 +1328,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.7"
-            android:background="#3F51B5"
+            android:background="@drawable/round_button_topmenu"
             android:orientation="horizontal">
 
             <Button
@@ -1330,6 +1343,7 @@
                 app:iconGravity="textTop"
                 app:iconPadding="0dp"
                 app:iconSize="25dp"
+                app:iconTint="#232323"
                 app:strokeColor="#00000000"
                 app:strokeWidth="0dp" />
 
@@ -1345,7 +1359,7 @@
                 app:iconGravity="textTop"
                 app:iconPadding="0dp"
                 app:iconSize="25dp"
-                app:iconTint="#000000"
+                app:iconTint="#232323"
                 app:strokeColor="#00000000"
                 app:strokeWidth="0dp" />
 
@@ -1359,7 +1373,8 @@
                 app:icon="@drawable/ic_board"
                 app:iconGravity="textTop"
                 app:iconPadding="0dp"
-                app:iconSize="25dp" />
+                app:iconSize="25dp"
+                app:iconTint="#232323" />
 
             <Button
                 android:id="@+id/Main_Button_GotoBookmark"
@@ -1373,6 +1388,7 @@
                 app:iconGravity="textTop"
                 app:iconPadding="0dp"
                 app:iconSize="25dp"
+                app:iconTint="#232323"
                 app:strokeColor="#00000000"
                 app:strokeWidth="0dp" />
 
@@ -1388,6 +1404,7 @@
                 app:iconGravity="textTop"
                 app:iconPadding="0dp"
                 app:iconSize="25dp"
+                app:iconTint="#232323"
                 app:strokeColor="#00000000"
                 app:strokeWidth="0dp" />
 
