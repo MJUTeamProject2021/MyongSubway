@@ -35,6 +35,7 @@ public class StationInformationFragment extends Fragment implements View.OnClick
     private LinearLayout restuarentLayout;
     private LinearLayout adjacentLayout;
     private LinearLayout facilitiesLayout;
+    private LinearLayout lineLayout;
     private TextView vertexName;
     private TextView toilet;
     private TextView door;
@@ -42,7 +43,7 @@ public class StationInformationFragment extends Fragment implements View.OnClick
     private TextView update;
     private TextView airstate;
     private TextView pmq;
-    private Button lineName;
+    private Button reportButton;
     private Button closeButton;
     private CustomAppGraph.Vertex vertex;
     CustomAppGraph graph;
@@ -82,8 +83,9 @@ public class StationInformationFragment extends Fragment implements View.OnClick
         toilet = v.findViewById(R.id.fragment_information_toilet);
         door = v.findViewById(R.id.fragment_information_door);
         number = v.findViewById(R.id.fragment_information_number);
-        lineName= v.findViewById(R.id.fragment_information_line);
+        lineLayout= v.findViewById(R.id.fragment_information_line);
         closeButton = v.findViewById(R.id.fragment_information_close);
+        reportButton = v.findViewById(R.id.fragment_information_reportButton);
         pmq = v.findViewById(R.id.fragment_information_pmq);
         airstate = v.findViewById(R.id.fragment_information_airstate);
         update = v.findViewById(R.id.fragment_information_update);
@@ -92,6 +94,7 @@ public class StationInformationFragment extends Fragment implements View.OnClick
 
         number.setOnClickListener(this);
         closeButton.setOnClickListener(this);
+        reportButton.setOnClickListener(this);
 
         // ShortestPathActivity 에서 생성한 프래그먼트 객체일 때 나가기버튼을 막는다.
         if (isBlockCloseBtn)
@@ -99,7 +102,24 @@ public class StationInformationFragment extends Fragment implements View.OnClick
 
         //역 이름 및 호선이름
         vertexName.setText(vertex.getVertex()+"역");
-        lineName.setText(vertex.getLine()+"호선");
+
+        for(int i=0;i<vertex.getLines().size();i++) {
+            final Button btn = new Button(getContext());
+            btn.setId(i * 10+100);
+            btn.setText(vertex.getLines().get(i).toString());
+            btn.setLayoutParams(new LinearLayout.LayoutParams(120,120 ));
+            if(btn.getText().equals("1")){btn.setBackgroundResource(R.drawable.round_button_main1);}
+            else if((btn.getText().equals("2"))){btn.setBackgroundResource(R.drawable.round_button_main2);}
+            else if((btn.getText().equals("3"))){btn.setBackgroundResource(R.drawable.round_button_main3);}
+            else if((btn.getText().equals("4"))){btn.setBackgroundResource(R.drawable.round_button_main4);}
+            else if((btn.getText().equals("5"))){btn.setBackgroundResource(R.drawable.round_button_main5);}
+            else if((btn.getText().equals("6"))){btn.setBackgroundResource(R.drawable.round_button_main6);}
+            else if((btn.getText().equals("7"))){btn.setBackgroundResource(R.drawable.round_button_main7);}
+            else if((btn.getText().equals("8"))){btn.setBackgroundResource(R.drawable.round_button_main8);}
+            else if((btn.getText().equals("9"))){btn.setBackgroundResource(R.drawable.round_button_main9);}
+            btn.setOnClickListener(this);
+            lineLayout.addView(btn);
+        }
 
         //전화번호
         number.setText(vertex.getNumber());
@@ -158,6 +178,15 @@ public class StationInformationFragment extends Fragment implements View.OnClick
             case R.id.fragment_information_number:
                 Intent tt = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+vertex.getNumber().replace("-","")));
                 startActivity(tt);
+                break;
+            case R.id.fragment_information_reportButton:
+                Intent email = new Intent(Intent.ACTION_SEND);
+                email.setType("plain/text");
+                String[] address = {"email@address.com"};
+                email.putExtra(Intent.EXTRA_EMAIL, address);
+                email.putExtra(Intent.EXTRA_SUBJECT, "");
+                email.putExtra(Intent.EXTRA_TEXT, "잘못된 정보를 입력해주세요.");
+                startActivity(email);
                 break;
         }
     }

@@ -17,14 +17,16 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/round_layout"
-            android:orientation="horizontal">
+            android:layout_height="70dp"
+            android:background="@drawable/round_button_topmenu"
+            android:orientation="horizontal"
+            android:weightSum="5">
 
             <Button
                 android:id="@+id/fragment_information_close"
-                android:layout_width="68dp"
-                android:layout_height="72dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:background="#05E4D5D5"
                 app:icon="@drawable/ic_leftarrow"
                 app:iconGravity="top"
@@ -33,7 +35,7 @@
 
             <TextView
                 android:id="@+id/fragment_information_name"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="101역"
@@ -43,29 +45,26 @@
                 android:textColorHint="#9A6262"
                 android:textSize="50sp" />
 
-            <androidx.appcompat.widget.AppCompatButton
+            <LinearLayout
                 android:id="@+id/fragment_information_line"
-                android:layout_width="64dp"
-                android:layout_height="61dp"
-                android:layout_gravity="right"
-                android:background="@drawable/round_button"
-                android:drawableTint="@null"
-                android:text="1호선"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:translationX="-3dp"
-                android:translationY="5dp" />
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="10dp"
+                android:layout_weight="3"
+                android:gravity="center|right"
+                android:orientation="horizontal" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/round_layout"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/round_button_topmenu"
             android:orientation="horizontal"
-            android:paddingLeft="10dp"
-            android:paddingTop="15dp"
-            android:paddingRight="10dp"
             android:paddingBottom="15dp"
             android:weightSum="3">
 
@@ -94,43 +93,56 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/textView18"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="5dp"
-                    android:text="개찰구 내 화장실"
-                    android:textColor="#191515"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:typeface="normal" />
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/fragment_information_toilet"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="5dp"
-                    android:text="있음"
-                    android:textAlignment="center" />
+                    <TextView
+                        android:id="@+id/textView20"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="내리는 문 방향"
+                        android:textColor="#191515"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:typeface="normal" />
 
-                <TextView
-                    android:id="@+id/textView20"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="5dp"
-                    android:text="내리는 문 방향"
-                    android:textColor="#191515"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:typeface="normal" />
+                    <TextView
+                        android:id="@+id/fragment_information_door"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp"
+                        android:text="오른쪽"
+                        android:textAlignment="center" />
+                </LinearLayout>
 
-                <TextView
-                    android:id="@+id/fragment_information_door"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="5dp"
-                    android:text="오른쪽"
-                    android:textAlignment="center" />
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView18"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="개찰구 내 화장실"
+                        android:textColor="#191515"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:typeface="normal" />
+
+                    <TextView
+                        android:id="@+id/fragment_information_toilet"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp"
+                        android:text="있음"
+                        android:textAlignment="center" />
+
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -156,7 +168,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/round_layout"
+            android:background="@drawable/round_button_topmenu"
             android:orientation="vertical"
             android:paddingLeft="10dp"
             android:paddingTop="15dp"
@@ -226,7 +238,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/round_layout"
+                android:background="@drawable/round_button_topmenu"
                 android:orientation="vertical"
                 android:paddingBottom="13dp">
 
@@ -251,7 +263,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/round_layout"
+                android:background="@drawable/round_button_topmenu"
                 android:orientation="vertical"
                 android:paddingBottom="13dp">
 
@@ -293,5 +305,19 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/fragment_information_reportButton"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="bottom|left"
+        android:background="@drawable/ripple_report_button"
+        android:gravity="center|left"
+        android:paddingLeft="10dp"
+        android:text="잘못된 정보 신고 >"
+        android:textColor="#808487"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
 </FrameLayout>

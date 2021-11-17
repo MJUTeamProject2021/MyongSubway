@@ -10,10 +10,16 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import org.jetbrains.annotations.NotNull;
 
 
 //본 fragment는 댓글 그 자체를 나타내는 fragment이다.
@@ -132,9 +138,27 @@ public class CommentFragment extends Fragment implements View.OnClickListener {
                                     Toast.makeText(getContext(), "본인의 댓글만 지울 수 있습니다.", Toast.LENGTH_SHORT).show();
                                 }
                                 else{
-                                    db = FirebaseDatabase.getInstance();                                //db에서 댓글을 지운다.
+                                    FirebaseDatabase _db = FirebaseDatabase.getInstance();
+                                    DatabaseReference _dr = _db.getReference("Boards").child(boardid).child("commentnumber");
+                                    _dr.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                            int num = Integer.parseInt(snapshot.getValue().toString());
+                                            num-=1;
+                                            _dr.setValue(Integer.toString(num));
+                                        }
+                                        @Override
+                                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                                            Toast.makeText(graph, "이미 삭제된 글입니다.", Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
+                                    });
+
+                                    //db에서 댓글을 지운다.
+                                    db =  FirebaseDatabase.getInstance();
                                     dr = db.getReference("Comments").child(getCommenttId());
                                     dr.removeValue();
+                                    ((BoardReadActivity)getActivity()).setCommentRefresh();
                                 }
                             }
                         });
