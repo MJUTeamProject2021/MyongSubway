@@ -200,7 +200,7 @@ public class MinDistancePathFragment extends Fragment {
         String cost = convertCost(costs.get(CustomAppGraph.SearchType.MIN_COST.ordinal()));
         costCost.setText(cost);
 
-        String transfer = costs.get(CustomAppGraph.SearchType.MIN_TRANSFER.ordinal()) + "번";
+        String transfer = costs.get(CustomAppGraph.SearchType.MIN_TRANSFER.ordinal()) + "회";
         costTransfer.setText(transfer);
     }
 
