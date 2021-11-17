@@ -1,37 +1,23 @@
 package com.example.myongsubway;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.LayerDrawable;
-import android.graphics.drawable.RippleDrawable;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class MinTimePathFragment extends Fragment {
     ArrayList<Integer> minTimePath;                 // 최소시간을 기준으로 탐색한 경로
@@ -62,6 +48,12 @@ public class MinTimePathFragment extends Fragment {
         lineColors = _lineColors;
 
         vertices = graph.getVertices();
+    }
+
+    @Override
+    public void onResume() {
+        ((ShortestPathActivity) getActivity()).setPageType(CustomAppGraph.SearchType.MIN_TIME);
+        super.onResume();
     }
 
     @Nullable
@@ -124,6 +116,7 @@ public class MinTimePathFragment extends Fragment {
         zoomButton = v.findViewById(R.id.zoomButton);
         reportButton = v.findViewById(R.id.reportButton);
         bookmarkButton = v.findViewById(R.id.bookmarkButton);
+        bookmarkButton.setColorFilter(Color.parseColor("#BEBEBE"));
         
         // 역버튼 사이의 선을 나타내는 뷰 참조
         midLine = v.findViewById(R.id.midLine);
