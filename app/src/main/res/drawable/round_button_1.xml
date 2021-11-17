@@ -27,13 +27,4 @@
         </shape>
     </item>
 
-    <!--<item>
-        <shape android:shape="ring"
-            android:thickness="15dp"
-            android:innerRadius="10dp"
-            android:useLevel="false">
-            <solid android:color="@color/line1Color"/>
-        </shape>
-    </item>-->
-
 </ripple>
