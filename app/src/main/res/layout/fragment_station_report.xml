@@ -16,7 +16,7 @@
         <Button
             android:id="@+id/fragment_report_opaque"
             android:layout_width="match_parent"
-            android:layout_height="548dp"
+            android:layout_height="508dp"
             android:background="#00FFFFFF" />
 
         <Button
@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="#00472A2A"
+            android:background="@drawable/bg_white_ripple"
             android:backgroundTint="@null"
             android:text="닫기"
             android:textColor="#FFFFFF"
@@ -75,7 +75,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="#00FFFFFF"
+            android:background="@drawable/bg_white_ripple"
             android:backgroundTint="#FFFFFF"
             android:text="역정보"
             android:textColor="#FFFFFF"

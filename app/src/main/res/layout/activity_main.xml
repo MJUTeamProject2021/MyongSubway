@@ -18,34 +18,33 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:background="@drawable/round_button_topmenu"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="9">
 
             <Button
                 android:id="@+id/Main_Button_Change"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_weight="0"
-                android:background="#00FFFFFF"
+                android:layout_weight="1"
+                android:background="@drawable/bg_white_ripple"
                 app:icon="@drawable/ic_change"
                 app:iconGravity="textEnd"
                 app:iconTint="#858585" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
                 android:layout_gravity="center"
-                android:layout_weight="0"
+                android:layout_weight="5"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/Main_textView_Depstation"
-                    android:layout_width="200dp"
-                    android:layout_height="30dp"
-                    android:layout_weight="0"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:background="@drawable/round_button_topmenu"
-                    android:gravity="center"
-                    android:paddingLeft="5dp"
                     android:text="출발역"
                     android:textAlignment="textStart"
                     android:textColor="@android:color/darker_gray"
@@ -54,12 +53,10 @@
 
                 <TextView
                     android:id="@+id/Main_textView_Desstation"
-                    android:layout_width="200dp"
-                    android:layout_height="30dp"
-                    android:layout_weight="0"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:background="@drawable/round_button_topmenu"
-                    android:gravity="center"
-                    android:paddingLeft="5dp"
                     android:text="도착역"
                     android:textAlignment="textStart"
                     android:textColor="@android:color/darker_gray"
@@ -68,43 +65,46 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_weight="0"
-                android:orientation="vertical"
-                android:translationY="15dp">
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <Button
                     android:id="@+id/Main_Button_departX"
-                    android:layout_width="25dp"
-                    android:layout_height="20dp"
-                    android:layout_weight="0"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:background="#00FFFFFF"
+                    android:translationX="-10dp"
+                    android:translationY="7dp"
                     app:icon="@drawable/ic_closex"
-                    app:iconGravity="textEnd"
+                    app:iconGravity="start"
                     app:iconTint="#858585" />
 
                 <Button
                     android:id="@+id/Main_Button_DestiX"
-                    android:layout_width="25dp"
-                    android:layout_height="20dp"
-                    android:layout_weight="0"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:background="#00FFFFFF"
-                    android:translationY="8dp"
+                    android:translationX="-10dp"
+                    android:translationY="-7dp"
                     app:icon="@drawable/ic_closex"
-                    app:iconGravity="textEnd"
+                    app:iconGravity="start"
                     app:iconTint="#858585" />
             </LinearLayout>
 
             <Button
                 android:id="@+id/Main_Button_Find"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:background="#00F8F8F8"
+                android:layout_weight="2"
+                android:background="@drawable/bg_white_ripple"
                 android:text="탐색"
                 android:textColor="#000000"
-                android:translationX="40dp"
                 app:icon="@drawable/ic_stat_name"
                 app:iconGravity="top"
                 app:iconTint="#858585"

@@ -32,7 +32,6 @@ public class BoardWatchActivity extends AppCompatActivity implements BoardAdapte
     private FloatingActionButton writeButton;
     private Button watchButton;
     private Button resetButton;
-    private ConstraintLayout layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +40,7 @@ public class BoardWatchActivity extends AppCompatActivity implements BoardAdapte
         resetButton = findViewById(R.id.fragment_boardwatch_reset);
         writeButton = findViewById(R.id.fragment_boardwatch_write);
         watchButton = findViewById(R.id.fragment_boardwatch_close);
-        layout = findViewById(R.id.fragment_boardwatch_layout);
+
 
         resetButton.setOnClickListener(this);
         writeButton.setOnClickListener(this);

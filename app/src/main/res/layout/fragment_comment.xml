@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,13 +17,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="35dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="8">
 
             <TextView
                 android:id="@+id/fragment_comment_writer"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="4"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="8dp"
+                android:layout_weight="7"
                 android:gravity="bottom"
                 android:text="작성자"
                 android:textAlignment="gravity"
@@ -30,24 +34,19 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:background="@drawable/round_button_topmenu">
-
-                <Button
-                    android:id="@+id/fragment_comment_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_gravity="right"
-                    android:layout_weight="1"
-                    android:background="#00FFFFFF"
-                    android:text="삭제"
-                    android:textAlignment="center"
-                    android:textColor="#000000"
-                    android:textStyle="bold" />
-            </FrameLayout>
+            <Button
+                android:id="@+id/fragment_comment_button"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_gravity="right"
+                android:layout_weight="1"
+                android:background="@drawable/bg_white_ripple"
+                android:backgroundTint="#00FFFFFF"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                app:icon="@drawable/ic_closex"
+                app:iconTint="#292828" />
 
         </LinearLayout>
 
@@ -55,6 +54,8 @@
             android:id="@+id/fragment_comment_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="8dp"
             android:text="내용"
             android:textColor="#222121"
             android:textSize="20sp" />
@@ -63,6 +64,8 @@
             android:id="@+id/fragment_comment_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="8dp"
             android:text="작성시간" />
     </LinearLayout>
 </FrameLayout>

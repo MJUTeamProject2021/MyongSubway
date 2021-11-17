@@ -14,14 +14,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class SearchActivity extends AppCompatActivity {
@@ -35,7 +28,7 @@ public class SearchActivity extends AppCompatActivity {
     private CustomAppGraph graph; // CustomAppGraph
     private ArrayList<CustomAppGraph.Vertex> vertices; // 모든 정점(역) 리스트
     private Button removeSearchHistoryButton;
-    private Gson gson;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +96,6 @@ public class SearchActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         addSearchedStation(viewedStationList.get(pos));
                         saveSearchData();
-                        System.out.println(viewedStationList.size());
                         ((MainActivity)MainActivity.mcontext).launchReport(viewedStationList.get(pos));
                         finish();
                     }
