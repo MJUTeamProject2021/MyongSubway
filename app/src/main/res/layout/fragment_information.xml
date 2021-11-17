@@ -27,7 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="#05E4D5D5"
+                android:background="@drawable/bg_white_ripple"
                 app:icon="@drawable/ic_leftarrow"
                 app:iconGravity="top"
                 app:iconSize="60dp"

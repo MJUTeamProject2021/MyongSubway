@@ -22,7 +22,7 @@
                 android:layout_width="20dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="#00FFFFFF"
+                android:background="@drawable/bg_white_ripple"
                 android:backgroundTint="#00000000"
                 android:text="취소" />
 
@@ -43,7 +43,7 @@
                 android:layout_width="5dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="#00FFFFFF"
+                android:background="@drawable/bg_white_ripple"
                 android:backgroundTint="#006A6C6E"
                 android:text="수정" />
 
