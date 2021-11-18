@@ -16,7 +16,7 @@
             android:id="@+id/bookmark_toolbar_station"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/basicColor"
+            android:background="#00FFFFFF"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"></androidx.appcompat.widget.Toolbar>
 
@@ -30,7 +30,7 @@
             android:id="@+id/bookmark_toolbar_route"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/basicColor"
+            android:background="#00FFFFFF"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"></androidx.appcompat.widget.Toolbar>
 

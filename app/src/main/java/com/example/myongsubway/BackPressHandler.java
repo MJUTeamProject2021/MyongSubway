@@ -11,7 +11,6 @@ public class BackPressHandler {
     public BackPressHandler(Activity _activity) {
         mainactivity = _activity;
     }
-
     public void onBackPressed(){
         if(System.currentTimeMillis()> backPressedTime + 1800){
             backPressedTime =System.currentTimeMillis();

@@ -107,8 +107,6 @@ public class SignInActivity extends AppCompatActivity {
                                             System.out.println("DocumentSnapshot data: " + document.getData());
                                             bookmarkedStation = (ArrayList) document.get("즐겨찾는 역");
                                             bookmarkedRoute = (ArrayList) document.get("즐겨찾는 경로");
-                                            System.out.println(bookmarkedStation);
-                                            System.out.println(bookmarkedRoute);
                                             ((CustomAppGraph) getApplicationContext()).setAccount(getEmail(), getPassword(), bookmarkedStation, bookmarkedRoute);
                                             saveSearchData();
                                         } else {

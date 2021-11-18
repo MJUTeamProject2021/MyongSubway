@@ -352,7 +352,7 @@ public class CustomAppGraph extends Application {
         bookmarkedRoute.clear();
 
         for (int i = 0; i < _bookmarkedRoute.size(); i++) {
-            bookmarkedStation.add(_bookmarkedRoute.get(i));
+            bookmarkedRoute.add(_bookmarkedRoute.get(i));
         }
     }
 
