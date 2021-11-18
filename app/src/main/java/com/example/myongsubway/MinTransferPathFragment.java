@@ -3,7 +3,6 @@ package com.example.myongsubway;
 import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +46,12 @@ public class MinTransferPathFragment extends Fragment {
         lineColors = _lineColors;
 
         vertices = graph.getVertices();
+    }
+
+    @Override
+    public void onResume() {
+        ((ShortestPathActivity) getActivity()).setPageType(CustomAppGraph.SearchType.MIN_TRANSFER);
+        super.onResume();
     }
 
     @Nullable
@@ -136,7 +141,7 @@ public class MinTransferPathFragment extends Fragment {
                     case R.id.reportButton:
                         Intent email = new Intent(Intent.ACTION_SEND);
                         email.setType("plain/text");
-                        String[] address = {"email@address.com"};
+                        String[] address = {"wndtjq0510@gmail.com"};
                         email.putExtra(Intent.EXTRA_EMAIL, address);
                         email.putExtra(Intent.EXTRA_SUBJECT, "");
                         email.putExtra(Intent.EXTRA_TEXT, "잘못된 정보를 입력해주세요.");
@@ -200,7 +205,7 @@ public class MinTransferPathFragment extends Fragment {
         String cost = convertCost(costs.get(CustomAppGraph.SearchType.MIN_COST.ordinal()));
         costCost.setText(cost);
 
-        String transfer = costs.get(CustomAppGraph.SearchType.MIN_TRANSFER.ordinal()) + "번";
+        String transfer = costs.get(CustomAppGraph.SearchType.MIN_TRANSFER.ordinal()) + "회";
         costTransfer.setText(transfer);
     }
 

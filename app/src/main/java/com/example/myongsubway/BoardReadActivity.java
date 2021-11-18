@@ -205,7 +205,6 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
             case R.id.board_read_commentbutton:
 
                 //게시글에 댓글 개수를 늘려준다.
-
                 if(commentText.getText().toString().equals("")){
                     Toast.makeText(this, "내용을 입력하세요.", Toast.LENGTH_SHORT).show();break;} //내용을 채워야 댓글을 달 수 있다.
                 FirebaseDatabase db = FirebaseDatabase.getInstance();

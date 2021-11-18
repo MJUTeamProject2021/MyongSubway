@@ -9,6 +9,9 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -20,9 +23,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -52,14 +60,14 @@ public class ShortestPathActivity extends AppCompatActivity {
     private ArrayList<Integer> btnBackgrounds;      // 역을 나타내는 버튼들의 background xml 파일의 id를 저장하는 리스트
     private ArrayList<Integer> lineColors;          // 호선의 색들을 담고있는 리스트
 
-    boolean isAlreadyButtonClicked = false;
+    boolean isButtonClicked = false;
+    CustomAppGraph.SearchType pageType;
+    CustomAppGraph.SearchType buttonType;
 
-    boolean time = false;
-    boolean distance = false;
-    boolean cost = false;
-    boolean transfer = false;
+    Context mContext = this;
 
-    ArrayList<Integer> alarmButtonRes;
+    final int IC_ALARM_FOREGROUND = R.mipmap.ic_alarm_foreground;
+    final int IC_ALARM_ANOTHER_SELECTED_FOREGROUND = R.mipmap.ic_alarm_another_selected_foreground;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,18 +94,6 @@ public class ShortestPathActivity extends AppCompatActivity {
         dijkstra(graph.getMap().get(departure), CustomAppGraph.SearchType.MIN_COST);
         dijkstra(graph.getMap().get(departure), CustomAppGraph.SearchType.MIN_TRANSFER);
 
-        // 각 경로의 역의 호선을 저장한다.
-        //getPathLines(CustomAppGraph.SearchType.MIN_TIME);
-        //getPathLines(CustomAppGraph.SearchType.MIN_DISTANCE);
-        //getPathLines(CustomAppGraph.SearchType.MIN_COST);
-        //getPathLines(CustomAppGraph.SearchType.MIN_TRANSFER);
-
-        int k = 0;
-        for (int i : allLines.get(CustomAppGraph.SearchType.MIN_TIME.ordinal())) {
-            Log.d("test", k + " " + i);
-            k++;
-        }
-
         // 뷰페이저2, 탭레이아웃 설정
         setPagerAndTabLayout();
     }
@@ -123,8 +119,6 @@ public class ShortestPathActivity extends AppCompatActivity {
             allLines.add(new ArrayList<Integer>());
         }
 
-        alarmButtonRes = new ArrayList<Integer>(4);
-
         setAlarmButton = findViewById(R.id.setAlarmButton);
         setAlarmButton.setColorFilter(getResources().getColor(R.color.rippleColor, null));
 
@@ -142,8 +136,8 @@ public class ShortestPathActivity extends AppCompatActivity {
     // 툴바를 설정하는 메소드
     private void setToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("지하철 경로 탐색");
-        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setTitle("길찾기");
+        toolbar.setTitleTextColor(Color.BLACK);
         setSupportActionBar(toolbar);
     }
 
@@ -156,17 +150,104 @@ public class ShortestPathActivity extends AppCompatActivity {
                     case R.id.setAlarmButton:
                         // TODO : 알람 설정 기능
 
-                        if (!isAlreadyButtonClicked) {
-                            setAlarmButton.setColorFilter(Color.RED);
-                            isAlreadyButtonClicked = true;
-                        }
+                        if (!isButtonClicked) {
+                            buttonType = pageType;
+                            isButtonClicked = true;
 
+                            // 버튼의 모양과 색을 눌려져 있는 상태의 경우로 바꾼다.
+                            setAlarmButton.setImageResource(R.mipmap.ic_alarm_foreground);
+                            setAlarmButton.setColorFilter(Color.RED);
+                        } else {
+                            if (pageType == buttonType) {
+                                // 버튼을 눌렀던 페이지
+                                // 알람 해제 ... 해제할건지 물어봄
+                                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                                builder.setMessage("설정된 알람을 해제하시겠습니까?");
+                                builder.setPositiveButton("확인",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                isButtonClicked = false;
+
+                                                // 버튼의 모양과 색을 원래대로 돌린다.
+                                                setAlarmButton.setImageResource(R.mipmap.ic_alarm_foreground);
+                                                setAlarmButton.setColorFilter(getResources().getColor(R.color.rippleColor, null));
+                                            }
+                                        });
+                                builder.setNegativeButton("취소",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+
+                                            }
+                                        });
+
+                                AlertDialog alert = builder.create();
+                                alert.setOnShowListener(new DialogInterface.OnShowListener() {
+                                    @Override
+                                    public void onShow(DialogInterface dialog) {
+                                        alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLUE);
+                                        alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLUE);
+                                    }
+                                });
+                                alert.show();
+
+                            } else {
+                                // 버튼을 눌렀던 페이지와 다른 페이지
+                                // 다른 페이지에서 이미 알람을 등록한 상태이므로 새로 등록할 것인지 물어봄
+                                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                                builder.setMessage("기존의 알람을 해제하고 새 알람을 등록하시겠습니까?");
+                                builder.setPositiveButton("확인",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                buttonType = pageType;
+
+                                                // 버튼의 모양과 색을 눌려졌을 때로 바꾼다.
+                                                setAlarmButton.setImageResource(R.mipmap.ic_alarm_foreground);
+                                                setAlarmButton.setColorFilter(Color.RED);
+                                            }
+                                        });
+                                builder.setNegativeButton("취소",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+
+                                            }
+                                        });
+
+                                AlertDialog alert = builder.create();
+                                alert.setOnShowListener(new DialogInterface.OnShowListener() {
+                                    @Override
+                                    public void onShow(DialogInterface dialog) {
+                                        alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLUE);
+                                        alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLUE);
+                                    }
+                                });
+                                alert.show();
+
+                            }
+
+                        }
                         break;
                 }
             }
         };
-        
+
         setAlarmButton.setOnClickListener(onClickListener);
+    }
+
+    public void setPageType(CustomAppGraph.SearchType type) {
+        pageType = type;
+
+        if (isButtonClicked)
+        {
+            if (buttonType != pageType) {
+                // 버튼의 모양과 색을 다른 페이지에서 눌려져 있는 상태의 경우로 바꾼다.
+                setAlarmButton.setImageResource(IC_ALARM_ANOTHER_SELECTED_FOREGROUND);
+                setAlarmButton.setColorFilter(Color.BLACK);
+            } else {
+                // 버튼의 모양과 색을 눌려져 있는 상태의 경우로 바꾼다.
+                setAlarmButton.setImageResource(R.mipmap.ic_alarm_foreground);
+                setAlarmButton.setColorFilter(Color.RED);
+            }
+        }
     }
 
     // 뷰페이저2, 탭레이아웃 설정
@@ -475,14 +556,6 @@ public class ShortestPathActivity extends AppCompatActivity {
         transaction.replace(R.id.zoom_path_fragment_container, frag);
         transaction.addToBackStack(null);
         transaction.commit();
-    }
-
-    public void changeAlarmButton(CustomAppGraph.SearchType TYPE) {
-        if (isAlreadyButtonClicked) {
-            setAlarmButton.setImageResource(R.mipmap.ic_alarm_another_selected_foreground);
-        } else {
-
-        }
     }
 
     // 호선에 따른 역버튼 배경 xml 을 담는 메소드
