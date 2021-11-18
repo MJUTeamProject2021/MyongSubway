@@ -18,8 +18,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="10dp"
             android:gravity="center"
             android:text="로그인"
+            android:textColor="#090909"
             android:textSize="24dp" />
 
         <ImageView
@@ -27,58 +29,90 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="10dp"
             android:background="@null"
-            android:src="@mipmap/ic_launcher" />
+            app:srcCompat="@mipmap/img_tempicon_foreground" />
 
         <TextView
             android:id="@+id/signin_edittext_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
             android:text="이메일 입력" />
 
         <EditText
             android:id="@+id/signin_edittext_emailinput"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:hint="user@gmail.com" />
 
         <TextView
             android:id="@+id/signin_textview_pawssword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
             android:text="비밀번호 입력" />
 
         <EditText
             android:id="@+id/signin_edittext_passwordinput"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:inputType="textPassword"
-            android:hint="****" />
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:hint="****"
+            android:inputType="textPassword" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/signin_button_signin"
             android:layout_width="match_parent"
             android:layout_height="52dp"
-            android:text="로그인" />
+            android:layout_marginLeft="60dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="60dp"
+            android:background="@drawable/round_layout"
+            android:backgroundTint="#23B7FB"
+            android:drawableLeft="@drawable/ic_user"
+            android:drawablePadding="-70dp"
+            android:drawableTint="#FFFFFF"
+            android:paddingLeft="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="로그인"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF" />
 
         <TextView
             android:id="@+id/signin_textview_or"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="10dp"
             android:gravity="center"
             android:text="또는"
             android:textSize="14dp" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/signin_button_withoutsignin"
             android:layout_width="match_parent"
             android:layout_height="52dp"
-            android:text="로그인 없이 시작" />
+            android:layout_marginLeft="60dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="60dp"
+            android:background="@drawable/round_layout"
+            android:backgroundTint="#9E9D9D"
+            android:text="로그인 없이 시작"
+            android:textColor="#FFFFFF" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:orientation="horizontal"
             android:weightSum="10">
 
@@ -86,19 +120,24 @@
                 android:id="@+id/signin_textview_findpassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
                 android:layout_weight="5"
                 android:gravity="center"
                 android:text="비밀번호 찾기"
-                android:textSize="18dp" />
+                android:textColor="#555555"
+                android:textSize="16dp" />
 
             <TextView
                 android:id="@+id/signin_textview_signup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
                 android:layout_weight="5"
                 android:gravity="center"
                 android:text="계정 생성"
-                android:textSize="18dp" />
+                android:textColor="#2E83AC"
+                android:textSize="16dp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
