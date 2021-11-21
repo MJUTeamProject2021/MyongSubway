@@ -30,21 +30,31 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Random;
+
+import static android.content.ContentValues.TAG;
 
 public class ShortestPathActivity extends AppCompatActivity {
     private ViewPager2 viewPager;               // 뷰페이저
@@ -63,6 +73,7 @@ public class ShortestPathActivity extends AppCompatActivity {
     private ImageButton setAlarmButton;             // 도착알람 설정 버튼
 
     private CustomAppGraph graph;                   // 액티비티 간에 공유되는 데이터를 담는 클래스
+    private FirebaseAuth mAuth;                     // 파이어베이스의 uid 를 참조하기 위해 필요한 변수
 
     private ArrayList<Integer> btnBackgrounds;      // 역을 나타내는 버튼들의 background xml 파일의 id를 저장하는 리스트
     private ArrayList<Integer> lineColors;          // 호선의 색들을 담고있는 리스트
@@ -143,6 +154,18 @@ public class ShortestPathActivity extends AppCompatActivity {
             departure = "112";
             arrival = "411";
         }
+
+        mAuth = FirebaseAuth.getInstance();
+
+        initBookmarkButton();
+    }
+
+    private void initBookmarkButton() {
+        if (isContained()) {
+            bookmarkButton.setBackgroundResource(R.mipmap.ic_star_selected_foreground);
+        } else {
+            bookmarkButton.setBackgroundResource(R.mipmap.ic_star_unselected_foreground);
+        }
     }
 
     // 버튼에 클릭리스너를 등록하는 메소드
@@ -153,9 +176,18 @@ public class ShortestPathActivity extends AppCompatActivity {
                 switch (v.getId()) {
                     case R.id.bookmarkButton:
                         // TODO : 즐겨찾기 등록 기능
-                        isSelected = !isSelected;
-                        if (isSelected) bookmarkButton.setBackgroundResource(R.mipmap.ic_star_selected_foreground);
-                        else bookmarkButton.setBackgroundResource(R.mipmap.ic_star_unselected_foreground);
+                        
+                        if (isContained()) {
+                            // 이미 켜져있을 때, 버튼의 이미지를 빈 별의 이미지로 바꾼다.
+                            bookmarkButton.setBackgroundResource(R.mipmap.ic_star_unselected_foreground);
+                            // 해당 경로의 즐겨찾기를 제거한다.
+                            removeBookmarkedRoute();
+                        } else {
+                            // 이미 꺼져있을 때, 버튼의 이미지를 노란 별의 이미지로 바꾼다.
+                            bookmarkButton.setBackgroundResource(R.mipmap.ic_star_selected_foreground);
+                            // 해당 경로의 즐겨찾기를 추가한다.
+                            addBookmarkedRoute();
+                        }
                         break;
 
                     case R.id.setAlarmButton:
@@ -244,6 +276,53 @@ public class ShortestPathActivity extends AppCompatActivity {
 
         bookmarkButton.setOnClickListener(onClickListener);
         setAlarmButton.setOnClickListener(onClickListener);
+    }
+
+    private void addBookmarkedRoute() {
+
+        String value = departure + "역 " + arrival + "역";
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("subwayData").document(mAuth.getUid());
+
+        ArrayList<String> list = new ArrayList<String>();
+        Map map = new HashMap<String, Object>();
+
+        for(int i = 0; i < graph.getBookmarkedRoute().size(); i++){
+            list.add(graph.getBookmarkedRoute().get(i));
+        }
+
+        list.add(value);
+        graph.setBookmarkedRoute(list);
+
+        map = graph.getBookmarkedMap();
+        map.put("즐겨찾는 경로", graph.getBookmarkedRoute());
+
+        docRef.set(map)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error updating document", e);
+                    }
+                });
+    }
+
+    private void removeBookmarkedRoute() {
+        String value = departure + "역 " + arrival + "역";
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        graph.getBookmarkedRoute().remove(value);
+        DocumentReference docRef = db.collection("subwayData").document(mAuth.getUid());
+        docRef.update("즐겨찾는 역", FieldValue.arrayRemove(value));
+    }
+
+    private boolean isContained() {
+        String value = departure + "역 " + arrival + "역";
+        return graph.getBookmarkedRoute().contains(value);
     }
 
     public void setPageType(CustomAppGraph.SearchType type) {
