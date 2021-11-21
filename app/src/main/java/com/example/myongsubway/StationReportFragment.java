@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,7 +47,7 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
     private Button destinationButton;
     private Button closeButton;
     private Button informationButton;
-    private Button bookmarkButton;
+    private ImageButton bookmarkButton;
     private Button nameButton;
     private Button leftButton;
     private Button rightButton;
@@ -185,7 +186,11 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
             doorButton.setText("내리는문:\t\t양쪽");
         }
 
-
+        if(((MainActivity)getActivity()).isContained(vertex.getVertex()+"역")) {
+            bookmarkButton.setBackgroundResource(R.mipmap.ic_star_selected_foreground);
+        }else{
+            bookmarkButton.setBackgroundResource(R.mipmap.ic_star_unselected_foreground);
+        }
 
         return v;
     }
@@ -240,6 +245,23 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
                     ((MainActivity) getActivity()).setDestitvisible();
                     ((MainActivity)getActivity()).setDesti(vertex.getVertex());
                     ((MainActivity) getActivity()).destroyFragment();
+                }
+                break;
+            case R.id.fragment_report_bookmark:
+                if(graph.isLogined()){
+                if(((MainActivity)getActivity()).isContained(vertex.getVertex()+"역")){
+                    Toast.makeText(getContext(), "즐겨찾기 해제되었습니다.", Toast.LENGTH_SHORT).show();
+                    ((MainActivity)getActivity()).removeBookmarkedStation(vertex.getVertex()+"역");
+                    bookmarkButton.setBackgroundResource(R.mipmap.ic_star_unselected_foreground);
+
+                }
+                else{
+                    Toast.makeText(getContext(), "즐겨찾기 설정되었습니다.", Toast.LENGTH_SHORT).show();
+                    ((MainActivity)getActivity()).addBookmarkedStation(vertex.getVertex()+"역");
+                    bookmarkButton.setBackgroundResource(R.mipmap.ic_star_selected_foreground);
+                }}
+                else{
+                    Toast.makeText(getContext(), "로그인해야 이용 가능합니다", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.fragment_report_left:         //왼쪽 역 터치
