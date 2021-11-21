@@ -97,6 +97,7 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
         gotoBoard = findViewById((R.id.Main_Button_GotoBoard));
         departX = findViewById(R.id.Main_Button_departX);
         destiX = findViewById(R.id.Main_Button_DestiX);
+
         //클릭리스너등록
         findButton.setOnClickListener(this);
         changeButton.setOnClickListener(this);

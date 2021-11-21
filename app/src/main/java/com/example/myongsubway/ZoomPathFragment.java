@@ -76,7 +76,8 @@ public class ZoomPathFragment extends Fragment {
                 // 마지막 역버튼
                 createButton(v, i, density, stationButtonWidthDpBig, stationButtonHeightDp);
             } else if (i == 0) {
-                createButton(v, i, density, stationButtonWidthDpBig, stationButtonHeightDp);
+                createLineAndButton(v, i, density, stationButtonWidthDpBig, stationButtonHeightDp);
+                //createButton(v, i, density, stationButtonWidthDpBig, stationButtonHeightDp);
                 createSimpleLine(v, i, density);
             } else {
                 // 환승
@@ -90,6 +91,9 @@ public class ZoomPathFragment extends Fragment {
             }
         }
     }
+
+
+
 
     // 역버튼을 생성하는 메소드.
     private void createButton(View v, int index, float density, int width, int height) {
@@ -174,8 +178,46 @@ public class ZoomPathFragment extends Fragment {
     // 환승하는 역버튼을 생성하는 메소드
     private void createTransferButton(View v, int index, float density) {
         createMidLayout(v, index, density);
-        createButton(v, index, density, stationButtonWidthDpBig, stationButtonHeightDp);
+        createLineAndButton(v, index, density, stationButtonWidthDpBig, stationButtonHeightDp);
+        //createButton(v, index, density, stationButtonWidthDpBig, stationButtonHeightDp);
         createSimpleLine(v, index, density);
+    }
+
+    private void createLineAndButton(View v, int index, float density, int width, int height) {
+        LinearLayout btnContainer = (LinearLayout) v.findViewById(R.id.btnContainer);   // 버튼들을 담는 리니어레이아웃
+        CustomAppGraph.Vertex vertex = graph.getVertices().get(path.get(index));        // 현재 역 버튼이 나타내는 Vertex 객체
+        RelativeLayout relativeLayout = new RelativeLayout(getActivity());
+
+        // 역 버튼 만들기
+        Button btn = new AppCompatButton(getActivity());
+        btn.setId(index + 1);
+        btn.setText(vertex.getVertex());
+        btn.setBackgroundResource(btnBackgrounds.get(lines.get(index)));
+        RelativeLayout.LayoutParams btnParams = new RelativeLayout.LayoutParams((int)(width * density + 0.5), (int)(height * density + 0.5));
+        btnParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+        btn.setLayoutParams(btnParams);
+
+        // 역 버튼을 누르면 해당 역의 정보를 나타내는 프래그먼트를 호출한다.
+        btn.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((ShortestPathActivity) getActivity()).generateStationInformationFragment(vertex);
+            }
+        });
+
+        // 내리는문을 나타내는 텍스트뷰
+        TextView textView = new AppCompatTextView(getActivity());
+        textView.setText(lines.get(index) + "호선");
+        RelativeLayout.LayoutParams textParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, (int)(height * density + 0.5));
+        textParams.rightMargin = (int)(20 * density + 0.5);
+        textView.setGravity(Gravity.CENTER);
+        textParams.addRule(RelativeLayout.LEFT_OF, btn.getId());
+        textView.setLayoutParams(textParams);
+
+        // 뷰를 레이아웃에 추가한다.
+        relativeLayout.addView(btn);
+        relativeLayout.addView(textView);
+        btnContainer.addView(relativeLayout);
     }
 
     // 환승을 나타내는 레이아웃을 생성하는 메소드
