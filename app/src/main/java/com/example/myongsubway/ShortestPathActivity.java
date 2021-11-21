@@ -280,7 +280,7 @@ public class ShortestPathActivity extends AppCompatActivity {
 
     private void addBookmarkedRoute() {
 
-        String value = departure + "역 " + arrival + "역";
+        String value = departure + "역" + " - " + arrival + "역";
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("subwayData").document(mAuth.getUid());
 
@@ -315,7 +315,7 @@ public class ShortestPathActivity extends AppCompatActivity {
     }
 
     private void removeBookmarkedRoute() {
-        String value = departure + "역 " + arrival + "역";
+        String value = departure + "역" + " - " + arrival + "역";
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         graph.getBookmarkedRoute().remove(value);
         DocumentReference docRef = db.collection("subwayData").document(mAuth.getUid());
@@ -323,7 +323,7 @@ public class ShortestPathActivity extends AppCompatActivity {
     }
 
     private boolean isContained() {
-        String value = departure + "역 " + arrival + "역";
+        String value = departure + "역" + " - " + arrival + "역";
         return graph.getBookmarkedRoute().contains(value);
     }
 
