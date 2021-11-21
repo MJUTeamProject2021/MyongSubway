@@ -136,6 +136,7 @@ public class BookmarkActivity extends AppCompatActivity  {
      * 해당 메소드는 각자의 기능만을 담고 있습니다.
      */
 
+<<<<<<< HEAD
     // 즐겨찾기 역이 추가되는 메소드
     public void addBookmarkedStation(String name) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -168,8 +169,9 @@ public class BookmarkActivity extends AppCompatActivity  {
                         Log.w(TAG, "Error updating document", e);
                     }
                 });
+=======
+>>>>>>> d56beca0d120e6ccf943fe32764f47c8454c3404
 
-    }
 
     // 즐겨찾기 경로가 추가되는 메소드
     public void addBookmarkedRoute(String depart, String desti){
@@ -183,9 +185,13 @@ public class BookmarkActivity extends AppCompatActivity  {
 
         
         String name = depart + " " + desti;
-        list = graph.getBookmarkedRoute();
+
+        for(int i=0;i<graph.getBookmarkedRoute().size();i++){
+            list.add(graph.getBookmarkedRoute().get(i));
+        }
+
         list.add(name);
-        ((CustomAppGraph) getApplicationContext()).setBookmarkedRoute(list);
+        graph.setBookmarkedRoute(list);
 
         map = graph.getBookmarkedMap();
         map.put("즐겨찾는 역", graph.getBookmarkedStation());
@@ -206,15 +212,6 @@ public class BookmarkActivity extends AppCompatActivity  {
                 });
     }
 
-    // 즐겨찾기 되어있던 역을 삭제하는 메소드 (그래프 내 데이터 지우고 데이터베이스 내 데이터 삭제)
-    public void removeBookmarkedStation(String name){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        graph = (CustomAppGraph) getApplicationContext();
-
-        graph.getBookmarkedStation().remove(name);
-        DocumentReference docRef = db.collection("subwayData").document(mAuth.getUid());
-        docRef.update("즐겨찾는 역", FieldValue.arrayRemove(name));
-    }
 
     // 즐겨찾기 되어있던 경로를 삭제하는 메소드 (그래프 내 데이터 지우고 데이터베이스 내 데이터 삭제)
     public void removeBookmarkedRoute(String depart, String desti){
@@ -225,14 +222,6 @@ public class BookmarkActivity extends AppCompatActivity  {
         graph.getBookmarkedRoute().remove(name);
         DocumentReference docRef = db.collection("subwayData").document(mAuth.getUid());
         docRef.update("즐겨찾는 경로", FieldValue.arrayRemove(name));
-    }
-
-    // 해당 역이 즐겨찾기 되어있는지 체크하는 메소드, true면 포함되어있음.
-    public boolean isContained(String _name) {
-        graph = (CustomAppGraph) getApplicationContext();
-
-        System.out.println(graph.getBookmarkedStation().contains(_name));
-        return graph.getBookmarkedStation().contains(_name);
     }
 
     // 해당 경로가 즐겨찾기 되어있는지 체크하는 메소드, true면 포함되어있음.
