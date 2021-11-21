@@ -71,6 +71,7 @@
                             android:textStyle="bold"
                             tools:layout_conversion_absoluteHeight="48dp"
                             tools:layout_conversion_absoluteWidth="88dp" />
+
                     </LinearLayout>
 
                 </FrameLayout>

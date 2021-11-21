@@ -45,6 +45,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/round_button_topmenu"
+                    android:paddingLeft="5dp"
                     android:text="출발역"
                     android:textAlignment="textStart"
                     android:textColor="@android:color/darker_gray"
@@ -57,6 +58,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/round_button_topmenu"
+                    android:paddingLeft="5dp"
                     android:text="도착역"
                     android:textAlignment="textStart"
                     android:textColor="@android:color/darker_gray"
@@ -147,10 +149,21 @@
                     android:id="@+id/textView3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|right"
+                    android:layout_marginRight="10dp"
                     android:text="명지교통공사"
                     android:textColor="#000000"
                     android:textSize="20sp"
+                    android:textStyle="bold"
                     android:typeface="normal" />
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="320dp"
+                    android:layout_height="310dp"
+                    android:translationX="80dp"
+                    android:translationY="-60dp"
+                    app:srcCompat="@mipmap/img_tempicon_foreground" />
 
                 <Button
                     android:id="@+id/button2"
