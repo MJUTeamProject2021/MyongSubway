@@ -15,13 +15,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#FFFFFF"
-            android:elevation="50dp"
+            android:elevation="25dp"
             android:orientation="horizontal">
 
             <Button
                 android:id="@+id/modify_Button_close"
-                android:layout_height="match_parent"
                 android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/bg_white_ripple"
                 android:backgroundTint="#00000000"
@@ -32,8 +32,8 @@
 
             <TextView
                 android:id="@+id/textView3"
-                android:layout_height="match_parent"
                 android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="3"
                 android:gravity="center"
                 android:text="글 수정"
@@ -45,8 +45,8 @@
 
             <Button
                 android:id="@+id/modify_Button_confirm"
-                android:layout_height="match_parent"
                 android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/bg_white_ripple"
                 android:backgroundTint="#006A6C6E"
