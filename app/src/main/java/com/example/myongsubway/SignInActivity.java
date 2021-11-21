@@ -28,6 +28,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * SigninActivity
@@ -53,6 +55,7 @@ public class SignInActivity extends AppCompatActivity {
     public TextView signUp;                         // 회원가입 프래그먼트로 이동
     public ArrayList<String> bookmarkedStation;     // "즐겨찾는 역" 데이터를 저장
     public ArrayList<String> bookmarkedRoute;       // "즐겨찾는 경로" 데이터를 저장
+    public Map<String, Object> bookmarkedMap;       // 유저 즐겨찾기 정보 저장
 
     private FragmentManager fragmentManager;        // 프래그먼트를 다루는 매니저
     private SignUpFragment SignUpFragment;
@@ -107,8 +110,6 @@ public class SignInActivity extends AppCompatActivity {
                                             System.out.println("DocumentSnapshot data: " + document.getData());
                                             bookmarkedStation = (ArrayList) document.get("즐겨찾는 역");
                                             bookmarkedRoute = (ArrayList) document.get("즐겨찾는 경로");
-                                            System.out.println(bookmarkedStation);
-                                            System.out.println(bookmarkedRoute);
                                             ((CustomAppGraph) getApplicationContext()).setAccount(getEmail(), getPassword(), bookmarkedStation, bookmarkedRoute);
                                             saveSearchData();
                                         } else {
