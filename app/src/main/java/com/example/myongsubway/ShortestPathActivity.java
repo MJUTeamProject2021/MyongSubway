@@ -295,6 +295,8 @@ public class ShortestPathActivity extends AppCompatActivity {
         graph.setBookmarkedRoute(list);
 
         map = graph.getBookmarkedMap();
+
+        map.put("즐겨찾는 역", graph.getBookmarkedStation());
         map.put("즐겨찾는 경로", graph.getBookmarkedRoute());
 
         docRef.set(map)
@@ -317,7 +319,7 @@ public class ShortestPathActivity extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         graph.getBookmarkedRoute().remove(value);
         DocumentReference docRef = db.collection("subwayData").document(mAuth.getUid());
-        docRef.update("즐겨찾는 역", FieldValue.arrayRemove(value));
+        docRef.update("즐겨찾는 경로", FieldValue.arrayRemove(value));
     }
 
     private boolean isContained() {
