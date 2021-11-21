@@ -81,6 +81,8 @@ public class BookmarkActivity extends AppCompatActivity  {
         stationList.setAdapter(adapter);
         routeList.setAdapter(adapter2);
 
+        addBookmarkedStation("210역");
+
         stationList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
@@ -147,6 +149,7 @@ public class BookmarkActivity extends AppCompatActivity  {
         list = graph.getBookmarkedStation();
         list.add(name);
         ((CustomAppGraph) getApplicationContext()).setBookmarkedStation(list);
+        System.out.println(graph.getBookmarkedStation());
 
         map = graph.getBookmarkedMap();
         map.put("즐겨찾는 역", list);
