@@ -9,101 +9,110 @@
     android:clickable="true"
     tools:context=".StationReportFragment">
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="10">
 
-        <Button
-            android:id="@+id/fragment_report_opaque"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="508dp"
-            android:background="#00FFFFFF" />
-
-        <Button
-            android:id="@+id/fragment_report_close"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/bg_white_ripple"
-            android:backgroundTint="@null"
-            android:text="닫기"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:translationY="-80dp"
-            app:icon="@drawable/ic_exit"
-            app:iconGravity="top"
-            app:iconPadding="0dp"
-            app:iconSize="50dp"
-            app:iconTint="#EC5959" />
+            android:layout_weight="10">
 
-        <Button
-            android:id="@+id/fragment_report_desti"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="#00472A2A"
-            android:backgroundTint="@null"
-            android:text="도착역"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:translationX="70dp"
-            app:icon="@drawable/ic_desti"
-            app:iconGravity="top"
-            app:iconPadding="0dp"
-            app:iconSize="50dp"
-            app:iconTint="#00BCD4" />
+            <Button
+                android:id="@+id/fragment_report_opaque"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#00FFFFFF" />
 
-        <Button
-            android:id="@+id/fragment_report_depart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="#00472A2A"
-            android:backgroundTint="@null"
-            android:text="출발역"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:translationX="-70dp"
-            app:icon="@drawable/ic_depart"
-            app:iconGravity="top"
-            app:iconPadding="0dp"
-            app:iconSize="50dp"
-            app:iconTint="#00BCD4" />
+            <Button
+                android:id="@+id/fragment_report_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_white_ripple"
+                android:backgroundTint="@null"
+                android:text="닫기"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:translationY="-80dp"
+                app:icon="@drawable/ic_exit"
+                app:iconGravity="top"
+                app:iconPadding="0dp"
+                app:iconSize="50dp"
+                app:iconTint="#EC5959" />
 
-        <Button
-            android:id="@+id/fragment_report_information"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/bg_white_ripple"
-            android:backgroundTint="#FFFFFF"
-            android:text="역정보"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:translationY="80dp"
-            app:icon="@drawable/ic_info"
-            app:iconGravity="top"
-            app:iconPadding="0dp"
-            app:iconSize="50dp"
-            app:iconTint="#FFFFFF" />
+            <Button
+                android:id="@+id/fragment_report_desti"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="#00472A2A"
+                android:backgroundTint="@null"
+                android:text="도착역"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:translationX="70dp"
+                app:icon="@drawable/ic_desti"
+                app:iconGravity="top"
+                app:iconPadding="0dp"
+                app:iconSize="50dp"
+                app:iconTint="#00BCD4" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/fragment_report_name"
-            android:layout_width="75dp"
-            android:layout_height="74dp"
-            android:layout_gravity="center"
-            android:background="@drawable/round_button"
-            android:backgroundTint="@null"
-            android:drawableTint="@null"
-            android:text="101역"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+            <Button
+                android:id="@+id/fragment_report_depart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="#00472A2A"
+                android:backgroundTint="@null"
+                android:text="출발역"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:translationX="-70dp"
+                app:icon="@drawable/ic_depart"
+                app:iconGravity="top"
+                app:iconPadding="0dp"
+                app:iconSize="50dp"
+                app:iconTint="#00BCD4" />
+
+            <Button
+                android:id="@+id/fragment_report_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_white_ripple"
+                android:backgroundTint="#FFFFFF"
+                android:text="역정보"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:translationY="80dp"
+                app:icon="@drawable/ic_info"
+                app:iconGravity="top"
+                app:iconPadding="0dp"
+                app:iconSize="50dp"
+                app:iconTint="#FFFFFF" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/fragment_report_name"
+                android:layout_width="75dp"
+                android:layout_height="74dp"
+                android:layout_gravity="center"
+                android:background="@drawable/round_button"
+                android:backgroundTint="@null"
+                android:drawableTint="@null"
+                android:text="101역"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+        </FrameLayout>
 
         <LinearLayout
             android:id="@+id/fragment_report_menulayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
+            android:layout_weight="0"
             android:background="@drawable/round_button_main1"
             android:orientation="vertical">
 
@@ -147,7 +156,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:orientation="horizontal" />
+                    android:orientation="horizontal"/>
 
             </LinearLayout>
 
@@ -244,7 +253,6 @@
 
             </LinearLayout>
         </LinearLayout>
-
-    </FrameLayout>
+    </LinearLayout>
 
 </FrameLayout>
