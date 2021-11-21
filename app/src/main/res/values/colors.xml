@@ -9,10 +9,11 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="rippleColor">#BEBEBE</color>
+    <color name="moreGray">#808487</color>
 
     <!--tab Color-->
-    <color name="tabSelectedColor">#FFFFFF</color>
-    <color name="tabUnSelectedColor">#000000</color>
+    <color name="tabSelectedColor">#000000</color>
+    <color name="tabUnSelectedColor">#808487</color>
 
     <!--UI Basic Color-->
     <color name="basicColor">#536AE8</color>
