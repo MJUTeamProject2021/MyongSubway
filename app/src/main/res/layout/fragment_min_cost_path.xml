@@ -191,18 +191,6 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"/>
 
-        <ImageButton
-            android:id="@+id/bookmarkButton"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:text="도착알람 설정"
-            android:stateListAnimator="@null"
-            android:background="@mipmap/ic_star_unselected_foreground"
-            android:layout_marginBottom="120dp"
-            android:layout_marginRight="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
-
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline1"
             android:layout_width="wrap_content"

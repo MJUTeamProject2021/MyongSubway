@@ -31,8 +31,6 @@ public class MinTimePathFragment extends Fragment {
     Button departureButton, arrivalButton;          // 출발역과 도착역을 나타내는 버튼
     ImageButton zoomButton;                         // 확대 버튼
     Button reportButton;                            // 잘못된 정보 신고 버튼
-    ImageButton bookmarkButton;                     // 즐겨찾기 등록 버튼
-    boolean isSelected = false;                     // 즐겨찾기 버튼이 눌렸는지를 나타내는 상태변수
     TextView departureLine, arrivalLine;            // 출발역과 도착역의 호선을 나타내는 텍스트뷰
     TextView costTime, costDistance, costCost,
             costTransfer;                           // 각각 소요시간, 소요거리, 소요비용, 환승횟수를 나타내는  텍스트뷰
@@ -115,8 +113,7 @@ public class MinTimePathFragment extends Fragment {
         // 확대, 잘못된 정보 신고, 즐겨찾기 등록 버튼 참조
         zoomButton = v.findViewById(R.id.zoomButton);
         reportButton = v.findViewById(R.id.reportButton);
-        bookmarkButton = v.findViewById(R.id.bookmarkButton);
-        bookmarkButton.setColorFilter(Color.parseColor("#BEBEBE"));
+
         
         // 역버튼 사이의 선을 나타내는 뷰 참조
         midLine = v.findViewById(R.id.midLine);
@@ -151,12 +148,7 @@ public class MinTimePathFragment extends Fragment {
                         startActivity(email);
                         break;
 
-                    case R.id.bookmarkButton:
-                        // TODO : 즐겨찾기 등록 기능
-                        isSelected = !isSelected;
-                        if (isSelected) bookmarkButton.setBackgroundResource(R.mipmap.ic_star_selected_foreground);
-                        else bookmarkButton.setBackgroundResource(R.mipmap.ic_star_unselected_foreground);
-                        break;
+
                 }
             }
         };
@@ -165,7 +157,6 @@ public class MinTimePathFragment extends Fragment {
         arrivalButton.setOnClickListener(onClickListener);
         zoomButton.setOnClickListener(onClickListener);
         reportButton.setOnClickListener(onClickListener);
-        bookmarkButton.setOnClickListener(onClickListener);
     }
 
     // 각각 departureButton , arrivalButton 의 중간에 오도록
