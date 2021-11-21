@@ -131,4 +131,9 @@ public class BookmarkActivity extends AppCompatActivity  {
             }
         });
     }
+    protected void onResume() {
+        super.onResume();
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,graph.getBookmarkedRoute());
+        routeList.setAdapter(adapter2);
+    }
 }
