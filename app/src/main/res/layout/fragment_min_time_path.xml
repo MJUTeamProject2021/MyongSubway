@@ -186,21 +186,9 @@
             android:paddingLeft="10dp"
             android:text="잘못된 정보 신고 >"
             android:gravity="left|center_vertical"
-            android:textColor="#808487"
+            android:textColor="@color/moreGray"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
-
-        <ImageButton
-            android:id="@+id/bookmarkButton"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:text="도착알람 설정"
-            android:stateListAnimator="@null"
-            android:background="@mipmap/ic_star_unselected_foreground"
-            android:layout_marginBottom="120dp"
-            android:layout_marginRight="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"/>
 
         <androidx.constraintlayout.widget.Guideline

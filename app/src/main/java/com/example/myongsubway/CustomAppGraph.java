@@ -158,7 +158,6 @@ public class CustomAppGraph extends Application {
 
     private final int LINE_COUNT = 9;                   // 호선의 개수
 
-
     @Override
     public void onCreate() {
         // 그래프 생성
@@ -352,7 +351,7 @@ public class CustomAppGraph extends Application {
         bookmarkedRoute.clear();
 
         for (int i = 0; i < _bookmarkedRoute.size(); i++) {
-            bookmarkedStation.add(_bookmarkedRoute.get(i));
+            bookmarkedRoute.add(_bookmarkedRoute.get(i));
         }
     }
 
