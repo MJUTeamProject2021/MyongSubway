@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Application;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
+
 public class BackPressHandler {
     private Activity mainactivity;
     private long backPressedTime = 0;
@@ -18,8 +20,7 @@ public class BackPressHandler {
             return;
         }
         if(System.currentTimeMillis() <= backPressedTime + 1800){
-            mainactivity.moveTaskToBack(true);
-            mainactivity.finishAndRemoveTask();
+            ActivityCompat.finishAffinity(mainactivity);
             System.exit(0);
         }
     }
