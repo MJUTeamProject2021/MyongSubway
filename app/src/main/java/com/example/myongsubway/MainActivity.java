@@ -1,47 +1,32 @@
 package com.example.myongsubway;
 
-import androidx.appcompat.app.ActionBar;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.view.MotionEventCompat;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
-import android.hardware.Camera;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
+
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.chrisbanes.photoview.OnPhotoTapListener;
-import com.github.chrisbanes.photoview.OnViewTapListener;
-import com.github.chrisbanes.photoview.PhotoView;
-import com.github.chrisbanes.photoview.PhotoViewAttacher;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserFactory;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+
+import static android.content.ContentValues.TAG;
 
 public class    MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -60,8 +45,11 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
     public TextView destiText;
     private Intent intent;
     private CustomAppGraph graph;
+    private FirebaseAuth mAuth;
+
     public ArrayList<Button>stationButtonList = new ArrayList();
     public ArrayList<CustomAppGraph.Vertex> mainVertices;
+
 
     private BackPressHandler backPressHandler = new BackPressHandler(this); //백버튼 핸들러
     private boolean isFragment = false;                 //프래그먼트 켜져있으면 true 아니면 false
@@ -75,6 +63,7 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
         mcontext = this;
         graph = (CustomAppGraph) getApplicationContext();        //공유되는 데이터 담는 객체
         mainVertices = graph.getVertices();
+        mAuth = FirebaseAuth.getInstance();
 
         //지하철버튼들을 동적으로 연결, 클릭리스너 설정
         for(int i=0;i<graph.getStationCount();i++) {
@@ -135,6 +124,54 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
         transaction.commitAllowingStateLoss();
         isFragment = true;
     }
+
+    public void addBookmarkedStation(String name) {
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("subwayData").document(mAuth.getUid());
+
+        ArrayList<String> list = new ArrayList<String>();
+        Map map = new HashMap<String, Object>();
+
+        for(int i=0;i<graph.getBookmarkedStation().size();i++){
+            list.add(graph.getBookmarkedStation().get(i));
+        }
+
+        list.add(name);
+        graph.setBookmarkedStation(list);
+
+        map = graph.getBookmarkedMap();
+        map.put("즐겨찾는 역", list);
+        map.put("즐겨찾는 경로", graph.getBookmarkedRoute());
+
+        docRef.set(map)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error updating document", e);
+                    }
+                });
+
+    }
+
+
+    public void removeBookmarkedStation(String name){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        graph.getBookmarkedStation().remove(name);
+        DocumentReference docRef = db.collection("subwayData").document(mAuth.getUid());
+        docRef.update("즐겨찾는 역", FieldValue.arrayRemove(name));
+    }
+
+    public boolean isContained(String _name) {
+        return graph.getBookmarkedStation().contains(_name);
+    }
+
     //터치할시에
     @Override
     public void onClick(View view) {

@@ -28,17 +28,21 @@
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#6085B1">
+                    android:background="#FFFFFF"
+                    android:elevation="25dp">
 
                     <Button
                         android:id="@+id/board_read_close"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:background="@drawable/bg_white_ripple"
                         android:backgroundTint="#00000000"
-                        android:text="뒤로가기"
                         android:textAlignment="viewStart"
                         android:textStyle="bold"
+                        app:icon="@drawable/ic_left"
+                        app:iconGravity="textStart"
+                        app:iconPadding="0dp"
+                        app:iconTint="#000000"
                         tools:layout_conversion_absoluteHeight="48dp"
                         tools:layout_conversion_absoluteWidth="89dp" />
 
@@ -51,24 +55,34 @@
                         <Button
                             android:id="@+id/board_read_modify"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:background="@drawable/bg_white_ripple"
                             android:backgroundTint="#00000000"
                             android:text="글 수정"
                             android:textAlignment="viewStart"
+                            android:textColor="#121111"
                             android:textStyle="bold"
+                            app:icon="@drawable/ic_modify"
+                            app:iconGravity="textTop"
+                            app:iconPadding="0dp"
+                            app:iconTint="#000000"
                             tools:layout_conversion_absoluteHeight="60dp"
                             tools:layout_conversion_absoluteWidth="65dp" />
 
                         <Button
                             android:id="@+id/board_read_delete"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:background="@drawable/bg_white_ripple"
                             android:backgroundTint="#00000000"
                             android:text="글 삭제"
                             android:textAlignment="viewStart"
+                            android:textColor="#000000"
                             android:textStyle="bold"
+                            app:icon="@drawable/ic_removecontent"
+                            app:iconGravity="textTop"
+                            app:iconPadding="0dp"
+                            app:iconTint="#000000"
                             tools:layout_conversion_absoluteHeight="48dp"
                             tools:layout_conversion_absoluteWidth="88dp" />
 
@@ -146,13 +160,14 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_gravity="bottom"
-            android:background="#6085B1"
+            android:background="@drawable/round_layout"
             android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/board_read_commenttext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:layout_weight="1"
                 android:ems="10"
                 android:gravity="start|top"
@@ -165,7 +180,8 @@
                 android:layout_weight="0"
                 android:background="@drawable/bg_white_ripple"
                 android:backgroundTint="#35465A"
-                android:text="댓글 작성" />
+                android:text="댓글 작성"
+                android:textColor="#040404" />
         </LinearLayout>
     </LinearLayout>
 

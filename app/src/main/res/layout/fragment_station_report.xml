@@ -128,21 +128,17 @@
                         android:textSize="24sp"
                         android:textStyle="bold" />
 
-                    <Button
+                    <ImageButton
                         android:id="@+id/fragment_report_bookmark"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_gravity="center"
-                        android:background="#00472A2A"
-                        android:backgroundTint="@null"
-                        android:textColor="#FFFFFF"
-                        android:textStyle="bold"
-                        android:translationX="150dp"
-                        app:icon="@mipmap/ic_star_unselected_foreground"
-                        app:iconGravity="textTop"
-                        app:iconPadding="0dp"
-                        app:iconSize="50dp"
-                        app:iconTint="#000000" />
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="right"
+                        android:layout_marginRight="25dp"
+                        android:background="@mipmap/ic_star_unselected_foreground"
+                        android:stateListAnimator="@null"
+                        android:text="도착알람 설정"
+                        android:translationY="-10dp" />
+
                 </FrameLayout>
 
                 <LinearLayout

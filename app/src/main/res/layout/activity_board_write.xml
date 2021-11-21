@@ -13,24 +13,31 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#6085B1"
-            android:orientation="horizontal">
+            android:layout_height="50dp"
+            android:background="#FFFFFF"
+            android:elevation="25dp"
+            android:orientation="horizontal"
+            android:weightSum="5">
 
             <Button
                 android:id="@+id/write_Button_close"
-                android:layout_width="20dp"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/bg_white_ripple"
                 android:backgroundTint="#00000000"
-                android:text="취소" />
+                android:textColor="#000000"
+                app:icon="@drawable/ic_closex"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconTint="#000000" />
 
             <TextView
                 android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center"
                 android:text="글 작성"
                 android:textAlignment="center"
                 android:textAllCaps="false"
@@ -40,12 +47,16 @@
 
             <Button
                 android:id="@+id/write_Button_confirm"
-                android:layout_width="5dp"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/bg_white_ripple"
                 android:backgroundTint="#006A6C6E"
-                android:text="작성" />
+                android:textColor="#000000"
+                app:icon="@drawable/ic_depart"
+                app:iconGravity="textTop"
+                app:iconPadding="0dp"
+                app:iconTint="#000000" />
         </LinearLayout>
 
         <EditText
@@ -64,6 +75,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:ems="10"
             android:gravity="start|top"
             android:inputType="textMultiLine"

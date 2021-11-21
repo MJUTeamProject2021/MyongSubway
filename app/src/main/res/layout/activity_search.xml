@@ -2,63 +2,94 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/Search_LinearLayout_search"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="10"
-    tools:context=".SearchActivity"
-    android:id="@+id/Search_LinearLayout_search"
-    android:orientation="vertical">
-    <Button
-        android:id="@+id/Search_Button_back"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_gravity="left"
-        android:text="◀ Main"
-        android:textSize="20dp"
-        android:background="#00FFFFFF"
-        android:textColor="@color/black"/>
+    android:orientation="vertical"
+    android:weightSum="12"
+    tools:context=".SearchActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#FFFFFF"
+        android:elevation="25dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/Search_Button_back"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:layout_weight="2"
+            android:background="#00FFFFFF"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            app:icon="@drawable/ic_closex"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:iconTint="#000000" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="8"
+            android:gravity="center|left"
+            android:paddingLeft="60dp"
+            android:text="즐겨찾기"
+            android:textAlignment="gravity"
+            android:textColor="#151515"
+            android:textSize="30dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="11"
         android:orientation="vertical"
-        android:layout_weight="9"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="-450dp">
+
         <EditText
             android:id="@+id/Search_EditText_editStation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:autofillHints="no"
             android:hint="검색할 역의 이름을 입력하세요"
+            android:inputType="number"
             android:paddingStart="10dp"
             android:textColor="#0067A7"
             android:textSize="25sp"
-            android:textStyle="bold"
-            android:inputType="number" />
+            android:textStyle="bold" />
+
         <LinearLayout
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:layout_gravity="center_vertical"
+                android:gravity="center"
                 android:paddingStart="10dp"
                 android:text="검색 내역" />
+
             <View
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
+
             <Button
                 android:id="@+id/Search_Button_removeSearchHistory"
-                android:layout_gravity="right"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="검색내역\n전체삭제"
+                android:layout_gravity="right"
                 android:background="#00FFFFFF"
-                android:textColor="@color/purple_500"/>
+                android:text="검색내역\n전체삭제"
+                android:textColor="@color/purple_500" />
 
         </LinearLayout>
 
@@ -67,8 +98,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="@color/teal_200"
-            android:dividerHeight="1dp">
-        </ListView>
+            android:dividerHeight="1dp"></ListView>
 
     </LinearLayout>
 
