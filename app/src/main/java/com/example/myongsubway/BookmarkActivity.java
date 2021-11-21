@@ -81,8 +81,6 @@ public class BookmarkActivity extends AppCompatActivity  {
         stationList.setAdapter(adapter);
         routeList.setAdapter(adapter2);
 
-        addBookmarkedStation("210역");
-
         stationList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
@@ -131,48 +129,6 @@ public class BookmarkActivity extends AppCompatActivity  {
         //adapter2.notifyDataSetChanged();
     }
 
-    /**
-     * 역 / 경로 추가, 삭제 및 검사 메소드
-     * 해당 메소드는 각자의 기능만을 담고 있습니다.
-     */
-
-<<<<<<< HEAD
-    // 즐겨찾기 역이 추가되는 메소드
-    public void addBookmarkedStation(String name) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection("subwayData").document(mAuth.getUid());
-        mAuth = FirebaseAuth.getInstance();
-        graph = (CustomAppGraph) getApplicationContext();
-
-        ArrayList<String> list = new ArrayList<String>();
-        Map map = new HashMap<String, Object>();
-
-        list = graph.getBookmarkedStation();
-        list.add(name);
-        ((CustomAppGraph) getApplicationContext()).setBookmarkedStation(list);
-        System.out.println(graph.getBookmarkedStation());
-
-        map = graph.getBookmarkedMap();
-        map.put("즐겨찾는 역", list);
-        map.put("즐겨찾는 경로", graph.getBookmarkedRoute());
-
-        docRef.set(map)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully updated!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error updating document", e);
-                    }
-                });
-=======
->>>>>>> d56beca0d120e6ccf943fe32764f47c8454c3404
-
-
     // 즐겨찾기 경로가 추가되는 메소드
     public void addBookmarkedRoute(String depart, String desti){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -182,7 +138,6 @@ public class BookmarkActivity extends AppCompatActivity  {
 
         ArrayList <String> list = new ArrayList<String>();
         Map map = new HashMap<String, Object>();
-
         
         String name = depart + " " + desti;
 
@@ -211,7 +166,6 @@ public class BookmarkActivity extends AppCompatActivity  {
                     }
                 });
     }
-
 
     // 즐겨찾기 되어있던 경로를 삭제하는 메소드 (그래프 내 데이터 지우고 데이터베이스 내 데이터 삭제)
     public void removeBookmarkedRoute(String depart, String desti){
