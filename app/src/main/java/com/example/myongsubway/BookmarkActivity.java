@@ -115,7 +115,7 @@ public class BookmarkActivity extends AppCompatActivity  {
                     // 맞다면 검색된 역에 해당 역을 추가하고, 메인으로 넘어가 메소드 호출!!
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        String[] results = graph.getBookmarkedRoute().get(pos).split(" ");
+                        String[] results = graph.getBookmarkedRoute().get(pos).split(" - ");
                         Log.e("출발역", results[0].replaceAll("[^0-9]", ""));
                         Log.e("도착역", results[1].replaceAll("[^0-9]", ""));
 
