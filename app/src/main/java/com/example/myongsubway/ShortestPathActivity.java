@@ -3,6 +3,7 @@ package com.example.myongsubway;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
@@ -13,7 +14,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.BlendMode;
+import android.graphics.BlendModeColorFilter;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -25,20 +30,31 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Random;
+
+import static android.content.ContentValues.TAG;
 
 public class ShortestPathActivity extends AppCompatActivity {
     private ViewPager2 viewPager;               // 뷰페이저
@@ -52,13 +68,18 @@ public class ShortestPathActivity extends AppCompatActivity {
     private ArrayList<ArrayList<Integer>> allCosts; // 소요시간, 소요거리, 소요비용, 환승횟수를 저장하는 리스트, 순서대로 최소시간, 최단거리, 최소비용, 환승횟수의 경우가 저장됨
     private ArrayList<ArrayList<Integer>> allLines; // 경로의 각 역의 호선을 저장하는 리스트
     private final int TYPE_COUNT = 4;               // SearchType 의 경우의 수 (최소시간, 최단거리, 최소비용)
+    private final int POINT = 100;
 
     private ImageButton setAlarmButton;             // 도착알람 설정 버튼
 
     private CustomAppGraph graph;                   // 액티비티 간에 공유되는 데이터를 담는 클래스
+    private FirebaseAuth mAuth;                     // 파이어베이스의 uid 를 참조하기 위해 필요한 변수
 
     private ArrayList<Integer> btnBackgrounds;      // 역을 나타내는 버튼들의 background xml 파일의 id를 저장하는 리스트
     private ArrayList<Integer> lineColors;          // 호선의 색들을 담고있는 리스트
+
+    ImageButton bookmarkButton;                     // 즐겨찾기 등록 버튼
+    boolean isSelected = false;                     // 즐겨찾기 버튼이 눌렸는지를 나타내는 상태변수
 
     boolean isButtonClicked = false;
     CustomAppGraph.SearchType pageType;
@@ -73,7 +94,6 @@ public class ShortestPathActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shortest_path);
-
 
         // 초기화
         init();
@@ -120,7 +140,10 @@ public class ShortestPathActivity extends AppCompatActivity {
         }
 
         setAlarmButton = findViewById(R.id.setAlarmButton);
-        setAlarmButton.setColorFilter(getResources().getColor(R.color.rippleColor, null));
+        setAlarmButton.setColorFilter(getResources().getColor(R.color.moreGray, null));
+
+        bookmarkButton = findViewById(R.id.bookmarkButton);
+        bookmarkButton.setColorFilter(Color.parseColor("#BEBEBE"));
 
         // MainActivity 가 전송한 데이터 받기
         Intent intent = getIntent();
@@ -128,17 +151,21 @@ public class ShortestPathActivity extends AppCompatActivity {
         arrival = intent.getStringExtra("destinationStation");
         // TODO : 디버깅용 코드
         if (departure == null) {
-            departure = "101";
-            arrival = "216";
+            departure = "112";
+            arrival = "411";
         }
+
+        mAuth = FirebaseAuth.getInstance();
+
+        initBookmarkButton();
     }
 
-    // 툴바를 설정하는 메소드
-    private void setToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("길찾기");
-        toolbar.setTitleTextColor(Color.BLACK);
-        setSupportActionBar(toolbar);
+    private void initBookmarkButton() {
+        if (isContained()) {
+            bookmarkButton.setBackgroundResource(R.mipmap.ic_star_selected_foreground);
+        } else {
+            bookmarkButton.setBackgroundResource(R.mipmap.ic_star_unselected_foreground);
+        }
     }
 
     // 버튼에 클릭리스너를 등록하는 메소드
@@ -147,6 +174,22 @@ public class ShortestPathActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
+                    case R.id.bookmarkButton:
+                        // TODO : 즐겨찾기 등록 기능
+                        
+                        if (isContained()) {
+                            // 이미 켜져있을 때, 버튼의 이미지를 빈 별의 이미지로 바꾼다.
+                            bookmarkButton.setBackgroundResource(R.mipmap.ic_star_unselected_foreground);
+                            // 해당 경로의 즐겨찾기를 제거한다.
+                            removeBookmarkedRoute();
+                        } else {
+                            // 이미 꺼져있을 때, 버튼의 이미지를 노란 별의 이미지로 바꾼다.
+                            bookmarkButton.setBackgroundResource(R.mipmap.ic_star_selected_foreground);
+                            // 해당 경로의 즐겨찾기를 추가한다.
+                            addBookmarkedRoute();
+                        }
+                        break;
+
                     case R.id.setAlarmButton:
                         // TODO : 알람 설정 기능
 
@@ -155,8 +198,8 @@ public class ShortestPathActivity extends AppCompatActivity {
                             isButtonClicked = true;
 
                             // 버튼의 모양과 색을 눌려져 있는 상태의 경우로 바꾼다.
-                            setAlarmButton.setImageResource(R.mipmap.ic_alarm_foreground);
-                            setAlarmButton.setColorFilter(Color.RED);
+                            setAlarmButton.setBackgroundResource(R.drawable.bg_white_ripple_stroke_red);
+                            setAlarmButton.setColorFilter(Color.WHITE);
                         } else {
                             if (pageType == buttonType) {
                                 // 버튼을 눌렀던 페이지
@@ -169,8 +212,9 @@ public class ShortestPathActivity extends AppCompatActivity {
                                                 isButtonClicked = false;
 
                                                 // 버튼의 모양과 색을 원래대로 돌린다.
+                                                setAlarmButton.setBackgroundResource(R.drawable.bg_white_ripple_stroke);
                                                 setAlarmButton.setImageResource(R.mipmap.ic_alarm_foreground);
-                                                setAlarmButton.setColorFilter(getResources().getColor(R.color.rippleColor, null));
+                                                setAlarmButton.setColorFilter(getResources().getColor(R.color.moreGray, null));
                                             }
                                         });
                                 builder.setNegativeButton("취소",
@@ -201,8 +245,9 @@ public class ShortestPathActivity extends AppCompatActivity {
                                                 buttonType = pageType;
 
                                                 // 버튼의 모양과 색을 눌려졌을 때로 바꾼다.
-                                                setAlarmButton.setImageResource(R.mipmap.ic_alarm_foreground);
-                                                setAlarmButton.setColorFilter(Color.RED);
+                                                setAlarmButton.setBackgroundResource(R.drawable.bg_white_ripple_stroke_red);
+                                                setAlarmButton.setImageResource(IC_ALARM_FOREGROUND);
+                                                setAlarmButton.setColorFilter(Color.WHITE);
                                             }
                                         });
                                 builder.setNegativeButton("취소",
@@ -223,14 +268,61 @@ public class ShortestPathActivity extends AppCompatActivity {
                                 alert.show();
 
                             }
-
                         }
                         break;
                 }
             }
         };
 
+        bookmarkButton.setOnClickListener(onClickListener);
         setAlarmButton.setOnClickListener(onClickListener);
+    }
+
+    private void addBookmarkedRoute() {
+
+        String value = departure + "역 " + arrival + "역";
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("subwayData").document(mAuth.getUid());
+
+        ArrayList<String> list = new ArrayList<String>();
+        Map map = new HashMap<String, Object>();
+
+        for(int i = 0; i < graph.getBookmarkedRoute().size(); i++){
+            list.add(graph.getBookmarkedRoute().get(i));
+        }
+
+        list.add(value);
+        graph.setBookmarkedRoute(list);
+
+        map = graph.getBookmarkedMap();
+        map.put("즐겨찾는 경로", graph.getBookmarkedRoute());
+
+        docRef.set(map)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error updating document", e);
+                    }
+                });
+    }
+
+    private void removeBookmarkedRoute() {
+        String value = departure + "역 " + arrival + "역";
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        graph.getBookmarkedRoute().remove(value);
+        DocumentReference docRef = db.collection("subwayData").document(mAuth.getUid());
+        docRef.update("즐겨찾는 역", FieldValue.arrayRemove(value));
+    }
+
+    private boolean isContained() {
+        String value = departure + "역 " + arrival + "역";
+        return graph.getBookmarkedRoute().contains(value);
     }
 
     public void setPageType(CustomAppGraph.SearchType type) {
@@ -240,12 +332,14 @@ public class ShortestPathActivity extends AppCompatActivity {
         {
             if (buttonType != pageType) {
                 // 버튼의 모양과 색을 다른 페이지에서 눌려져 있는 상태의 경우로 바꾼다.
+                setAlarmButton.setBackgroundResource(R.drawable.bg_white_ripple_stroke);
                 setAlarmButton.setImageResource(IC_ALARM_ANOTHER_SELECTED_FOREGROUND);
-                setAlarmButton.setColorFilter(Color.BLACK);
+                setAlarmButton.setColorFilter(Color.RED);
             } else {
                 // 버튼의 모양과 색을 눌려져 있는 상태의 경우로 바꾼다.
-                setAlarmButton.setImageResource(R.mipmap.ic_alarm_foreground);
-                setAlarmButton.setColorFilter(Color.RED);
+                setAlarmButton.setBackgroundResource(R.drawable.bg_white_ripple_stroke_red);
+                setAlarmButton.setImageResource(IC_ALARM_FOREGROUND);
+                setAlarmButton.setColorFilter(Color.WHITE);
             }
         }
     }
@@ -295,10 +389,21 @@ public class ShortestPathActivity extends AppCompatActivity {
         });
     }
 
+    // 툴바를 설정하는 메소드
+    private void setToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("길찾기");
+        toolbar.setTitleTextColor(Color.BLACK);
+        setSupportActionBar(toolbar);
+    }
+
     // 툴바의 액션버튼을 설정하는 메소드
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.quit_menu, menu);
+
+        Drawable drawable = menu.getItem(0).getIcon();
+        drawable.setColorFilter(new BlendModeColorFilter(ContextCompat.getColor(this, R.color.black), BlendMode.SRC_ATOP));
         return true;
     }
 
@@ -323,12 +428,10 @@ public class ShortestPathActivity extends AppCompatActivity {
 
             @Override
             public int compareTo(VertexCost vc) {
-                if (this.cost > vc.cost)
+                if (this.cost >= vc.cost)
                     return 1;
-                else if (this.cost < vc.cost)
-                    return -1;
                 else
-                    return 0;
+                    return -1;
             }
         }
 
@@ -373,9 +476,7 @@ public class ShortestPathActivity extends AppCompatActivity {
                 if (TYPE == CustomAppGraph.SearchType.MIN_TRANSFER) {
 
                     // 현재 역이 출발 역이라면
-                    if (parent.get(here) == here) {
-
-                    } else {
+                    if (parent.get(here) != here) {
                         ArrayList<Integer> prevLines = graph.getVertices().get(parent.get(here)).getLines();
                         ArrayList<Integer> hereLines = graph.getVertices().get(here).getLines();
                         ArrayList<Integer> thereLines = graph.getVertices().get(there).getLines();
@@ -424,7 +525,15 @@ public class ShortestPathActivity extends AppCompatActivity {
                 best.set(there, nextCost);
                 parent.set(there, here);
             }
+
+            if (TYPE == CustomAppGraph.SearchType.MIN_TRANSFER)
+                if ((Integer.parseInt(graph.getReverseMap().get(here)) >= 112 && Integer.parseInt(graph.getReverseMap().get(here)) <= 115) ||
+                        (Integer.parseInt(graph.getReverseMap().get(here)) >= 406 && Integer.parseInt(graph.getReverseMap().get(here)) <= 411) ||
+                        (Integer.parseInt(graph.getReverseMap().get(here)) >= 801 && Integer.parseInt(graph.getReverseMap().get(here)) <= 803) ||
+                        Integer.parseInt(graph.getReverseMap().get(here)) == 901)
+                    Log.d("test", "station : " + graph.getReverseMap().get(here) + " parent : " + graph.getReverseMap().get(parent.get(here)) + " here : " + best.get(here));
         }
+
 
         // 경로탐색이 끝남
 

@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -49,6 +50,7 @@ public class BookmarkActivity extends AppCompatActivity  {
     private ListView routeList;
 
     private CustomAppGraph graph;                   // 액티비티 간에 공유되는 데이터를 담는 클래스
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +76,8 @@ public class BookmarkActivity extends AppCompatActivity  {
         routeList = (ListView)findViewById(R.id.bookmark_listview_route);
 
         graph = (CustomAppGraph) getApplicationContext();       // 액티비티 간에 공유되는 데이터를 담는 클래스의 객체.
+
+        mContext = this;
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,graph.getBookmarkedStation());
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,graph.getBookmarkedRoute());
@@ -116,8 +120,10 @@ public class BookmarkActivity extends AppCompatActivity  {
                         Log.e("도착역", results[1].replaceAll("[^0-9]", ""));
 
                         //TODO. ShortestPathActivity로 연결
-                        //((MainActivity)MainActivity.mcontext).launchReport(intStr);
-                        //finish();
+                        Intent intent = new Intent(mContext, ShortestPathActivity.class);
+                        intent.putExtra("departureStation", results[0].replaceAll("[^0-9]", ""));
+                        intent.putExtra("destinationStation", results[1].replaceAll("[^0-9]", ""));
+                        startActivity(intent);
                     }
                 });
                 dialog.setNegativeButton("아니오", null);

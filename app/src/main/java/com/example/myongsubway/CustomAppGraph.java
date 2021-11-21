@@ -160,7 +160,6 @@ public class CustomAppGraph extends Application {
             = new HashMap<>();
     private final int LINE_COUNT = 9;                   // 호선의 개수
 
-
     @Override
     public void onCreate() {
         // 그래프 생성
