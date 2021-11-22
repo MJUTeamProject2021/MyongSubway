@@ -4,13 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.BlendMode;
+import android.graphics.BlendModeColorFilter;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -61,18 +67,16 @@ public class BookmarkActivity extends AppCompatActivity  {
         mAuth = FirebaseAuth.getInstance();
         DocumentReference docRef = db.collection("subwayData").document(mAuth.getUid());
 
+        Toolbar toolbarRoute = findViewById(R.id.bookmark_toolbar_route);
+        setSupportActionBar(toolbarRoute);
+        getSupportActionBar().setDisplayShowTitleEnabled(false); //기본 타이틀 보여줄지 말지 설정
+
         Toolbar toolbarStation = findViewById(R.id.bookmark_toolbar_station);
-        toolbarStation.setTitle("즐겨찾는 역");
-        toolbarStation.setTitleTextColor(Color.BLACK);
         setSupportActionBar(toolbarStation);
+        getSupportActionBar().setDisplayShowTitleEnabled(false); //기본 타이틀 보여줄지 말지 설정
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true); // 뒤로가기 버튼, 디폴트로 true만 해도 백버튼이 생김
 
         stationList = (ListView)findViewById(R.id.bookmark_listview_station);
-
-        Toolbar toolbarRoute = findViewById(R.id.bookmark_toolbar_route);
-        toolbarRoute.setTitle("즐겨찾는 경로");
-        toolbarRoute.setTitleTextColor(Color.BLACK);
-        setSupportActionBar(toolbarRoute);
-
         routeList = (ListView)findViewById(R.id.bookmark_listview_route);
 
         graph = (CustomAppGraph) getApplicationContext();       // 액티비티 간에 공유되는 데이터를 담는 클래스의 객체.
@@ -119,7 +123,6 @@ public class BookmarkActivity extends AppCompatActivity  {
                         Log.e("출발역", results[0].replaceAll("[^0-9]", ""));
                         Log.e("도착역", results[1].replaceAll("[^0-9]", ""));
 
-                        //TODO. ShortestPathActivity로 연결
                         Intent intent = new Intent(mContext, ShortestPathActivity.class);
                         intent.putExtra("departureStation", results[0].replaceAll("[^0-9]", ""));
                         intent.putExtra("destinationStation", results[1].replaceAll("[^0-9]", ""));
@@ -131,6 +134,18 @@ public class BookmarkActivity extends AppCompatActivity  {
             }
         });
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:{ //toolbar의 back키 눌렀을 때 동작
+                onBackPressed();
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     protected void onResume() {
         super.onResume();
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,graph.getBookmarkedRoute());
