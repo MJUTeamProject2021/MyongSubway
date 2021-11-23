@@ -157,54 +157,67 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
             case R.id.board_read_commentbutton:
 
                 //게시글에 댓글 개수를 늘려준다.
-                if(commentText.getText().toString().equals("")){
-                    Toast.makeText(this, "내용을 입력하세요.", Toast.LENGTH_SHORT).show();break;} //내용을 채워야 댓글을 달 수 있다.
-                FirebaseDatabase db = FirebaseDatabase.getInstance();
-                dr = db.getReference("Boards").child(item.getId()).child("commentnumber");
-                dr.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                        int num = Integer.parseInt(snapshot.getValue().toString());
-                        num+=1;
-                       dr.setValue(Integer.toString(num));
-                    }
-                    @Override
-                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                    }
-                });
 
-                //댓글을 생성한다
-                DatabaseReference dr = db.getReference("Comments");
-                dr.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull @NotNull DataSnapshot datasnapshot) {
+                    if (commentText.getText().toString().equals("")) {
+                        Toast.makeText(this, "내용을 입력하세요.", Toast.LENGTH_SHORT).show();
+                        break;
+                    } //내용을 채워야 댓글을 달 수 있다.
+                    FirebaseDatabase db = FirebaseDatabase.getInstance();
+                    dr = db.getReference("Boards").child(item.getId()).child("commentnumber");
+                    dr.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                            try{
+                            int num = Integer.parseInt(snapshot.getValue().toString());
+                            num += 1;
+                            dr.setValue(Integer.toString(num));}
+                            catch(Exception e){
+                                e.printStackTrace();
+                                Toast.makeText(BoardReadActivity.this, "이미 삭제된 글입니다.", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+                        }
 
-                        long num = datasnapshot.getChildrenCount();         //현재 댓글 갯수
+                        @Override
+                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                        }
+                    });
 
-                        for(DataSnapshot snapshot : datasnapshot.getChildren()){        //key가 같은지 거르기
-                            if(num <= Integer.parseInt(snapshot.getKey())){num = Integer.parseInt(snapshot.getKey())+1;}         //이미 같은 key존재시 id를증가
-                        }//같은 key가 아니거나 없을 시 반복문 종료
+                    //댓글을 생성한다
+                    DatabaseReference dr = db.getReference("Comments");
+                    dr.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull @NotNull DataSnapshot datasnapshot) {
 
-                        DatabaseReference databaseReference = dr.child(Long.toString(num));                    //데이터들 삽입
-                        databaseReference.child("id").setValue(Long.toString(num));
-                        databaseReference.child("boardid").setValue(item.getId());
-                        databaseReference.child("content").setValue(commentText.getText().toString());
-                        databaseReference.child("writer").setValue(graph.getEmail());
-                        databaseReference.child("time").setValue(new SimpleDateFormat("yy/MM/dd hh:mm").format(new Date(System.currentTimeMillis())));
-                        setCommentRefresh();
-                        commentText.setText("");
+                            long num = datasnapshot.getChildrenCount();         //현재 댓글 갯수
+
+                            for (DataSnapshot snapshot : datasnapshot.getChildren()) {        //key가 같은지 거르기
+                                if (num <= Integer.parseInt(snapshot.getKey())) {
+                                    num = Integer.parseInt(snapshot.getKey()) + 1;
+                                }         //이미 같은 key존재시 id를증가
+                            }//같은 key가 아니거나 없을 시 반복문 종료
+
+                            DatabaseReference databaseReference = dr.child(Long.toString(num));                    //데이터들 삽입
+                            databaseReference.child("id").setValue(Long.toString(num));
+                            databaseReference.child("boardid").setValue(item.getId());
+                            databaseReference.child("content").setValue(commentText.getText().toString());
+                            databaseReference.child("writer").setValue(graph.getEmail());
+                            databaseReference.child("time").setValue(new SimpleDateFormat("yy/MM/dd hh:mm").format(new Date(System.currentTimeMillis())));
+                            setCommentRefresh();
+                            commentText.setText("");
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                        }
+                    });
+                    InputMethodManager keyboard = imm;
+                    if (keyboard != null) {
+                        keyboard.hideSoftInputFromWindow(this.commentbutton.getWindowToken(), 0);
                     }
-                    @Override
-                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                    }
-                });
-                InputMethodManager keyboard = imm;
-                if(keyboard != null){
-                    keyboard.hideSoftInputFromWindow(this.commentbutton.getWindowToken(), 0);
+                      break;
                 }
 
-                break;
-        }
     }
 
     @Override

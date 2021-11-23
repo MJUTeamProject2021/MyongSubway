@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -49,18 +50,24 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.CustomViewHo
     public void onBindViewHolder(@NonNull @org.jetbrains.annotations.NotNull CustomViewHolder holder, int position) {
         CardItem item = mDataList.get(position);
 
-
-
-
         holder.title.setText(item.getTitle());
         holder.content.setText(item.getContent());
         holder.writer.setText("  |   "+item.getWriter());
         holder.commentnumber.setText(item.getCommentnumber());
+        //holder.time.setText(item.getTime());
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yy/MM/dd HH:mm");
-        Date tempDate = dateFormat.parse(item.getTime(), new ParsePosition(0));
-        Long tempLong = tempDate.getTime();
-        holder.time.setText(formatTimeString(tempLong));
+
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yy/MM/dd HH:mm");
+            Date tempDate = null;
+            tempDate = dateFormat.parse(item.getTime());
+            Long tempLong = tempDate.getTime();
+            System.out.println(tempDate);
+            holder.time.setText(formatTimeString(tempLong));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
     }
 
