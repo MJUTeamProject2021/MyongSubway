@@ -3,35 +3,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="165dp"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    app:cardElevation="8dp"
+    app:cardCornerRadius="0dp"
+    app:cardElevation="0dp"
     app:cardUseCompatPadding="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/round_layout"
+        android:background="@drawable/round_button_topmenubottom"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/board_title"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="30dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="5dp"
             android:text="이건제목"
             android:textColor="#000000"
-            android:textSize="25sp"
+            android:textSize="17dp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/board_content"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="25dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
             android:layout_marginRight="10dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:padding="0sp"
             android:textColor="#252525"
             android:textSize="15sp"
@@ -39,52 +41,45 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="35dp"
             android:orientation="horizontal"
-            android:weightSum="4">
+            android:weightSum="1">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/board_time"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="4"
-                android:orientation="vertical">
+                android:layout_height="25dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="0"
+                android:padding="0sp"
+                android:textColor="#000000"
+                android:textSize="13dp"
+                tools:text="작성시간: " />
 
-                <TextView
-                    android:id="@+id/board_writer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="25dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="2"
-                    android:padding="0sp"
-                    android:text="작성자"
-                    android:textColor="#000000"
-                    android:textSize="13sp"
-                    android:textStyle="bold"
-                    tools:text="작성자:" />
-
-                <TextView
-                    android:id="@+id/board_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="25dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="1"
-                    android:padding="0sp"
-                    android:textColor="#000000"
-                    android:textSize="10sp"
-                    tools:text="작성시간: " />
-            </LinearLayout>
+            <TextView
+                android:id="@+id/board_writer"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:padding="0sp"
+                android:text="작성자"
+                android:textColor="#000000"
+                android:textSize="13dp"
+                tools:text="작성자:" />
 
             <Button
                 android:id="@+id/board_commentnumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="0"
                 android:background="#00FFFFFF"
                 android:text="1"
-                android:textAlignment="viewStart"
+                android:textAlignment="center"
                 android:textColor="#202020"
-                android:textSize="14sp"
+                android:textSize="14dp"
                 app:icon="@drawable/ic_comment"
+                app:iconGravity="textEnd"
                 app:iconSize="20dp"
                 app:iconTint="#1E1E1E" />
 

@@ -4,8 +4,13 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -15,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -45,9 +51,8 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
     TextView commentText;
 
     Button commentbutton;
-    Button closeButton;
-    Button deleteButton;
-    Button modifyButton;
+
+    Toolbar myToolbar;
     LinearLayout commentLayout;
     ArrayList<CommentFragment> commentList = new ArrayList();
     CardItem item;
@@ -64,8 +69,11 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
 
         imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         graph = (CustomAppGraph)getApplicationContext();
+
         Intent intent = getIntent();
         item = (CardItem)intent.getSerializableExtra("item");
+
+        myToolbar = findViewById(R.id.board_read_toolbar);
 
         titleText = findViewById(R.id.board_read_title);
         contentText = findViewById(R.id.board_read_content);
@@ -73,17 +81,16 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
 
         commentText = findViewById(R.id.board_read_commenttext);
         commentLayout = findViewById(R.id.board_read_commentlayout);
-
-        closeButton = findViewById(R.id.board_read_close);
-        modifyButton = findViewById(R.id.board_read_modify);
-        deleteButton = findViewById(R.id.board_read_delete);
         commentbutton = findViewById(R.id.board_read_commentbutton);
-        modifyButton.setOnClickListener(this);
-        deleteButton.setOnClickListener(this);
-        closeButton.setOnClickListener(this);
+
         commentbutton.setOnClickListener(this);
 
-
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        final Drawable arrow = getResources().getDrawable(R.drawable.ic_left,null);
+        arrow.setTint(Color.BLACK);
+        getSupportActionBar().setTitle("");
+        myToolbar.setNavigationIcon(arrow);
 
     }
 
@@ -91,8 +98,7 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
     void setRefresh() {
         titleText.setText(item.getTitle());
         contentText.setText(item.getContent());
-        writerandtimeText.setText(item.getWriter()+"     "+item.getTime());
-        if(!item.getWriter().substring(5).equals(graph.getEmail())){deleteButton.setVisibility(View.INVISIBLE); modifyButton.setVisibility(View.INVISIBLE);}
+        writerandtimeText.setText(item.getWriter()+"  |   "+item.getTime());
     }
 
     //업데이트된 댓글들을 갱신한다.
@@ -146,12 +152,89 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onClick(View v) {
-        FragmentManager fragmentManager;
         switch (v.getId()) {
 
-            case R.id.board_read_close:
+            case R.id.board_read_commentbutton:
+
+                //게시글에 댓글 개수를 늘려준다.
+
+                    if (commentText.getText().toString().equals("")) {
+                        Toast.makeText(this, "내용을 입력하세요.", Toast.LENGTH_SHORT).show();
+                        break;
+                    } //내용을 채워야 댓글을 달 수 있다.
+                    FirebaseDatabase db = FirebaseDatabase.getInstance();
+                    dr = db.getReference("Boards").child(item.getId()).child("commentnumber");
+                    dr.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                            try{
+                            int num = Integer.parseInt(snapshot.getValue().toString());
+                            num += 1;
+                            dr.setValue(Integer.toString(num));}
+                            catch(Exception e){
+                                e.printStackTrace();
+                                Toast.makeText(BoardReadActivity.this, "이미 삭제된 글입니다.", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                        }
+                    });
+
+                    //댓글을 생성한다
+                    DatabaseReference dr = db.getReference("Comments");
+                    dr.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull @NotNull DataSnapshot datasnapshot) {
+
+                            long num = datasnapshot.getChildrenCount();         //현재 댓글 갯수
+
+                            for (DataSnapshot snapshot : datasnapshot.getChildren()) {        //key가 같은지 거르기
+                                if (num <= Integer.parseInt(snapshot.getKey())) {
+                                    num = Integer.parseInt(snapshot.getKey()) + 1;
+                                }         //이미 같은 key존재시 id를증가
+                            }//같은 key가 아니거나 없을 시 반복문 종료
+
+                            DatabaseReference databaseReference = dr.child(Long.toString(num));                    //데이터들 삽입
+                            databaseReference.child("id").setValue(Long.toString(num));
+                            databaseReference.child("boardid").setValue(item.getId());
+                            databaseReference.child("content").setValue(commentText.getText().toString());
+                            databaseReference.child("writer").setValue(graph.getEmail());
+                            databaseReference.child("time").setValue(new SimpleDateFormat("yy/MM/dd hh:mm").format(new Date(System.currentTimeMillis())));
+                            setCommentRefresh();
+                            commentText.setText("");
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                        }
+                    });
+                    InputMethodManager keyboard = imm;
+                    if (keyboard != null) {
+                        keyboard.hideSoftInputFromWindow(this.commentbutton.getWindowToken(), 0);
+                    }
+                      break;
+                }
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.read_menu, menu);
+       MenuItem deleteItem = (MenuItem)menu.findItem(R.id.board_read_delete);
+       MenuItem modifyItem = (MenuItem)menu.findItem(R.id.board_read_modify);
+        if(!item.getWriter().equals(graph.getEmail())){deleteItem.setVisible(false); modifyItem.setVisible(false);}
+        return true ;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem _item) {
+        switch (_item.getItemId()) {
+            case android.R.id.home:
                 finish();
-                break;
+                return true;
 
             case R.id.board_read_delete:
                 AlertDialog.Builder dlg = new AlertDialog.Builder(this);
@@ -170,7 +253,7 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
                                 filterQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                        for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                                             dataSnapshot.getRef().removeValue();
                                         }
                                     }
@@ -191,67 +274,20 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
                             }
                         });
                 dlg.show();
-                break;
+                return true;
 
-            case R.id.board_read_modify:                            //글을 수정한다.
+            case R.id.board_read_modify:
                 finish();
                 Intent intent = new Intent(this, BoardModifyActivity.class);
                 intent.putExtra("item", item);
                 startActivity(intent);
-                break;
+                return true;
 
-
-                //댓글을 다는 과정
-            case R.id.board_read_commentbutton:
-
-                //게시글에 댓글 개수를 늘려준다.
-                if(commentText.getText().toString().equals("")){
-                    Toast.makeText(this, "내용을 입력하세요.", Toast.LENGTH_SHORT).show();break;} //내용을 채워야 댓글을 달 수 있다.
-                FirebaseDatabase db = FirebaseDatabase.getInstance();
-                dr = db.getReference("Boards").child(item.getId()).child("commentnumber");
-                dr.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                        int num = Integer.parseInt(snapshot.getValue().toString());
-                        num+=1;
-                       dr.setValue(Integer.toString(num));
-                    }
-                    @Override
-                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                    }
-                });
-
-                //댓글을 생성한다
-                DatabaseReference dr = db.getReference("Comments");
-                dr.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull @NotNull DataSnapshot datasnapshot) {
-
-                        long num = datasnapshot.getChildrenCount();         //현재 댓글 갯수
-
-                        for(DataSnapshot snapshot : datasnapshot.getChildren()){        //key가 같은지 거르기
-                            if(num <= Integer.parseInt(snapshot.getKey())){num = Integer.parseInt(snapshot.getKey())+1;}         //이미 같은 key존재시 id를증가
-                        }//같은 key가 아니거나 없을 시 반복문 종료
-
-                        DatabaseReference databaseReference = dr.child(Long.toString(num));                    //데이터들 삽입
-                        databaseReference.child("id").setValue(Long.toString(num));
-                        databaseReference.child("boardid").setValue(item.getId());
-                        databaseReference.child("content").setValue(commentText.getText().toString());
-                        databaseReference.child("writer").setValue("작성자: "+graph.getEmail());
-                        databaseReference.child("time").setValue("작성시간: "+new SimpleDateFormat("yyyy-MM-dd hh:mm").format(new Date(System.currentTimeMillis())));
-                        setCommentRefresh();
-                        commentText.setText("");
-                    }
-                    @Override
-                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                    }
-                });
-                InputMethodManager keyboard = imm;
-                if(keyboard != null){
-                    keyboard.hideSoftInputFromWindow(this.commentbutton.getWindowToken(), 0);
-                }
-
-                break;
+            default:
+                return super.onOptionsItemSelected(_item);
         }
+
     }
+
+
 }
