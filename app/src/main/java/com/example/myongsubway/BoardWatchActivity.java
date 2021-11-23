@@ -6,12 +6,14 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -54,16 +56,15 @@ public class BoardWatchActivity extends AppCompatActivity implements BoardAdapte
         layoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(layoutManager);
 
-
-
         resetBoard();
     }
 
     //게시글들을 갱신한다.
     public void resetBoard(){
-
+        dataList.clear();
         db = FirebaseDatabase.getInstance();
         dr = db.getReference("Boards");
+
         dr.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot datasnapshot) {
@@ -87,6 +88,7 @@ public class BoardWatchActivity extends AppCompatActivity implements BoardAdapte
 
     @Override
     public void onItemClick(View v, int position) {
+
         final CardItem item = dataList.get(position);
         Intent intent = new Intent(getApplicationContext(), BoardReadActivity.class);
         intent.putExtra("item",item);
