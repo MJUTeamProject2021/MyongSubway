@@ -13,6 +13,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="60dp"
             android:orientation="vertical">
 
             <TextView
@@ -21,6 +22,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
+                android:layout_marginBottom="50dp"
+                android:textColor="@color/black"
                 android:textSize="24dp"
                 android:text="회원가입" />
 
@@ -28,32 +31,46 @@
                 android:id="@+id/signup_textview_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="사용하실 이메일을 입력해주세요" />
+                android:textSize="18dp"
+                android:textColor="@color/black"
+                android:text="   사용하실 이메일을 입력해주세요" />
 
             <EditText
                 android:id="@+id/signup_edittext_emailsignup"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:hint="user@gmail.com" />
+                android:layout_marginBottom="30dp"
+                android:hint="  user@gmail.com" />
 
             <TextView
                 android:id="@+id/signup_textview_password"
                 android:layout_width="match_parent"
+                android:textSize="18dp"
+                android:textColor="@color/black"
                 android:layout_height="wrap_content"
-                android:text="비밀번호를 입력해주세요" />
+                android:text="   사용하실 비밀번호를 입력해주세요" />
 
             <EditText
                 android:id="@+id/signup_edittext_passwordsignup"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:inputType="textPassword"
-                android:hint="****" />
+                android:hint="  ******"
+                android:layout_marginBottom="18dp"/>
 
-            <Button
-                android:id="@+id/signup_button_completesignup"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/signup_button_compltetsignup"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="회원가입" />
+                android:layout_height="52dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="30dp"
+                android:background="@drawable/round_layout"
+                android:textSize="18dp"
+                android:backgroundTint="#23B7FB"
+                android:text="회원가입"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF" />
         </LinearLayout>
 
     </FrameLayout>
