@@ -6,11 +6,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.CustomViewHolder> {
 
@@ -44,11 +48,20 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.CustomViewHo
     @Override
     public void onBindViewHolder(@NonNull @org.jetbrains.annotations.NotNull CustomViewHolder holder, int position) {
         CardItem item = mDataList.get(position);
+
+
+
+
         holder.title.setText(item.getTitle());
         holder.content.setText(item.getContent());
-        holder.writer.setText(item.getWriter());
-        holder.time.setText(item.getTime());
+        holder.writer.setText("  |   "+item.getWriter());
         holder.commentnumber.setText(item.getCommentnumber());
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yy/MM/dd HH:mm");
+        Date tempDate = dateFormat.parse(item.getTime(), new ParsePosition(0));
+        Long tempLong = tempDate.getTime();
+        holder.time.setText(formatTimeString(tempLong));
+
     }
 
     @Override
@@ -79,5 +92,33 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.CustomViewHo
                 }
             });
         }
+    }
+
+    //시간 변환 코드 출처 : https://milkissboy.tistory.com/31
+    private static class TIME_MAXIMUM{
+        public static final int SEC = 60;
+        public static final int MIN = 60;
+        public static final int HOUR = 24;
+        public static final int DAY = 30;
+        public static final int MONTH = 12;
+    }
+    public static String formatTimeString(long regTime) {
+        long curTime = System.currentTimeMillis();
+        long diffTime = (curTime - regTime) / 1000;
+        String msg = null;
+        if (diffTime < TIME_MAXIMUM.SEC) {
+            msg = "방금 전";
+        } else if ((diffTime /= TIME_MAXIMUM.SEC) < TIME_MAXIMUM.MIN) {
+            msg = diffTime + "분 전";
+        } else if ((diffTime /= TIME_MAXIMUM.MIN) < TIME_MAXIMUM.HOUR) {
+            msg = (diffTime) + "시간 전";
+        } else if ((diffTime /= TIME_MAXIMUM.HOUR) < TIME_MAXIMUM.DAY) {
+            msg = (diffTime) + "일 전";
+        } else if ((diffTime /= TIME_MAXIMUM.DAY) < TIME_MAXIMUM.MONTH) {
+            msg = (diffTime) + "달 전";
+        } else {
+            msg = (diffTime) + "년 전";
+        }
+        return msg;
     }
 }

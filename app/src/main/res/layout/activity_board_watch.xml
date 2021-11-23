@@ -24,7 +24,7 @@
             <Button
                 android:id="@+id/fragment_boardwatch_close"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/bg_white_ripple"
                 android:backgroundTint="#00000000"
@@ -52,7 +52,7 @@
             <Button
                 android:id="@+id/fragment_boardwatch_reset"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/bg_white_ripple"
                 android:backgroundTint="#006A6C6E"

@@ -82,8 +82,8 @@ public class BoardWriteActivity extends AppCompatActivity implements View.OnClic
                                         databaseReference.child("id").setValue(Long.toString(num));
                                         databaseReference.child("title").setValue(titleText.getText().toString());
                                         databaseReference.child("content").setValue(contentText.getText().toString());
-                                        databaseReference.child("writer").setValue("작성자: "+graph.getEmail());
-                                        databaseReference.child("time").setValue("작성시간: "+new SimpleDateFormat("yyyy-MM-dd hh:mm").format(new Date(System.currentTimeMillis())));
+                                        databaseReference.child("writer").setValue(graph.getEmail());
+                                        databaseReference.child("time").setValue(new SimpleDateFormat("yy/MM/dd HH:mm").format(new Date(System.currentTimeMillis())));
                                         databaseReference.child("commentnumber").setValue("0");
 
                                     }

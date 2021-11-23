@@ -4,8 +4,13 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -15,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -45,9 +51,8 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
     TextView commentText;
 
     Button commentbutton;
-    Button closeButton;
-    Button deleteButton;
-    Button modifyButton;
+
+    Toolbar myToolbar;
     LinearLayout commentLayout;
     ArrayList<CommentFragment> commentList = new ArrayList();
     CardItem item;
@@ -64,8 +69,11 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
 
         imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         graph = (CustomAppGraph)getApplicationContext();
+
         Intent intent = getIntent();
         item = (CardItem)intent.getSerializableExtra("item");
+
+        myToolbar = findViewById(R.id.board_read_toolbar);
 
         titleText = findViewById(R.id.board_read_title);
         contentText = findViewById(R.id.board_read_content);
@@ -73,17 +81,16 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
 
         commentText = findViewById(R.id.board_read_commenttext);
         commentLayout = findViewById(R.id.board_read_commentlayout);
-
-        closeButton = findViewById(R.id.board_read_close);
-        modifyButton = findViewById(R.id.board_read_modify);
-        deleteButton = findViewById(R.id.board_read_delete);
         commentbutton = findViewById(R.id.board_read_commentbutton);
-        modifyButton.setOnClickListener(this);
-        deleteButton.setOnClickListener(this);
-        closeButton.setOnClickListener(this);
+
         commentbutton.setOnClickListener(this);
 
-
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        final Drawable arrow = getResources().getDrawable(R.drawable.ic_left,null);
+        arrow.setTint(Color.BLACK);
+        getSupportActionBar().setTitle("");
+        myToolbar.setNavigationIcon(arrow);
 
     }
 
@@ -91,8 +98,7 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
     void setRefresh() {
         titleText.setText(item.getTitle());
         contentText.setText(item.getContent());
-        writerandtimeText.setText(item.getWriter()+"     "+item.getTime());
-        if(!item.getWriter().substring(5).equals(graph.getEmail())){deleteButton.setVisibility(View.INVISIBLE); modifyButton.setVisibility(View.INVISIBLE);}
+        writerandtimeText.setText(item.getWriter()+"  |   "+item.getTime());
     }
 
     //업데이트된 댓글들을 갱신한다.
@@ -146,62 +152,8 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onClick(View v) {
-        FragmentManager fragmentManager;
         switch (v.getId()) {
 
-            case R.id.board_read_close:
-                finish();
-                break;
-
-            case R.id.board_read_delete:
-                AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-                dlg.setTitle("글을 삭제하시겠습니까?");
-                dlg.setMessage("삭제하시려면 예를 눌러주세요");
-                dlg.setPositiveButton("예",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {                //글을 삭제한다.
-
-                                db = FirebaseDatabase.getInstance();
-                                dr = db.getReference("Boards").child(item.getId());
-                                dr.removeValue();
-
-                                dr = db.getReference();
-                                Query filterQuery = dr.child("Comments").orderByChild("boardid").equalTo(item.getId());
-                                filterQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                        for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
-                                            dataSnapshot.getRef().removeValue();
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                                    }
-                                });
-
-                                finish();
-                                Toast.makeText(getApplicationContext(), "글을 삭제하였습니다.", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                dlg.setNegativeButton("아니오",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        });
-                dlg.show();
-                break;
-
-            case R.id.board_read_modify:                            //글을 수정한다.
-                finish();
-                Intent intent = new Intent(this, BoardModifyActivity.class);
-                intent.putExtra("item", item);
-                startActivity(intent);
-                break;
-
-
-                //댓글을 다는 과정
             case R.id.board_read_commentbutton:
 
                 //게시글에 댓글 개수를 늘려준다.
@@ -237,8 +189,8 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
                         databaseReference.child("id").setValue(Long.toString(num));
                         databaseReference.child("boardid").setValue(item.getId());
                         databaseReference.child("content").setValue(commentText.getText().toString());
-                        databaseReference.child("writer").setValue("작성자: "+graph.getEmail());
-                        databaseReference.child("time").setValue("작성시간: "+new SimpleDateFormat("yyyy-MM-dd hh:mm").format(new Date(System.currentTimeMillis())));
+                        databaseReference.child("writer").setValue(graph.getEmail());
+                        databaseReference.child("time").setValue(new SimpleDateFormat("yy/MM/dd hh:mm").format(new Date(System.currentTimeMillis())));
                         setCommentRefresh();
                         commentText.setText("");
                     }
@@ -254,4 +206,75 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
                 break;
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.read_menu, menu);
+       MenuItem deleteItem = (MenuItem)menu.findItem(R.id.board_read_delete);
+       MenuItem modifyItem = (MenuItem)menu.findItem(R.id.board_read_modify);
+        if(!item.getWriter().equals(graph.getEmail())){deleteItem.setVisible(false); modifyItem.setVisible(false);}
+        return true ;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem _item) {
+        switch (_item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+
+            case R.id.board_read_delete:
+                AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+                dlg.setTitle("글을 삭제하시겠습니까?");
+                dlg.setMessage("삭제하시려면 예를 눌러주세요");
+                dlg.setPositiveButton("예",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {                //글을 삭제한다.
+
+                                db = FirebaseDatabase.getInstance();
+                                dr = db.getReference("Boards").child(item.getId());
+                                dr.removeValue();
+
+                                dr = db.getReference();
+                                Query filterQuery = dr.child("Comments").orderByChild("boardid").equalTo(item.getId());
+                                filterQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                            dataSnapshot.getRef().removeValue();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                                    }
+                                });
+
+                                finish();
+                                Toast.makeText(getApplicationContext(), "글을 삭제하였습니다.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                dlg.setNegativeButton("아니오",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                dlg.show();
+                return true;
+
+            case R.id.board_read_modify:
+                finish();
+                Intent intent = new Intent(this, BoardModifyActivity.class);
+                intent.putExtra("item", item);
+                startActivity(intent);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(_item);
+        }
+
+    }
+
+
 }
