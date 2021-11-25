@@ -16,7 +16,7 @@
     <color name="tabUnSelectedColor">#808487</color>
 
     <!--UI Basic Color-->
-    <color name="basicColor">#536AE8</color>
+    <color name="basicColor">#0000ff</color>
 
     <!--각 호선의 색-->
     <color name="line1Color">#FF009688</color>

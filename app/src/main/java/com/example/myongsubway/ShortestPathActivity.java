@@ -368,22 +368,52 @@ public class ShortestPathActivity extends AppCompatActivity {
                 switch (v.getId()) {
                     case R.id.bookmarkButton:
 
-                        if (isContained()) {
-                            // 이미 켜져있을 때, 버튼의 이미지를 빈 별의 이미지로 바꾼다.
-                            bookmarkButton.setBackgroundResource(R.mipmap.ic_star_unselected_foreground);
-                            // 해당 경로의 즐겨찾기를 제거한다.
-                            removeBookmarkedRoute();
+                        // 로그인된 상태일 때만 즐겨찾기 가능
+                        if (graph.isLogined()) {
+                            if (isContained()) {
+                                // 이미 켜져있을 때, 버튼의 이미지를 빈 별의 이미지로 바꾼다.
+                                bookmarkButton.setBackgroundResource(R.mipmap.ic_star_unselected_foreground);
+                                // 해당 경로의 즐겨찾기를 제거한다.
+                                removeBookmarkedRoute();
+                            } else {
+                                // 이미 꺼져있을 때, 버튼의 이미지를 노란 별의 이미지로 바꾼다.
+                                bookmarkButton.setBackgroundResource(R.mipmap.ic_star_selected_foreground);
+                                // 해당 경로의 즐겨찾기를 추가한다.
+                                addBookmarkedRoute();
+                            }
                         } else {
-                            // 이미 꺼져있을 때, 버튼의 이미지를 노란 별의 이미지로 바꾼다.
-                            bookmarkButton.setBackgroundResource(R.mipmap.ic_star_selected_foreground);
-                            // 해당 경로의 즐겨찾기를 추가한다.
-                            addBookmarkedRoute();
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(ShortestPathContext);
+                            builder.setTitle("로그인이 필요합니다.");
+                            builder.setMessage("로그인 창으로 이동하시겠습니까?");
+                            builder.setPositiveButton("확인",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // TODO : 로그인 창으로 연결
+                                        }
+                                    });
+                            builder.setNegativeButton("취소",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                        }
+                                    });
+
+                            AlertDialog alert = builder.create();
+                            alert.setOnShowListener(new DialogInterface.OnShowListener() {
+                                @Override
+                                public void onShow(DialogInterface dialog) {
+                                    alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLUE);
+                                    alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLUE);
+                                }
+                            });
+
+                            alert.show();
                         }
                         break;
 
                     case R.id.setAlarmButton:
-                        // TODO : 알람 설정 기능
-
+                        
                         if (!isButtonClicked) {
                             buttonType = pageType;
                             isButtonClicked = true;
