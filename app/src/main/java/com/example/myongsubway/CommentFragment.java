@@ -134,7 +134,7 @@ public class CommentFragment extends Fragment implements View.OnClickListener {
                 dlg.setPositiveButton("예",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                if(!getWriter().substring(5).equals(graph.getEmail())){
+                                if(!getWriter().equals(graph.getEmail())){
                                     Toast.makeText(getContext(), "본인의 댓글만 지울 수 있습니다.", Toast.LENGTH_SHORT).show();
                                 }
                                 else{
