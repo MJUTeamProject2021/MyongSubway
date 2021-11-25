@@ -43,6 +43,7 @@ public class StationInformationFragment extends Fragment implements View.OnClick
     private TextView update;
     private TextView airstate;
     private TextView pmq;
+    private TextView congestion;
     private Button reportButton;
     private Button closeButton;
     private CustomAppGraph.Vertex vertex;
@@ -91,6 +92,7 @@ public class StationInformationFragment extends Fragment implements View.OnClick
         update = v.findViewById(R.id.fragment_information_update);
         buildingLayout = v.findViewById(R.id.fragment_surrounding_building);
         restuarentLayout = v.findViewById(R.id.fragment_surrounding_restuarent);
+        congestion = v.findViewById(R.id.fragment_information_congestion);
 
         number.setOnClickListener(this);
         closeButton.setOnClickListener(this);
@@ -128,6 +130,8 @@ public class StationInformationFragment extends Fragment implements View.OnClick
         for(int i=0;i<vertex.getAdjacent().size();i++){
             TextView tv = new TextView(getContext());
             tv.setText(graph.getReverseMap().get(vertex.getAdjacent().get(i))+"역");
+            tv.setTextColor(Color.rgb(0,0,0));
+            tv.setGravity(Gravity.CENTER_HORIZONTAL);
             adjacentLayout.addView(tv);
         }
         //동적으로 역 내 편의시설보여주기
@@ -135,15 +139,20 @@ public class StationInformationFragment extends Fragment implements View.OnClick
         for(int i=0;i<facilities.length;i++){
             TextView tv = new TextView(getContext());
             tv.setText(facilities[i]);
+            tv.setTextColor(Color.rgb(0,0,0));
+            tv.setGravity(Gravity.CENTER_HORIZONTAL);
             facilitiesLayout.addView(tv);
         }
         //화장실 및 내리는 문 위치
         if(vertex.getToilet()==false) {
             toilet.setText("없음");
+            toilet.setTextColor(Color.rgb(0,0,0));
         }else{
             toilet.setText("있음");
+            toilet.setTextColor(Color.rgb(0,0,0));
         }
         door.setText(vertex.getDoorDirection());
+        door.setTextColor(Color.rgb(0,0,0));
 
         facilities = vertex.getNearbyFacilities();
         for(int i=0;i<facilities.length;i++){
@@ -161,6 +170,14 @@ public class StationInformationFragment extends Fragment implements View.OnClick
             tv.setGravity(Gravity.CENTER);
             tv.setText(facilities[i]);
             restuarentLayout.addView(tv);
+        }
+        //혼잡도
+        if(vertex.getCongestion().equals("여유")){
+           congestion.setText("평균적으로 \n여유로운 역입니다");congestion.setTextColor(Color.rgb(0,0,255));
+        }else if(vertex.getCongestion().equals("보통")){
+            congestion.setText("평균적으로 \n혼잡하지 않은 역입니다.");congestion.setTextColor(Color.rgb(0,255,0));
+        }else{
+            congestion.setText("평균적으로 \n혼잡한 역입니다.");congestion.setTextColor(Color.rgb(255,0,0));
         }
 
         AirThread at = new AirThread();
