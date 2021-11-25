@@ -4,8 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -105,7 +107,6 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
         setDestiGray();
         setDestiInvisible();
     }
-
 
     //Report 프래그먼트 종료
     void destroyFragment(){

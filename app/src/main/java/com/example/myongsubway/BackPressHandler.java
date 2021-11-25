@@ -2,6 +2,7 @@ package com.example.myongsubway;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Intent;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
@@ -20,8 +21,11 @@ public class BackPressHandler {
             return;
         }
         if(System.currentTimeMillis() <= backPressedTime + 1800){
-            ActivityCompat.finishAffinity(mainactivity);
-            System.exit(0);
+
+            mainactivity.finishAndRemoveTask();
+            
+            /*ActivityCompat.finishAffinity(mainactivity);
+            System.exit(0);*/
         }
     }
 }

@@ -83,7 +83,7 @@ public class SignUpFragment extends Fragment {
 
         email = v.findViewById(R.id.signup_edittext_emailsignup);
         password = v.findViewById(R.id.signup_edittext_passwordsignup);
-        complete = v.findViewById(R.id.signup_button_completesignup);
+        complete = v.findViewById(R.id.signup_button_compltetsignup);
 
         //파이어스토어에 접근하기 위한 객체
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -94,6 +94,17 @@ public class SignUpFragment extends Fragment {
         complete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(getEmail().isEmpty()){
+                    email.setError("이메일을 입력해주세요");
+                    email.requestFocus();
+                    return;
+                }
+
+                if(getPassword().isEmpty()){
+                    password.setError("비밀번호를 입력해주세요");
+                    password.requestFocus();
+                    return;
+                }
                 mAuth.createUserWithEmailAndPassword(getEmail(), getPassword())
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
