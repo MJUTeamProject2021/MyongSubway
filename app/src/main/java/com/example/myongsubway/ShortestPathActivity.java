@@ -10,14 +10,16 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BlendMode;
 import android.graphics.BlendModeColorFilter;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,60 +37,64 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.Random;
 
 import static android.content.ContentValues.TAG;
 
 public class ShortestPathActivity extends AppCompatActivity {
-    private ViewPager2 viewPager;               // 뷰페이저
-    private FragmentStateAdapter pagerAdapter;  // 뷰페이저 어댑터
-    private TabLayout tabLayout;                // 탭들을 담는 탭 레이아웃
-    private final List<String> tabElement = Arrays.asList("최소시간", "최단거리", "최소비용", "최소환승");  // 탭을 채울 텍스트
+    private ViewPager2 viewPager;                           // 뷰페이저
+    private FragmentStateAdapter pagerAdapter;              // 뷰페이저 어댑터
+    private TabLayout tabLayout;                            // 탭들을 담는 탭 레이아웃
+    private final List<String> tabElement =
+            Arrays.asList("최소시간", "최단거리", "최소비용", "최소환승");  // 탭을 채울 텍스트
 
 
-    private String departure, arrival;              // 출발역과 도착역
-    private ArrayList<ArrayList<Integer>> paths;    // 출발역 ~ 도착역의 경로를 저장하는 리스트, 순서대로 최소시간, 최단거리, 최소비용, 최소환승의 경로가 저장됨
-    private ArrayList<ArrayList<Integer>> allCosts; // 소요시간, 소요거리, 소요비용, 환승횟수를 저장하는 리스트, 순서대로 최소시간, 최단거리, 최소비용, 환승횟수의 경우가 저장됨
-    private ArrayList<ArrayList<Integer>> allLines; // 경로의 각 역의 호선을 저장하는 리스트
-    private final int TYPE_COUNT = 4;               // SearchType 의 경우의 수 (최소시간, 최단거리, 최소비용)
+    private String departure, arrival;                      // 출발역과 도착역
+    private ArrayList<ArrayList<Integer>> paths;            // 출발역 ~ 도착역의 경로를 저장하는 리스트, 순서대로 최소시간, 최단거리, 최소비용, 최소환승의 경로가 저장됨
+    private ArrayList<ArrayList<Integer>> allCosts;         // 소요시간, 소요거리, 소요비용, 환승횟수를 저장하는 리스트, 순서대로 최소시간, 최단거리, 최소비용, 환승횟수의 경우가 저장됨
+    private ArrayList<ArrayList<Integer>> allLines;         // 경로의 각 역의 호선을 저장하는 리스트
+    private final int TYPE_COUNT = 4;                       // SearchType 의 경우의 수 (최소시간, 최단거리, 최소비용)
     private final int POINT = 100;
 
-    private ImageButton setAlarmButton;             // 도착알람 설정 버튼
+    private ImageButton setAlarmButton;                     // 도착알람 설정 버튼
 
-    private CustomAppGraph graph;                   // 액티비티 간에 공유되는 데이터를 담는 클래스
-    private FirebaseAuth mAuth;                     // 파이어베이스의 uid 를 참조하기 위해 필요한 변수
+    private CustomAppGraph graph;                           // 액티비티 간에 공유되는 데이터를 담는 클래스
+    private FirebaseAuth mAuth;                             // 파이어베이스의 uid 를 참조하기 위해 필요한 변수
 
-    private ArrayList<Integer> btnBackgrounds;      // 역을 나타내는 버튼들의 background xml 파일의 id를 저장하는 리스트
-    private ArrayList<Integer> lineColors;          // 호선의 색들을 담고있는 리스트
+    private ArrayList<Integer> btnBackgrounds;              // 역을 나타내는 버튼들의 background xml 파일의 id를 저장하는 리스트
+    private ArrayList<Integer> lineColors;                  // 호선의 색들을 담고있는 리스트
 
-    ImageButton bookmarkButton;                     // 즐겨찾기 등록 버튼
-    boolean isSelected = false;                     // 즐겨찾기 버튼이 눌렸는지를 나타내는 상태변수
+    private ImageButton bookmarkButton;                     // 즐겨찾기 등록 버튼
+    private boolean isSelected = false;                     // 즐겨찾기 버튼이 눌렸는지를 나타내는 상태변수
 
-    boolean isButtonClicked = false;
-    CustomAppGraph.SearchType pageType;
-    CustomAppGraph.SearchType buttonType;
+    private boolean isButtonClicked = false;                // 알람버튼이 눌렸는지를 확인하는 상태변수
+    private CustomAppGraph.SearchType pageType;             // 현재 켜져있는 페이지의 타입
+    private CustomAppGraph.SearchType buttonType;           // 알람을 등록했을 때 페이지의 타입
 
-    Context mContext = this;
+    private AlarmManager alarmManager;                      // 알람 등록을 위한 알람매니저
+    private int registeredAlarmCount = 0;                   // 등록된 알람의 개수
 
-    final int IC_ALARM_FOREGROUND = R.mipmap.ic_alarm_foreground;
-    final int IC_ALARM_ANOTHER_SELECTED_FOREGROUND = R.mipmap.ic_alarm_another_selected_foreground;
+    public static Context ShortestPathContext;              // AlarmReceiver 에서 해당 액티비티의 메소드를 호출하기 위한 스태틱 변수
+
+    final int IC_NORMAL_ALARM_BUTTON =                      // 알람이 등록되지 않은 평범한 상태의 알람 버튼 아이콘 
+            R.mipmap.ic_alarm_foreground;
+    final int IC_ANOTHER_SELECTED_ALARM_BUTTON =            // 이미 다른 페이지에서 알람이 등록된 상태의 알람 버튼 아이콘
+            R.mipmap.ic_alarm_another_selected_foreground;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,8 +124,10 @@ public class ShortestPathActivity extends AppCompatActivity {
         setPagerAndTabLayout();
     }
 
-    // 초기화하는 메소드
+    // 초기설정을 한다.
     private void init() {
+        ShortestPathContext = this;
+
         // 변수  초기화
         graph = (CustomAppGraph) getApplicationContext();       // 액티비티 간에 공유되는 데이터를 담는 클래스의 객체.
         if (graph == null) return;
@@ -158,14 +166,198 @@ public class ShortestPathActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         initBookmarkButton();
+        initAlarmButton();
     }
 
+    // 즐겨찾기 버튼을 초기화한다.
     private void initBookmarkButton() {
         if (isContained()) {
             bookmarkButton.setBackgroundResource(R.mipmap.ic_star_selected_foreground);
         } else {
             bookmarkButton.setBackgroundResource(R.mipmap.ic_star_unselected_foreground);
         }
+    }
+
+    // 알람 버튼을 초기화한다.
+    private void initAlarmButton() {
+        //Log.d("test", "initAlarmButton");
+
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        String alarmKey = graph.getAlarmKey();
+        String key = departure + "-" + arrival;
+        //Log.d("test", "alarmKey : " + alarmKey + " key : " + key);
+
+        // 등록한 알람의 키와 현재 경로의 키가 다를때
+        if (!key.equals(alarmKey)) {
+            //Log.d("test", "alarmKey != key");
+
+            // 다른 경로에 등록된 알람이 있을 때
+            if (alarmKey != null) {
+                isButtonClicked = true;
+                buttonType = CustomAppGraph.SearchType.NONE;
+            }
+
+        }
+        else
+        // 등록한 알람의 키와 현재 경로의 키가 같을 때 => 알람을 등록했던 경로일 때
+        {
+            //Log.d("test", "alarmKey == key");
+            isButtonClicked = true;
+            SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+            // 현재 경로와 같은 페이지에 등록된 알람이 있다면
+            int index = sharedPref.getInt(alarmKey, -1);
+            if (index != -1) {
+                CustomAppGraph.SearchType sharedPrefButtonType = CustomAppGraph.SearchType.values()[index];
+                buttonType = sharedPrefButtonType;
+            }
+            //Log.d("test", "initAlarmButton, key : " + key + " value : " + index);
+        }
+    }
+
+    // 알람이 하나씩 종료될 때 마다 호출된다.
+    // 등록된 모든 알람이 종료되면 등록된 모든 알람을 제거한다.
+    public void finishAlarm() {
+        //Log.d("test", "finishAlarm");
+
+        // 알람이 모두 종료되면
+        if (graph.decreaseAlarmNum() == 0) {
+            isButtonClicked = false;
+
+            // 버튼의 모양과 색을 원래대로 돌린다.
+            setAlarmButton.setBackgroundResource(R.drawable.bg_white_ripple_stroke);
+            setAlarmButton.setImageResource(R.mipmap.ic_alarm_foreground);
+            setAlarmButton.setColorFilter(getResources().getColor(R.color.moreGray, null));
+
+            // 현재 등록된 알람을 제거한다.
+            graph.destroyAlarm();
+        }
+    }
+
+    // 알람을 등록한다.
+    private void registerAlarm() {
+        // 초를 밀리세컨드로 변환하기 위한 상수 , 현재는 디버깅을 위해 10으로 설정.
+        // TODO : 실제 시간으로 설정하기 위해선 1000으로 바꿔야함
+        final int CONSTANT_FOR_CONVERT = 10;
+
+        // 환승을 위해 하차할 때 마다 알람이 울리도록 설정한다.
+        ArrayList<Integer> lines = allLines.get(pageType.ordinal());
+        ArrayList<Integer> path = paths.get(pageType.ordinal());
+
+        int prevLine = lines.get(0);            // 이전 호선을 나타낸다. 초기값은 첫번째 역의 호선
+        int cumulative = 0;                     // 다음역으로 갈 때마다 누적되는 시간을 나타낸다.
+        int alarmCount = 0;                     // 알람을 등록할 때마다 증가하는 변수
+
+        // 호선을 비교하여 알람을 등록할 때를 찾는다.
+        for (int i = 0; i < lines.size(); i++) {
+            // 현재역까지 걸리는 시간을 갱신한다.
+            if (i != 0) {
+                cumulative += graph.getAdjacent().get(path.get(i - 1)).get(path.get(i)).getCost(CustomAppGraph.SearchType.MIN_TIME);
+            }
+
+            // 현재 역의 호선이 이전 역의 호선과 다른 호선이면 => 환승을 위해 하차해야하는 역이면
+            if (lines.get(i) != prevLine) {
+                CustomAppGraph.Vertex getOffStation = graph.getVertices().get(path.get(i));
+                int halfTimeBeforeGetOff = cumulative - (graph.getAdjacent().get(path.get(i - 1)).get(path.get(i)).getCost(CustomAppGraph.SearchType.MIN_TIME) / 2);
+                int oneMinuteAgoBeforeGetOff = cumulative - 60;
+
+                //Log.d("test", "cumulative : " + cumulative);
+                startAlarm(halfTimeBeforeGetOff * CONSTANT_FOR_CONVERT, alarmCount++, getOffStation);
+                startAlarm(oneMinuteAgoBeforeGetOff * CONSTANT_FOR_CONVERT, alarmCount++, getOffStation);
+            }
+            // 가장 마지막의 하차역이면
+            else if (i == lines.size() - 1) {
+                CustomAppGraph.Vertex getOffStation = graph.getVertices().get(path.get(i));
+                int halfTimeBeforeGetOff = cumulative - (graph.getAdjacent().get(path.get(i - 1)).get(path.get(i)).getCost(CustomAppGraph.SearchType.MIN_TIME) / 2);
+                int oneMinuteAgoBeforeGetOff = cumulative - 60;
+
+                //Log.d("test", "cumulative : " + cumulative);
+                startAlarm(halfTimeBeforeGetOff * CONSTANT_FOR_CONVERT, alarmCount++, getOffStation);
+                startAlarm(oneMinuteAgoBeforeGetOff * CONSTANT_FOR_CONVERT, alarmCount++, getOffStation);
+            }
+
+            // 이전역을 갱신한다.
+            prevLine = lines.get(i);
+        }
+
+        // 등록될 알람의 개수를 저장한다.
+        registeredAlarmCount = alarmCount;
+        graph.setAlarmCount(registeredAlarmCount);
+        //Log.d("test", "registeredAlarmCount : " + registeredAlarmCount);
+
+        //Log.d("test", "total elapsed Time : " + allCosts.get(pageType.ordinal()).get(CustomAppGraph.SearchType.MIN_TIME.ordinal()));
+
+        // SharedPreference 에 현재 알람 내용을 저장한다.
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        String key = departure + "-" + arrival;
+        editor.putInt(key, buttonType.ordinal());
+        editor.apply();
+        //Log.d("test", "registerAlarm, key : " + key + " value : " + buttonType.ordinal());
+
+        // 공유클래스에 현재 등록하는 알람의 키를 저장한다.
+        graph.setAlarmKey(key);
+    }
+
+    // 새로운 알람을 시작한다.
+    private void startAlarm(int elapsedMilliSec, int requestId, CustomAppGraph.Vertex vertex) {
+        // 캘린더 객체를 받아와 알람을 울릴 시간을 설정한다.
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis() + elapsedMilliSec);
+
+        /** date 포맷을 이용해 알람이 등록되는 시간을 확인한다. */
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.KOREA);
+        Log.d("test", (sdf.format(calendar.getTime()).toString()));
+
+        // 얻어온 캘린더 객체가 현재의 캘린더 객체보다 이전의 것이면 갱신한다.
+        if (calendar.before(Calendar.getInstance())) {
+            calendar.add(Calendar.DATE, 1);
+        }
+
+        // 캘린더 객체에 설정된 시간에 맞춰 알람이 울리도록 한다.
+        if (alarmManager != null) {
+            Intent intent = new Intent(ShortestPathContext, AlarmReceiver.class);
+
+            Bundle bundle = new Bundle();
+            bundle.putString("station", vertex.getVertex());
+            bundle.putString("doorDirection", vertex.getDoorDirection());
+            intent.putExtras(bundle);
+
+            PendingIntent alarmIntent = PendingIntent.getBroadcast(ShortestPathContext, requestId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
+
+            // toast 를 띄운다.
+            Toast.makeText(ShortestPathContext, "알람이 등록되었습니다.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // 등록된 모든 알람을 해제한다.
+    public void cancelAlarm() {
+        //Log.d("test", "cancelAlarm");
+
+        for (int i = 0; i < registeredAlarmCount; i++) {
+            Intent intent = new Intent(ShortestPathContext, AlarmReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(ShortestPathContext, i, intent, PendingIntent.FLAG_NO_CREATE);
+            alarmManager.cancel(pendingIntent);
+        }
+
+        // 등록된 알람의 개수를 초기화하고 공유클래스의 알람의 개수도 초기화한다.
+        registeredAlarmCount = 0;
+        graph.setAlarmCount(0);
+
+        // SharedPreference 에 저장된 키-값을 제거한다.
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        String key = departure + "-" + arrival;
+        editor.remove(key);
+        editor.commit();
+
+        // 알람이 모두 해제되었으므로 공유클래스의 키값을 초기화한다.
+        graph.setAlarmKey(null);
+
+        // toast 를 띄운다.
+        Toast.makeText(ShortestPathContext, "알람이 해제되었습니다.", Toast.LENGTH_SHORT).show();
     }
 
     // 버튼에 클릭리스너를 등록하는 메소드
@@ -175,24 +367,53 @@ public class ShortestPathActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.bookmarkButton:
-                        // TODO : 즐겨찾기 등록 기능
-                        
-                        if (isContained()) {
-                            // 이미 켜져있을 때, 버튼의 이미지를 빈 별의 이미지로 바꾼다.
-                            bookmarkButton.setBackgroundResource(R.mipmap.ic_star_unselected_foreground);
-                            // 해당 경로의 즐겨찾기를 제거한다.
-                            removeBookmarkedRoute();
+
+                        // 로그인된 상태일 때만 즐겨찾기 가능
+                        if (graph.isLogined()) {
+                            if (isContained()) {
+                                // 이미 켜져있을 때, 버튼의 이미지를 빈 별의 이미지로 바꾼다.
+                                bookmarkButton.setBackgroundResource(R.mipmap.ic_star_unselected_foreground);
+                                // 해당 경로의 즐겨찾기를 제거한다.
+                                removeBookmarkedRoute();
+                            } else {
+                                // 이미 꺼져있을 때, 버튼의 이미지를 노란 별의 이미지로 바꾼다.
+                                bookmarkButton.setBackgroundResource(R.mipmap.ic_star_selected_foreground);
+                                // 해당 경로의 즐겨찾기를 추가한다.
+                                addBookmarkedRoute();
+                            }
                         } else {
-                            // 이미 꺼져있을 때, 버튼의 이미지를 노란 별의 이미지로 바꾼다.
-                            bookmarkButton.setBackgroundResource(R.mipmap.ic_star_selected_foreground);
-                            // 해당 경로의 즐겨찾기를 추가한다.
-                            addBookmarkedRoute();
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(ShortestPathContext);
+                            builder.setTitle("로그인이 필요합니다.");
+                            builder.setMessage("로그인 창으로 이동하시겠습니까?");
+                            builder.setPositiveButton("확인",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // TODO : 로그인 창으로 연결
+                                        }
+                                    });
+                            builder.setNegativeButton("취소",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                        }
+                                    });
+
+                            AlertDialog alert = builder.create();
+                            alert.setOnShowListener(new DialogInterface.OnShowListener() {
+                                @Override
+                                public void onShow(DialogInterface dialog) {
+                                    alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLUE);
+                                    alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLUE);
+                                }
+                            });
+
+                            alert.show();
                         }
                         break;
 
                     case R.id.setAlarmButton:
-                        // TODO : 알람 설정 기능
-
+                        
                         if (!isButtonClicked) {
                             buttonType = pageType;
                             isButtonClicked = true;
@@ -200,11 +421,15 @@ public class ShortestPathActivity extends AppCompatActivity {
                             // 버튼의 모양과 색을 눌려져 있는 상태의 경우로 바꾼다.
                             setAlarmButton.setBackgroundResource(R.drawable.bg_white_ripple_stroke_red);
                             setAlarmButton.setColorFilter(Color.WHITE);
+
+                            // 알람을 등록한다.
+                            registerAlarm();
+
                         } else {
                             if (pageType == buttonType) {
                                 // 버튼을 눌렀던 페이지
                                 // 알람 해제 ... 해제할건지 물어봄
-                                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                                AlertDialog.Builder builder = new AlertDialog.Builder(ShortestPathContext);
                                 builder.setMessage("설정된 알람을 해제하시겠습니까?");
                                 builder.setPositiveButton("확인",
                                         new DialogInterface.OnClickListener() {
@@ -215,6 +440,9 @@ public class ShortestPathActivity extends AppCompatActivity {
                                                 setAlarmButton.setBackgroundResource(R.drawable.bg_white_ripple_stroke);
                                                 setAlarmButton.setImageResource(R.mipmap.ic_alarm_foreground);
                                                 setAlarmButton.setColorFilter(getResources().getColor(R.color.moreGray, null));
+
+                                                // 등록된 알람을 취소한다.
+                                                cancelAlarm();
                                             }
                                         });
                                 builder.setNegativeButton("취소",
@@ -237,7 +465,7 @@ public class ShortestPathActivity extends AppCompatActivity {
                             } else {
                                 // 버튼을 눌렀던 페이지와 다른 페이지
                                 // 다른 페이지에서 이미 알람을 등록한 상태이므로 새로 등록할 것인지 물어봄
-                                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                                AlertDialog.Builder builder = new AlertDialog.Builder(ShortestPathContext);
                                 builder.setMessage("기존의 알람을 해제하고 새 알람을 등록하시겠습니까?");
                                 builder.setPositiveButton("확인",
                                         new DialogInterface.OnClickListener() {
@@ -246,8 +474,12 @@ public class ShortestPathActivity extends AppCompatActivity {
 
                                                 // 버튼의 모양과 색을 눌려졌을 때로 바꾼다.
                                                 setAlarmButton.setBackgroundResource(R.drawable.bg_white_ripple_stroke_red);
-                                                setAlarmButton.setImageResource(IC_ALARM_FOREGROUND);
+                                                setAlarmButton.setImageResource(IC_NORMAL_ALARM_BUTTON);
                                                 setAlarmButton.setColorFilter(Color.WHITE);
+
+                                                // 이미 등록된 알람을 해제하고 새로운 알람을 등록한다.
+                                                cancelAlarm();
+                                                registerAlarm();
                                             }
                                         });
                                 builder.setNegativeButton("취소",
@@ -278,6 +510,7 @@ public class ShortestPathActivity extends AppCompatActivity {
         setAlarmButton.setOnClickListener(onClickListener);
     }
 
+    // 현재 경로를 즐겨찾기에 추가한다.
     private void addBookmarkedRoute() {
 
         String value = departure + "역" + " - " + arrival + "역";
@@ -314,6 +547,7 @@ public class ShortestPathActivity extends AppCompatActivity {
                 });
     }
 
+    // 현재 경로를 즐겨찾기에서 제거한다.
     private void removeBookmarkedRoute() {
         String value = departure + "역" + " - " + arrival + "역";
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -322,11 +556,13 @@ public class ShortestPathActivity extends AppCompatActivity {
         docRef.update("즐겨찾는 경로", FieldValue.arrayRemove(value));
     }
 
+    // 현재 경로가 즐겨찾기에 등록되어있는지 확인한다.
     private boolean isContained() {
         String value = departure + "역" + " - " + arrival + "역";
         return graph.getBookmarkedRoute().contains(value);
     }
 
+    // 현재 켜져있는 페이지의 타입을 설정한다.
     public void setPageType(CustomAppGraph.SearchType type) {
         pageType = type;
 
@@ -335,12 +571,12 @@ public class ShortestPathActivity extends AppCompatActivity {
             if (buttonType != pageType) {
                 // 버튼의 모양과 색을 다른 페이지에서 눌려져 있는 상태의 경우로 바꾼다.
                 setAlarmButton.setBackgroundResource(R.drawable.bg_white_ripple_stroke);
-                setAlarmButton.setImageResource(IC_ALARM_ANOTHER_SELECTED_FOREGROUND);
+                setAlarmButton.setImageResource(IC_ANOTHER_SELECTED_ALARM_BUTTON);
                 setAlarmButton.setColorFilter(Color.RED);
             } else {
                 // 버튼의 모양과 색을 눌려져 있는 상태의 경우로 바꾼다.
                 setAlarmButton.setBackgroundResource(R.drawable.bg_white_ripple_stroke_red);
-                setAlarmButton.setImageResource(IC_ALARM_FOREGROUND);
+                setAlarmButton.setImageResource(IC_NORMAL_ALARM_BUTTON);
                 setAlarmButton.setColorFilter(Color.WHITE);
             }
         }
@@ -528,12 +764,13 @@ public class ShortestPathActivity extends AppCompatActivity {
                 parent.set(there, here);
             }
 
-            if (TYPE == CustomAppGraph.SearchType.MIN_TRANSFER)
+            /*if (TYPE == CustomAppGraph.SearchType.MIN_TRANSFER)
                 if ((Integer.parseInt(graph.getReverseMap().get(here)) >= 112 && Integer.parseInt(graph.getReverseMap().get(here)) <= 115) ||
                         (Integer.parseInt(graph.getReverseMap().get(here)) >= 406 && Integer.parseInt(graph.getReverseMap().get(here)) <= 411) ||
                         (Integer.parseInt(graph.getReverseMap().get(here)) >= 801 && Integer.parseInt(graph.getReverseMap().get(here)) <= 803) ||
                         Integer.parseInt(graph.getReverseMap().get(here)) == 901)
                     Log.d("test", "station : " + graph.getReverseMap().get(here) + " parent : " + graph.getReverseMap().get(parent.get(here)) + " here : " + best.get(here));
+             */
         }
 
 
@@ -699,6 +936,7 @@ public class ShortestPathActivity extends AppCompatActivity {
         lineColors.add(getResources().getColor(R.color.line9Color, null));
 
     }
+
 
     // 뷰페이저 어댑터 클래스
     private class VPAdapter extends FragmentStateAdapter {

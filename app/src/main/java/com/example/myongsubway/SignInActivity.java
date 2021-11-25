@@ -71,6 +71,9 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
+        // 이하윤 ... 어플 강제종료 시 알람 등록해제를 위함
+        startService(new Intent(this, ForcedTerminationService.class));
+
         fragmentManager = getSupportFragmentManager();
         SignUpFragment = new SignUpFragment();
 
@@ -132,6 +135,7 @@ public class SignInActivity extends AppCompatActivity {
                                         Toast.makeText(SignInActivity.this, "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                         startActivity(intent);
+                                        finish();
                                     } else {
                                         //그렇지 않을때
                                         System.out.println("get failed with " + task.getException());
@@ -161,6 +165,7 @@ public class SignInActivity extends AppCompatActivity {
                         ((CustomAppGraph) getApplicationContext()).clearAccount();
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
+                        finish();
                     }
                 });
                 dlg.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
@@ -181,6 +186,7 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
     }
+
     public void saveSearchData(){
 
         SharedPreferences sp = getSharedPreferences("savedid", MODE_PRIVATE);
