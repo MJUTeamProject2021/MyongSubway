@@ -106,6 +106,7 @@ public class CustomAppGraph extends Application {
         private String[] stationFacilities;             // 역 내 편의시설을 저장하는 리스트
         private String[] nearbyRestaurants;             // 역 주변 식당을 저장하는 리스트
         private String[] nearbyFacilities;              // 역 주변 시설을 저장하는 리스트
+        private String congestion;                      // 해당 역의 평균 혼잡도
 
         public Vertex(String _vertex, int _line) {
             adjacent = new ArrayList<Integer>();
@@ -129,6 +130,10 @@ public class CustomAppGraph extends Application {
             nearbyFacilities = _nearbyFacilities.split(",");
         }
 
+        private void setCongestion(String _congestion) {
+            congestion = _congestion;
+        }
+
         // getter (안쓰는 메소드는 삭제할 예정)
         public String getVertex() { return vertex; }
         public ArrayList<Integer> getAdjacent() { return adjacent; }
@@ -140,6 +145,7 @@ public class CustomAppGraph extends Application {
         public String[] getStationFacilities() { return stationFacilities; }
         public String[] getNearbyRestaurants() { return nearbyRestaurants; }
         public String[] getNearbyFacilities() { return nearbyFacilities; }
+        public String getCongestion() { return congestion; }
     }
 
     private HashMap<String, Integer> map = new HashMap<String, Integer>();          // 역의 이름을 배열의 index 로 변환시키기 위한 map
@@ -197,16 +203,21 @@ public class CustomAppGraph extends Application {
             InputStream dataIs = getBaseContext().getResources().getAssets().open("data.xls");
             Workbook dataWb = Workbook.getWorkbook(dataIs);
 
-            // data.xls 역 정보 읽기
+            // lines.xls 역 호선 읽기
             InputStream linesIs = getBaseContext().getResources().getAssets().open("lines.xls");
             Workbook linesWb = Workbook.getWorkbook(linesIs);
 
-            if (stationWb != null && dataWb != null && linesWb != null) {
+            // congestion.xls 역 평균 혼잡도 읽기
+            InputStream congestionIs = getBaseContext().getResources().getAssets().open("congestion.xls");
+            Workbook congestionWb = Workbook.getWorkbook(congestionIs);
+
+            if (stationWb != null && dataWb != null && linesWb != null && congestionWb != null) {
                 Sheet stationsSheet = stationWb.getSheet(0);
                 Sheet dataSheet = dataWb.getSheet(0);
                 Sheet linesSheet = linesWb.getSheet(0);
+                Sheet congestionSheet = congestionWb.getSheet(0);
 
-                if (stationsSheet != null && dataSheet != null && linesSheet != null) {
+                if (stationsSheet != null && dataSheet != null && linesSheet != null && congestionSheet != null) {
                     // stations.xls 를 읽어서 초기화
                     {
                         int colTotal = stationsSheet.getColumns();
@@ -291,6 +302,20 @@ public class CustomAppGraph extends Application {
                                     break;
                                 }
                             }
+                        }
+                    }
+
+                    // 추가로 congestion.xls 를 읽어서 각 역의 평균 혼잡도 업데이트
+                    {
+                        int colTotal = congestionSheet.getColumns();
+                        int rowIndexStart = 0;
+                        int rowTotal = congestionSheet.getColumn(colTotal - 1).length;
+
+                        // congestion.xls 를 읽어서 초기화
+                        for (int row = rowIndexStart; row < rowTotal; row++) {
+                            String index = congestionSheet.getCell(0, row).getContents();
+                            String congestion = congestionSheet.getCell(1, row).getContents();
+                            vertices.get(map.get(index)).setCongestion(congestion);
                         }
                     }
                 }
