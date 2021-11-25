@@ -44,7 +44,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         final NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(mContext, channelId).
-                setSmallIcon(R.mipmap.ic_launcher).
+                setSmallIcon(R.mipmap.img_appico4white_foreground).
                 setDefaults(Notification.DEFAULT_ALL).
                 setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)).
                 setAutoCancel(true).
