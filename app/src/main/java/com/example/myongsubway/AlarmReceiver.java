@@ -22,7 +22,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d("test", "onReceive is called");
+        //Log.d("test", "onReceive is called");
 
         mContext = context;
 
