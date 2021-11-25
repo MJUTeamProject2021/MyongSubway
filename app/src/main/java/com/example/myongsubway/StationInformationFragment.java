@@ -43,6 +43,7 @@ public class StationInformationFragment extends Fragment implements View.OnClick
     private TextView update;
     private TextView airstate;
     private TextView pmq;
+    private TextView congestion;
     private Button reportButton;
     private Button closeButton;
     private CustomAppGraph.Vertex vertex;
@@ -91,6 +92,7 @@ public class StationInformationFragment extends Fragment implements View.OnClick
         update = v.findViewById(R.id.fragment_information_update);
         buildingLayout = v.findViewById(R.id.fragment_surrounding_building);
         restuarentLayout = v.findViewById(R.id.fragment_surrounding_restuarent);
+        congestion = v.findViewById(R.id.fragment_information_congestion);
 
         number.setOnClickListener(this);
         closeButton.setOnClickListener(this);
@@ -161,6 +163,14 @@ public class StationInformationFragment extends Fragment implements View.OnClick
             tv.setGravity(Gravity.CENTER);
             tv.setText(facilities[i]);
             restuarentLayout.addView(tv);
+        }
+        //혼잡도
+        if(vertex.getCongestion().equals("여유")){
+           congestion.setText("평균적으로 여유로운 역입니다");airstate.setTextColor(Color.rgb(0,0,255));
+        }else if(vertex.getCongestion().equals("보통")){
+            congestion.setText("평균적으로 혼잡하지 않은 역입니다.");airstate.setTextColor(Color.rgb(0,255,0));
+        }else{
+            congestion.setText("평균적으로 혼잡한 역입니다.");airstate.setTextColor(Color.rgb(255,0,0));
         }
 
         AirThread at = new AirThread();

@@ -225,8 +225,12 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
                 setDestiInvisible();
                 break;
             case R.id.Main_Button_GotoBookmark:
-                intent = new Intent(this,BookmarkActivity.class);
-                startActivity(intent);
+                if(graph.isLogined()){
+                    intent = new Intent(this,BookmarkActivity.class);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(this, "로그인을 해야 이용하실 수 있습니다.", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.Main_Button_GotoSearch:
                 intent = new Intent(this,SearchActivity.class);
