@@ -72,7 +72,6 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginBottom="15dp"
                 android:orientation="horizontal"
                 android:paddingBottom="15dp"
                 android:weightSum="3">
@@ -85,12 +84,14 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
                     android:layout_weight="1"
+                    android:gravity="center"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/textView9"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
                         android:text="인접한 역"
                         android:textColor="#191515"
                         android:textSize="24sp"
@@ -110,6 +111,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:orientation="vertical">
 
                         <TextView
@@ -140,12 +142,14 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
                     android:layout_weight="1"
+                    android:gravity="center"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/textView22"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
                         android:text="역 내 시설"
                         android:textColor="#191515"
                         android:textSize="20sp"
@@ -166,23 +170,27 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="10dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/textView18"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="개찰구 내 화장실"
-                        android:textColor="#191515"
-                        android:textSize="20sp"
+                    <Button
+                        android:id="@+id/button14"
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:background="#00FFFFFF"
+                        android:backgroundTint="@empty"
+                        android:text="개찰구 내\n화장실"
+                        android:textColor="#000000"
+                        android:textSize="16dp"
                         android:textStyle="bold"
-                        android:typeface="normal" />
+                        app:icon="@mipmap/ic_newtoilet_foreground"
+                        app:iconGravity="textEnd"
+                        app:iconSize="50dp"
+                        app:iconTint="#000000" />
 
                     <TextView
                         android:id="@+id/fragment_information_toilet"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingTop="5dp"
                         android:text="있음"
@@ -193,23 +201,27 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/textView2"
+                    <Button
+                        android:id="@+id/button12"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="혼잡도"
-                        android:textColor="#191515"
-                        android:textSize="20sp"
+                        android:layout_height="70dp"
+                        android:background="#00FFFFFF"
+                        android:backgroundTint="@empty"
+                        android:text="평균 혼잡도"
+                        android:textColor="#000000"
+                        android:textSize="18sp"
                         android:textStyle="bold"
-                        android:typeface="normal" />
+                        app:icon="@drawable/ic_congestion"
+                        app:iconGravity="textEnd"
+                        app:iconTint="#000000" />
 
                     <TextView
                         android:id="@+id/fragment_information_congestion"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingTop="5dp"
                         android:text="있음"
