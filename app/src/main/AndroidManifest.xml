@@ -35,7 +35,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".UnityPlayerActivity"/>
+        <activity android:name=".UnityPlayerActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:process=":unityplayer"/>
         
         <receiver android:name=".AlarmReceiver"/>
         <service android:name=".ForcedTerminationService"

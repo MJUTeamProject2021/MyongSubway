@@ -9352,6 +9352,14 @@ IL_0017:
 		return;
 	}
 }
+// System.Boolean GameController::WantsToQuit()
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR bool GameController_WantsToQuit_m5DAC42E171AF2BFAADE68700E7E4008BF4227475 (const RuntimeMethod* method)
+{
+	{
+		// return false;
+		return (bool)0;
+	}
+}
 // System.Void GameController::GameStart()
 IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void GameController_GameStart_mF339A1F9CF66DBD39A3F1E68151EC26C13BB49C7 (GameController_tB9A9FA594113443BE7F9A0B6EC8588EB5101D274 * __this, const RuntimeMethod* method)
 {
