@@ -36,8 +36,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         prefs.registerOnSharedPreferenceChangeListener(prefListener);//설정 변경 리스너
     }//OnCreatePreferences
 
-    SharedPreferences.OnSharedPreferenceChangeListener prefListener =
-            new SharedPreferences.OnSharedPreferenceChangeListener() {
+    SharedPreferences.OnSharedPreferenceChangeListener prefListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {//설정 변경 리스너
             if(s.equals("ringtone_list")) {
