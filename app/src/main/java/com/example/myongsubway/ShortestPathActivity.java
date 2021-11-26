@@ -96,6 +96,8 @@ public class ShortestPathActivity extends AppCompatActivity {
     final int IC_ANOTHER_SELECTED_ALARM_BUTTON =            // 이미 다른 페이지에서 알람이 등록된 상태의 알람 버튼 아이콘
             R.mipmap.ic_alarm_another_selected_foreground;
 
+    private Button unityBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,6 +124,15 @@ public class ShortestPathActivity extends AppCompatActivity {
 
         // 뷰페이저2, 탭레이아웃 설정
         setPagerAndTabLayout();
+
+        unityBtn = findViewById(R.id.unityBtn);
+        unityBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ShortestPathContext, UnityPlayerActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     // 초기설정을 한다.
@@ -321,6 +332,7 @@ public class ShortestPathActivity extends AppCompatActivity {
             Bundle bundle = new Bundle();
             bundle.putString("station", vertex.getVertex());
             bundle.putString("doorDirection", vertex.getDoorDirection());
+            bundle.putInt("requestId", requestId);
             intent.putExtras(bundle);
 
             PendingIntent alarmIntent = PendingIntent.getBroadcast(ShortestPathContext, requestId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
