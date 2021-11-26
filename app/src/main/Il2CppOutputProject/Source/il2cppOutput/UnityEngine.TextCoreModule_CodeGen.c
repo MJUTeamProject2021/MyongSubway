@@ -562,10 +562,10 @@ static const Il2CppRGCTXDefinition s_rgctxValues[6] =
 {
 	{ (Il2CppRGCTXDataType)3, 4260 },
 	{ (Il2CppRGCTXDataType)2, 1937 },
-	{ (Il2CppRGCTXDataType)3, 8023 },
+	{ (Il2CppRGCTXDataType)3, 8024 },
 	{ (Il2CppRGCTXDataType)3, 4261 },
 	{ (Il2CppRGCTXDataType)2, 1938 },
-	{ (Il2CppRGCTXDataType)3, 8024 },
+	{ (Il2CppRGCTXDataType)3, 8025 },
 };
 extern const CustomAttributesCacheGenerator g_UnityEngine_TextCoreModule_AttributeGenerators[];
 IL2CPP_EXTERN_C const Il2CppCodeGenModule g_UnityEngine_TextCoreModule_CodeGenModule;

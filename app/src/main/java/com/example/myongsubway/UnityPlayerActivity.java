@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -45,6 +46,10 @@ public class UnityPlayerActivity extends Activity implements IUnityPlayerLifecyc
         mUnityPlayer = new UnityPlayer(this, this);
         setContentView(mUnityPlayer);
         mUnityPlayer.requestFocus();
+    }
+
+    public void receiveStr(String str) { // from unity, point(str) coming
+        Log.d("test", "receiveStr : " + str);
     }
 
     // When Unity player unloaded move task to background
