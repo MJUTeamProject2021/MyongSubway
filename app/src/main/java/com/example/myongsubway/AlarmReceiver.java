@@ -30,17 +30,19 @@ public class AlarmReceiver extends BroadcastReceiver {
         Bundle extras = intent.getExtras();
         String station = "알림";
         String doorDirection = "쪽";
+        int requestId = 1;
 
         if (extras != null) {
             station = extras.getString("station");
             doorDirection = extras.getString("doorDirection");
+            requestId = extras.getInt("requestId");
         }
 
         Intent getOffAlarmIntent = new Intent(mContext, ShortestPathActivity.class);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(mContext);
         stackBuilder.addNextIntentWithParentStack(getOffAlarmIntent);
-        PendingIntent getOffAlarmPendingIntent = stackBuilder.getPendingIntent(1, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent getOffAlarmPendingIntent = stackBuilder.getPendingIntent(requestId, PendingIntent.FLAG_UPDATE_CURRENT);
 
         final NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(mContext, channelId).
@@ -48,6 +50,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 setDefaults(Notification.DEFAULT_ALL).
                 setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)).
                 setAutoCancel(true).
+                setPriority(NotificationCompat.PRIORITY_HIGH).
                 setContentTitle(station + "역 하차 알림").
                 setContentText("잠시 후 도착 (내리는문 " + doorDirection + ")").
                 setContentIntent(getOffAlarmPendingIntent);
@@ -55,7 +58,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         final NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(channelId, "Channel human readable title", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel channel = new NotificationChannel(channelId, "Channel human readable title", NotificationManager.IMPORTANCE_HIGH);
             notificationManager.createNotificationChannel(channel);
         }
 
