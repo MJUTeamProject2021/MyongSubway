@@ -15,10 +15,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyongSubway"
         android:usesCleartextTraffic="true">
+        <activity android:name=".AccountInformationActivity"></activity>
         <activity android:name=".ShortestPathActivity" />
         <activity android:name=".SettingsActivity" />
-        <activity android:name=".SearchActivity"
-            android:windowSoftInputMode="adjustNothing"/>
+        <activity
+            android:name=".SearchActivity"
+            android:windowSoftInputMode="adjustNothing" />
         <activity android:name=".BookmarkActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".BoardModifyActivity" />
@@ -34,16 +36,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".UnityPlayerActivity"
+        <activity
+            android:name=".UnityPlayerActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:process=":unityplayer"/>
-        
-        <receiver android:name=".AlarmReceiver"/>
-        <service android:name=".ForcedTerminationService"
-            android:stopWithTask="false"/>
-        
+            android:process=":unityplayer" />
+
+        <receiver android:name=".AlarmReceiver" />
+
+        <service
+            android:name=".ForcedTerminationService"
+            android:stopWithTask="false" />
     </application>
 
 </manifest>
