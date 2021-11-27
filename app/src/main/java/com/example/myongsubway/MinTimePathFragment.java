@@ -199,7 +199,7 @@ public class MinTimePathFragment extends Fragment {
         String cost = convertCost(costs.get(CustomAppGraph.SearchType.MIN_COST.ordinal()));
         costCost.setText(cost);
 
-        String transfer = costs.get(CustomAppGraph.SearchType.MIN_TRANSFER.ordinal()) + "회";
+        String transfer = costs.get(CustomAppGraph.SearchType.TRANSFER.ordinal()) + "회";
         costTransfer.setText(transfer);
     }
 

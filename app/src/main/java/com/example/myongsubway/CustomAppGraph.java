@@ -82,7 +82,7 @@ public class CustomAppGraph extends Application {
         MIN_TIME,       // 최소 시간
         MIN_DISTANCE,   // 최소 거리
         MIN_COST,       // 최소 비용
-        MIN_TRANSFER,   // 최소 환승
+        TRANSFER,       // 최소 환승
         NONE            // nothing
     }
 
@@ -336,22 +336,6 @@ public class CustomAppGraph extends Application {
             e.printStackTrace();
         }
     }
-
-    /* TODO : 디버깅용 코드
-    void printLines() {
-        for (Vertex vertex : vertices) {
-            String output = vertex.getVertex() + " 인접역 : ";
-            for (int index : vertex.getAdjacent()) {
-                output += reverseMap.get(index) + " ";
-            }
-            output += "호선 : ";
-            for (int line : vertex.getLines()) {
-                output += line + " ";
-            }
-
-            Log.d("test", output);
-        }
-    }*/
 
     // 로그인 관련 setter
     // email 과 password 는 초기에 null 이지만 해당 setter 가 수행되면 email 과 password 는 값이 생기게 된다.

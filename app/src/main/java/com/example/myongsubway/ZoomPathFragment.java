@@ -92,9 +92,6 @@ public class ZoomPathFragment extends Fragment {
         }
     }
 
-
-
-
     // 역버튼을 생성하는 메소드.
     private void createButton(View v, int index, float density, int width, int height) {
         LinearLayout btnContainer = (LinearLayout) v.findViewById(R.id.btnContainer);   // 버튼들을 담는 리니어레이아웃
