@@ -88,7 +88,8 @@
             android:layout_marginTop="-5dp"
             android:textSize="16sp"
             android:gravity="left"
-            android:text="문의하기" />
+            android:text="문의하기"
+            android:onClick="onclickQuestion"/>
 
         <TextView
             android:id="@+id/settings_textview_appinfo"

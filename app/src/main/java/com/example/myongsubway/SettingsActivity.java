@@ -66,4 +66,14 @@ public class SettingsActivity extends AppCompatActivity {
             dlg.show();
         }
     }
+
+    public void onclickQuestion(View view) {
+        Intent email = new Intent(Intent.ACTION_SEND);
+        email.setType("plain/text");
+        String[] address = {"email@address.com"};
+        email.putExtra(Intent.EXTRA_EMAIL, address);
+        email.putExtra(Intent.EXTRA_SUBJECT, "");
+        email.putExtra(Intent.EXTRA_TEXT, "잘못된 정보를 입력해주세요.");
+        startActivity(email);
+    }
 }
