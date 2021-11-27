@@ -635,19 +635,11 @@ public class ShortestPathActivity extends AppCompatActivity {
     // 툴바를 설정하는 메소드
     private void setToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("길찾기");
-        toolbar.setTitleTextColor(Color.BLACK);
         setSupportActionBar(toolbar);
-    }
-
-    // 툴바의 액션버튼을 설정하는 메소드
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.quit_menu, menu);
-
-        Drawable drawable = menu.getItem(0).getIcon();
-        drawable.setColorFilter(new BlendModeColorFilter(ContextCompat.getColor(this, R.color.black), BlendMode.SRC_ATOP));
-        return true;
+        // 기본 텍스트를 숨긴다.
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        // 뒤로가기 버튼을 추가
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     // 툴바의 액션버튼이 선택됐을때의 기능을 설정하는 메소드
@@ -720,6 +712,8 @@ public class ShortestPathActivity extends AppCompatActivity {
                 // 다음 역까지의 비용 (아래에서 환승여부에 따른 가중치 추가)
                 int nextCost = best.get(here) + graph.getAdjacent().get(here).get(there).getCost(TYPE);
 
+
+
                 // 현재 역이 출발 역이 아니라면
                 if (parent.get(here) != here) {
                     // 다음 역의 호선들을 담는 리스트
@@ -757,6 +751,30 @@ public class ShortestPathActivity extends AppCompatActivity {
                     // 환승이면 가중치를 추가한다.
                     if (hereLine != thereLine) {
                         nextCost += TRANSFER_WEIGHT;
+
+                        // 판정기준에 환승하는데 걸리는 시간을 추가함
+                        if (TYPE == CustomAppGraph.SearchType.MIN_TIME) {
+                            // here 에서 환승거리
+                            int transferDistance = graph.getVertices().get(here).getTransferDistance();
+                            // 환승이 불가능한 역이면 -1
+                            if (transferDistance != -1) {
+                                // 환승하는데 걸리는 시간(분) = 환승 거리(m) / (도보 속도(km/h) * 1000 / 60)
+                                int transferTime = (int)(transferDistance / (graph.getWalkSpeed() * 1000 / 60));
+                                //TODO : delete Log.d("test", "station : " + graph.getVertices().get(here).getVertex() + " additionalTime : " + transferTime);
+                                // 환승하는데 걸리는 시간을 가중치로 추가
+                                nextCost += transferTime;
+                            }
+                        }
+                        // 판정기준에 환승 거리를 추가함
+                        else if (TYPE == CustomAppGraph.SearchType.MIN_DISTANCE) {
+                            // here 에서 환승거리
+                            int transferDistance = graph.getVertices().get(here).getTransferDistance();
+                            // 환승이 불가능한 역이면 -1
+                            if (transferDistance != -1) {
+                                // 환승 거리를 가중치로 추가
+                                nextCost += transferDistance;
+                            }
+                        }
                     }
                 }
 
@@ -830,43 +848,85 @@ public class ShortestPathActivity extends AppCompatActivity {
         // 환승횟수에 따른 가중치 제거를 위해 환승횟수를 먼저 구하여 저장한다.
         allCosts.get(TYPE.ordinal()).set(LAST_INDEX, calculateElapsed(TYPE));
 
-        switch (TYPE) {
+        allCosts.get(TYPE.ordinal()).set(0, calculateElapsed(path, TYPE, CustomAppGraph.SearchType.MIN_TIME));
+        allCosts.get(TYPE.ordinal()).set(1, calculateElapsed(path, TYPE, CustomAppGraph.SearchType.MIN_DISTANCE));
+        allCosts.get(TYPE.ordinal()).set(2, calculateElapsed(path, TYPE, CustomAppGraph.SearchType.MIN_COST));
+        /*switch (TYPE) {
             case MIN_TIME:
-                allCosts.get(TYPE.ordinal()).set(0, best - allCosts.get(TYPE.ordinal()).get(LAST_INDEX) * TRANSFER_WEIGHT);
+                allCosts.get(TYPE.ordinal()).set(0, calculateElapsed(path, CustomAppGraph.SearchType.MIN_TIME));
                 allCosts.get(TYPE.ordinal()).set(1, calculateElapsed(path, CustomAppGraph.SearchType.MIN_DISTANCE));
                 allCosts.get(TYPE.ordinal()).set(2, calculateElapsed(path, CustomAppGraph.SearchType.MIN_COST));
                 break;
 
             case MIN_DISTANCE:
                 allCosts.get(TYPE.ordinal()).set(0, calculateElapsed(path, CustomAppGraph.SearchType.MIN_TIME));
-                allCosts.get(TYPE.ordinal()).set(1, best - allCosts.get(TYPE.ordinal()).get(LAST_INDEX) * TRANSFER_WEIGHT);
+                allCosts.get(TYPE.ordinal()).set(1, calculateElapsed(path, CustomAppGraph.SearchType.MIN_DISTANCE));
                 allCosts.get(TYPE.ordinal()).set(2, calculateElapsed(path, CustomAppGraph.SearchType.MIN_COST));
                 break;
 
             case MIN_COST:
                 allCosts.get(TYPE.ordinal()).set(0, calculateElapsed(path, CustomAppGraph.SearchType.MIN_TIME));
                 allCosts.get(TYPE.ordinal()).set(1, calculateElapsed(path, CustomAppGraph.SearchType.MIN_DISTANCE));
-                allCosts.get(TYPE.ordinal()).set(2, best - allCosts.get(TYPE.ordinal()).get(LAST_INDEX) * TRANSFER_WEIGHT);
+                allCosts.get(TYPE.ordinal()).set(2, calculateElapsed(path, CustomAppGraph.SearchType.MIN_COST));
                 break;
-        }
+        }*/
     }
 
     // 소요시간, 소요거리, 소요비용을 계산한다.
-    private int calculateElapsed(ArrayList<Integer> path, CustomAppGraph.SearchType TYPE) {
+    private int calculateElapsed(ArrayList<Integer> path, CustomAppGraph.SearchType ALL_COST_TYPE, CustomAppGraph.SearchType COST_TYPE) {
         int output = 0;
 
         for (int pathIndex = 0; pathIndex < path.size() - 1; pathIndex++) {
-            output += graph.getAdjacent().get(path.get(pathIndex)).get(path.get(pathIndex + 1)).getCost(TYPE);
+            output += graph.getAdjacent().get(path.get(pathIndex)).get(path.get(pathIndex + 1)).getCost(COST_TYPE);
+
+            // 소요비용을 계산하는 경우가 아닐 때
+            if (COST_TYPE != CustomAppGraph.SearchType.MIN_COST) {
+                // ALL_COST_TYPE 인 경로탐색일 때의 경로의 호선을 담는 리스트
+                ArrayList<Integer> lines = allLines.get(ALL_COST_TYPE.ordinal());
+                
+                // 다음역에서 환승일 때
+                if (lines.get(pathIndex) != lines.get(pathIndex + 1)) {
+                    // 환승하는 역
+                    CustomAppGraph.Vertex transferStation = graph.getVertices().get(path.get(pathIndex + 1));
+                    // 환승하는 역에서 환승거리
+                    int transferDistance = transferStation.getTransferDistance();
+
+                    switch (COST_TYPE) {
+                        // 환승 시간 추가 계산
+                        case MIN_TIME:
+                            // 환승이 불가능한 역이면 -1
+                            if (transferDistance != -1) {
+                                // 환승하는데 걸리는 시간(분) = 환승 거리(m) / (도보 속도(km/h) * 1000 / 60)
+                                int transferTime = (int) (transferDistance / (graph.getWalkSpeed() * 1000 / 60));
+                                // 환승하는데 걸리는 시간을 소요시간에 추가
+                                output += transferTime;
+                            }
+
+                            break;
+                            
+                        // 환승 거리 추가 계산
+                        case MIN_DISTANCE:
+                            // 환승이 불가능한 역이면 -1
+                            if (transferDistance != -1) {
+                                // 환승 거리를 가중치로 추가
+                                output += transferDistance;
+                            }
+
+                            break;
+                    }
+                }
+            }
         }
 
         return output;
     }
 
+
     // 환승횟수를 계산한다.
-    private int calculateElapsed(CustomAppGraph.SearchType LINES_TYPE) {
+    private int calculateElapsed(CustomAppGraph.SearchType ALL_COST_TYPE) {
         int output = 0;
 
-        ArrayList<Integer> lines = allLines.get(LINES_TYPE.ordinal());
+        ArrayList<Integer> lines = allLines.get(ALL_COST_TYPE.ordinal());
 
         for (int pathIndex = 0; pathIndex < lines.size() - 1; pathIndex++) {
             if (lines.get(pathIndex) != lines.get(pathIndex + 1)) {
@@ -887,16 +947,32 @@ public class ShortestPathActivity extends AppCompatActivity {
         transaction.replace(R.id.station_info_fragment_container, frag);
         transaction.addToBackStack(null);
         transaction.commit();
+
+        // 역정보 프래그먼트 밑에 문의버튼을 보이게한다.
+        Button infoReportButton = findViewById(R.id.infoReportButton);
+        infoReportButton.setVisibility(View.VISIBLE);
+        infoReportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent email = new Intent(Intent.ACTION_SEND);
+                email.setType("plain/text");
+                String[] address = {"email@address.com"};
+                email.putExtra(Intent.EXTRA_EMAIL, address);
+                email.putExtra(Intent.EXTRA_SUBJECT, "");
+                email.putExtra(Intent.EXTRA_TEXT, "잘못된 정보를 입력해주세요.");
+                startActivity(email);
+            }
+        });
     }
     
     // 확대경로 프래그먼트를 띄우는 메소드
-    public void generateStationInformationFragment(ArrayList<Integer> path, ArrayList<Integer> btnBackgrounds, CustomAppGraph.SearchType TYPE) {
-        // 역정보 프래그먼트를 띄운다.
+    public void generateZoomPathFragment(ArrayList<Integer> path, ArrayList<Integer> btnBackgrounds, CustomAppGraph.SearchType TYPE) {
+        // 확대경로 프래그먼트를 띄운다.
         ZoomPathFragment frag = new ZoomPathFragment(path, allLines.get(TYPE.ordinal()), btnBackgrounds, lineColors);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
-        transaction.replace(R.id.zoom_path_fragment_container, frag);
+        transaction.add(R.id.zoom_path_fragment_container, frag);
         transaction.addToBackStack(null);
         transaction.commit();
     }

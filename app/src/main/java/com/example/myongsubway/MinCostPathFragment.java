@@ -132,7 +132,7 @@ public class MinCostPathFragment extends Fragment {
                         break;
 
                     case R.id.zoomButton:
-                        ((ShortestPathActivity) getActivity()).generateStationInformationFragment(minCostPath, btnBackgrounds, CustomAppGraph.SearchType.MIN_COST);
+                        ((ShortestPathActivity) getActivity()).generateZoomPathFragment(minCostPath, btnBackgrounds, CustomAppGraph.SearchType.MIN_COST);
                         break;
 
                     case R.id.reportButton:

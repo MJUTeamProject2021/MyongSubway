@@ -132,7 +132,7 @@ public class MinDistancePathFragment extends Fragment {
                         break;
 
                     case R.id.zoomButton:
-                        ((ShortestPathActivity) getActivity()).generateStationInformationFragment(minDistancePath, btnBackgrounds, CustomAppGraph.SearchType.MIN_DISTANCE);
+                        ((ShortestPathActivity) getActivity()).generateZoomPathFragment(minDistancePath, btnBackgrounds, CustomAppGraph.SearchType.MIN_DISTANCE);
                         break;
 
                     case R.id.reportButton:
