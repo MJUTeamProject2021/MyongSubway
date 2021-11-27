@@ -1,6 +1,8 @@
 package com.example.myongsubway;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.PorterDuff;
@@ -248,6 +250,7 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
                 }
                 break;
             case R.id.fragment_report_bookmark:
+
                 if(graph.isLogined()){
                 if(((MainActivity)getActivity()).isContained(vertex.getVertex()+"역")){
                     Toast.makeText(getContext(), "즐겨찾기 해제되었습니다.", Toast.LENGTH_SHORT).show();
@@ -260,8 +263,31 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
                     ((MainActivity)getActivity()).addBookmarkedStation(vertex.getVertex()+"역");
                     bookmarkButton.setBackgroundResource(R.mipmap.ic_star_selected_foreground);
                 }}
-                else{
-                    Toast.makeText(getContext(), "로그인해야 이용 가능합니다", Toast.LENGTH_SHORT).show();
+                else{   AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("로그인이 필요합니다.");
+                    builder.setMessage("로그인 창으로 이동하시겠습니까?");
+                    builder.setPositiveButton("확인",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // TODO : 로그인 창으로 연결
+                                }
+                            });
+                    builder.setNegativeButton("취소",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            });
+
+                    AlertDialog alert = builder.create();
+                    alert.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialog) {
+                            alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLUE);
+                            alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLUE);
+                        }
+                    });
+                    alert.show();
                 }
                 break;
             case R.id.fragment_report_left:         //왼쪽 역 터치

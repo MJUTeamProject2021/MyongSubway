@@ -4,10 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -225,8 +228,36 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
                 setDestiInvisible();
                 break;
             case R.id.Main_Button_GotoBookmark:
-                intent = new Intent(this,BookmarkActivity.class);
-                startActivity(intent);
+                if(graph.isLogined()){
+                    intent = new Intent(this,BookmarkActivity.class);
+                    startActivity(intent);
+                }else{
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("로그인이 필요합니다.");
+                    builder.setMessage("로그인 창으로 이동하시겠습니까?");
+                    builder.setPositiveButton("확인",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // TODO : 로그인 창으로 연결
+                                }
+                            });
+                    builder.setNegativeButton("취소",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            });
+
+                    AlertDialog alert = builder.create();
+                    alert.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialog) {
+                            alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLUE);
+                            alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLUE);
+                        }
+                    });
+                    alert.show();
+                }
                 break;
             case R.id.Main_Button_GotoSearch:
                 intent = new Intent(this,SearchActivity.class);
@@ -245,9 +276,33 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
                     intent = new Intent(this,BoardWatchActivity.class);
                     startActivity(intent);
                 }else{
-                    Toast.makeText(this, "로그인을 해야 이용하실 수 있습니다.", Toast.LENGTH_SHORT).show();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("로그인이 필요합니다.");
+                    builder.setMessage("로그인 창으로 이동하시겠습니까?");
+                    builder.setPositiveButton("확인",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // TODO : 로그인 창으로 연결
+                                }
+                            });
+                    builder.setNegativeButton("취소",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            });
+
+                    AlertDialog alert = builder.create();
+                    alert.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialog) {
+                            alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLUE);
+                            alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLUE);
+                        }
+                    });
+                    alert.show();
                 }
-             
+
                 break;
         }
     }
