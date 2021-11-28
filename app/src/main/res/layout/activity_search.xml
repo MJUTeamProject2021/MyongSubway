@@ -37,6 +37,7 @@
             android:layout_weight="8"
             android:gravity="center|left"
             android:paddingLeft="60dp"
+            android:fontFamily="@font/maruburisemibold"
             android:text="즐겨찾기"
             android:textAlignment="gravity"
             android:textColor="#151515"
