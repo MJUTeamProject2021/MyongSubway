@@ -329,7 +329,6 @@ public class ShortestPathActivity extends AppCompatActivity {
             Bundle bundle = new Bundle();
             bundle.putString("station", vertex.getVertex());
             bundle.putString("doorDirection", vertex.getDoorDirection());
-            bundle.putInt("requestId", requestId);
             intent.putExtras(bundle);
 
             PendingIntent alarmIntent = PendingIntent.getBroadcast(ShortestPathContext, requestId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -395,7 +394,8 @@ public class ShortestPathActivity extends AppCompatActivity {
                             builder.setPositiveButton("확인",
                                     new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
-                                            // TODO : 로그인 창으로 연결
+                                            Intent intent = new Intent(ShortestPathContext, SignInActivity.class);
+                                            startActivity(intent);
                                         }
                                     });
                             builder.setNegativeButton("취소",
@@ -760,7 +760,6 @@ public class ShortestPathActivity extends AppCompatActivity {
                             if (transferDistance != -1) {
                                 // 환승하는데 걸리는 시간(분) = 환승 거리(m) / (도보 속도(km/h) * 1000 / 60)
                                 int transferTime = (int)(transferDistance / (graph.getWalkSpeed() * 1000 / 60));
-                                //TODO : delete Log.d("test", "station : " + graph.getVertices().get(here).getVertex() + " additionalTime : " + transferTime);
                                 // 환승하는데 걸리는 시간을 가중치로 추가
                                 nextCost += transferTime;
                             }
@@ -851,25 +850,6 @@ public class ShortestPathActivity extends AppCompatActivity {
         allCosts.get(TYPE.ordinal()).set(0, calculateElapsed(path, TYPE, CustomAppGraph.SearchType.MIN_TIME));
         allCosts.get(TYPE.ordinal()).set(1, calculateElapsed(path, TYPE, CustomAppGraph.SearchType.MIN_DISTANCE));
         allCosts.get(TYPE.ordinal()).set(2, calculateElapsed(path, TYPE, CustomAppGraph.SearchType.MIN_COST));
-        /*switch (TYPE) {
-            case MIN_TIME:
-                allCosts.get(TYPE.ordinal()).set(0, calculateElapsed(path, CustomAppGraph.SearchType.MIN_TIME));
-                allCosts.get(TYPE.ordinal()).set(1, calculateElapsed(path, CustomAppGraph.SearchType.MIN_DISTANCE));
-                allCosts.get(TYPE.ordinal()).set(2, calculateElapsed(path, CustomAppGraph.SearchType.MIN_COST));
-                break;
-
-            case MIN_DISTANCE:
-                allCosts.get(TYPE.ordinal()).set(0, calculateElapsed(path, CustomAppGraph.SearchType.MIN_TIME));
-                allCosts.get(TYPE.ordinal()).set(1, calculateElapsed(path, CustomAppGraph.SearchType.MIN_DISTANCE));
-                allCosts.get(TYPE.ordinal()).set(2, calculateElapsed(path, CustomAppGraph.SearchType.MIN_COST));
-                break;
-
-            case MIN_COST:
-                allCosts.get(TYPE.ordinal()).set(0, calculateElapsed(path, CustomAppGraph.SearchType.MIN_TIME));
-                allCosts.get(TYPE.ordinal()).set(1, calculateElapsed(path, CustomAppGraph.SearchType.MIN_DISTANCE));
-                allCosts.get(TYPE.ordinal()).set(2, calculateElapsed(path, CustomAppGraph.SearchType.MIN_COST));
-                break;
-        }*/
     }
 
     // 소요시간, 소요거리, 소요비용을 계산한다.
@@ -1007,7 +987,6 @@ public class ShortestPathActivity extends AppCompatActivity {
         lineColors.add(getResources().getColor(R.color.line9Color, null));
 
     }
-
 
     // 뷰페이저 어댑터 클래스
     private class VPAdapter extends FragmentStateAdapter {
