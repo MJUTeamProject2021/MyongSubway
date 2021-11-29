@@ -64,6 +64,7 @@
                         android:gravity="center|right"
                         android:orientation="horizontal" />
 
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -188,7 +189,6 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="70dp"
                                 android:background="#00FFFFFF"
-                                android:backgroundTint="@empty"
                                 android:text="개찰구 내\n화장실"
                                 android:textColor="#000000"
                                 android:textSize="16dp"
@@ -221,7 +221,6 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="70dp"
                                 android:background="#00FFFFFF"
-                                android:backgroundTint="@empty"
                                 android:text="평균 혼잡도"
                                 android:textColor="#000000"
                                 android:textSize="18sp"
@@ -326,7 +325,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="#00FFFFFF"
-                            android:backgroundTint="@empty"
                             android:text="주변식당"
                             android:textColor="#000000"
                             android:textSize="18sp"
@@ -351,7 +349,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="#00FFFFFF"
-                            android:backgroundTint="@empty"
                             android:text="주변건물"
                             android:textColor="#000000"
                             android:textSize="18sp"
