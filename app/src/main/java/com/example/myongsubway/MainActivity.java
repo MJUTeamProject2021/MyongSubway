@@ -236,7 +236,8 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
                     builder.setPositiveButton("확인",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    // TODO : 로그인 창으로 연결
+                                    Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
+                                    startActivity(intent);
                                 }
                             });
                     builder.setNegativeButton("취소",
@@ -280,7 +281,8 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
                     builder.setPositiveButton("확인",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    // TODO : 로그인 창으로 연결
+                                    Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
+                                    startActivity(intent);
                                 }
                             });
                     builder.setNegativeButton("취소",

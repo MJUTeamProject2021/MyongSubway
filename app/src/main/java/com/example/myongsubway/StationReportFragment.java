@@ -3,6 +3,7 @@ package com.example.myongsubway;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.PorterDuff;
@@ -269,7 +270,8 @@ public class StationReportFragment extends Fragment implements View.OnClickListe
                     builder.setPositiveButton("확인",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    // TODO : 로그인 창으로 연결
+                                    Intent intent = new Intent(getContext(), SignInActivity.class);
+                                    startActivity(intent);
                                 }
                             });
                     builder.setNegativeButton("취소",
