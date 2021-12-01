@@ -49,19 +49,34 @@ public class StationInformationFragment extends Fragment implements View.OnClick
     private CustomAppGraph.Vertex vertex;
     CustomAppGraph graph;
     
-    private boolean isBlockCloseBtn;        // 나가기 버튼을 막을지를 나타내는 변수. true면 막는다.
-    
+    private boolean isZoomPath;        // 나가기 버튼을 막을지를 나타내는 변수. true 면 막는다.
+
     public StationInformationFragment(CustomAppGraph.Vertex _vertex,CustomAppGraph _graph) {
         vertex=_vertex;
         graph = _graph;
     }
 
     // ShortestPathActivity 에서 프래그먼트를 띄울 때 사용하는 생성자 오버로딩 함수
-    public StationInformationFragment(CustomAppGraph.Vertex _vertex,CustomAppGraph _graph, boolean _isBlockCloseBtn) {
+    public StationInformationFragment(CustomAppGraph.Vertex _vertex,CustomAppGraph _graph, boolean _isZoomPath) {
         vertex=_vertex;
         graph = _graph;
-        isBlockCloseBtn = _isBlockCloseBtn;
+        isZoomPath = _isZoomPath;
     }
+
+    // ShortestPathActivity 에서 프래그먼트를 띄울 때 화면에 띄운 신고 버튼을
+    // 프래그먼트를 종료할 때 동적으로 숨긴다.
+    @Override
+    public void onDestroy() {
+        if (isZoomPath) {
+            if (((ShortestPathActivity) ShortestPathActivity.ShortestPathContext) != null) {
+                Button infoReportButton = ((ShortestPathActivity) ShortestPathActivity.ShortestPathContext).findViewById(R.id.infoReportButton);
+                infoReportButton.setVisibility(View.GONE);
+            }
+        }
+
+        super.onDestroy();
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,8 +114,10 @@ public class StationInformationFragment extends Fragment implements View.OnClick
         reportButton.setOnClickListener(this);
 
         // ShortestPathActivity 에서 생성한 프래그먼트 객체일 때 나가기버튼을 막는다.
-        if (isBlockCloseBtn)
+        if (isZoomPath) {
             closeButton.setVisibility(View.INVISIBLE);
+            reportButton.setVisibility(View.INVISIBLE);
+        }
 
         //역 이름 및 호선이름
         vertexName.setText(vertex.getVertex()+"역");

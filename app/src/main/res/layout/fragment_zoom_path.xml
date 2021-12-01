@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:clickable="true"
-    android:background="#FAFAFA">
+    android:orientation="vertical">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:background="#FAFAFA"
+        android:layout_weight="1">
 
         <LinearLayout
             android:id="@+id/btnContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="30dp"/>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/reportButton"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@drawable/ripple_report_button"
-            android:paddingLeft="10dp"
-            android:text="잘못된 정보 신고 >"
-            android:gravity="left|center_vertical"
-            android:textColor="#808487"/>
-    </LinearLayout>
+    </ScrollView>
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/reportButton"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/ripple_report_button"
+        android:paddingLeft="10dp"
+        android:text="잘못된 정보 신고 >"
+        android:gravity="left|center_vertical"
+        android:textColor="#808487"/>
 
-</ScrollView>
+</LinearLayout>

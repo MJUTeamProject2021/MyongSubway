@@ -267,9 +267,35 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
                 startActivity(intent);
                 break;
             case R.id.Main_Button_GotoGame:
-                intent = new Intent(this,ShortestPathActivity.class);
-                startActivity(intent);
+                AlertDialog.Builder gameBuilder = new AlertDialog.Builder(this);
+                gameBuilder.setTitle("미니게임을 실행하시겠습니까?");
+                //gameBuilder.setMessage("로그인 창으로 이동하시겠습니까?");
+                gameBuilder.setPositiveButton("확인",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(mcontext, UnityPlayerActivity.class);
+                                startActivity(intent);
+                            }
+                        });
+                gameBuilder.setNegativeButton("취소",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+
+                AlertDialog gameAlert = gameBuilder.create();
+                gameAlert.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        gameAlert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLUE);
+                        gameAlert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLUE);
+                    }
+                });
+                gameAlert.show();
+
                 break;
+
             case R.id.Main_Button_GotoBoard:
                 if(graph.isLogined()){
                     intent = new Intent(this,BoardWatchActivity.class);

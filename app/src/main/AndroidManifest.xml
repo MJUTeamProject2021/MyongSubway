@@ -4,7 +4,6 @@
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".CustomAppGraph"
@@ -15,8 +14,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyongSubway"
         android:usesCleartextTraffic="true">
-        <activity android:name=".AccountInformationActivity"></activity>
-        <activity android:name=".ShortestPathActivity" />
+
+        <activity android:name=".ShortestPathActivity"
+            android:parentActivityName=".MainActivity">
+            <intent-filter>
+                <action android:name="111"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".OpenSourceInfoActivity"></activity>
+        <activity android:name=".AccountInformationActivity" />
+        <activity android:name=".TransferWalkTimeActivity"/>
         <activity android:name=".SettingsActivity" />
         <activity
             android:name=".SearchActivity"

@@ -110,16 +110,21 @@
             android:text="로그인 없이 시작"
             android:textColor="#FFFFFF" />
 
-        <TextView
-            android:id="@+id/signin_textview_signup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:text="계정 생성"
-            android:textColor="#2E83AC"
-            android:textSize="16dp"
-            android:textStyle="bold" />
+
+
+            <TextView
+                android:id="@+id/signin_textview_signup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:layout_weight="5"
+                android:gravity="center"
+                android:text="계정 생성"
+                android:textColor="#2E83AC"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+
+
 
     </LinearLayout>
 

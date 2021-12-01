@@ -26,7 +26,7 @@
             android:background="#00FFFFFF"
             android:textColor="@color/black"
             android:textSize="20dp"
-            app:icon="@drawable/ic_closex"
+            app:icon="@drawable/ic_left"
             app:iconGravity="textStart"
             app:iconPadding="0dp"
             app:iconTint="#000000" />
@@ -37,8 +37,7 @@
             android:layout_weight="8"
             android:gravity="center|left"
             android:paddingLeft="60dp"
-            android:fontFamily="@font/maruburisemibold"
-            android:text="즐겨찾기"
+            android:text="역 검색"
             android:textAlignment="gravity"
             android:textColor="#151515"
             android:textSize="30dp"

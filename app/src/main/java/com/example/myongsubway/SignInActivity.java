@@ -35,12 +35,9 @@ import java.util.Map;
 /**
  * SigninActivity
  * Firebase firestore Database 이용
- * 로그인을 통해 해당 컬렉션(users) 내부의 문서를 탐색해 탐색된 내용을 배열에 담아 사용됩니다.
- * 회원가입(SignUpFragment)을 통해 문서 ID가 생성됩니다.
- * 데이터 추가는 데이터 추가 버튼이 있는 다른 액티비티에서 진행될 예정이며,
- * ToDO: 데이터 전시 및 삭제는 BookmarkActivity에서 진행될 예정입니다.
- * 컬렉션 이름은 "users" (언제든지 수정 가능)
- * 문서 ID 형식은 email_password 형식 (형식 처음부터 끝까지 일치해야 데이터 접근 가능)
+ * 회원가입(SignUpFragment)을 통해 문서 UID가 생성됩니다.
+ * UID를 통해 컬렉션 내부 문서를 생성합니다.
+ * 컬렉션 이름은 "subwayData" (언제든지 수정 가능)
  * 문서 내부 데이터는 해시 맵으로 이루어져 있으며, key는 String, value는 ArrayList로 이루어져 있음.
 
  * 별도로 firebase 데이터를 확인해보고 싶으시면 wndtjq0510@naver.com으로 메일 주시면 권한 부여해드리겠습니다.
@@ -61,10 +58,9 @@ public class SignInActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;        // 프래그먼트를 다루는 매니저
     private SignUpFragment SignUpFragment;
     private FragmentTransaction transaction;
-    private boolean isFragment = false;
     private FirebaseAuth mAuth;
 
-    private BackPressHandler backPressHandler = new BackPressHandler(this); //백버튼 핸들러
+    public boolean isFragment = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -216,13 +212,12 @@ public class SignInActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.remove(SignUpFragment);
         fragmentTransaction.commit();
-        isFragment=false;
     }
 
     @Override
     public void onBackPressed() {
         if(isFragment == false) {
-            super.onBackPressed();
+            finishAndRemoveTask();
         }
         if(isFragment == true) {
             destroyFragment();

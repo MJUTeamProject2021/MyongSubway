@@ -84,7 +84,6 @@ public class AccountInformationActivity extends AppCompatActivity {
                 Toast.makeText(AccountInformationActivity.this, "탈퇴되었습니다.", Toast.LENGTH_SHORT).show();
 
                 mAuth.getCurrentUser().delete();
-                //TODO. firestore 내부 데이터 삭제
                 PackageManager packageManager = getPackageManager();
                 Intent intent = packageManager.getLaunchIntentForPackage(getPackageName());
                 ComponentName componentName = intent.getComponent();
