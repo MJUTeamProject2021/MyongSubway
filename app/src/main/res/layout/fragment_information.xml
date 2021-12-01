@@ -12,375 +12,368 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:tabRippleColor="@null">
+                android:layout_height="70dp"
+                android:background="@drawable/round_button_topmenunoripple"
+                android:orientation="horizontal"
+                android:weightSum="5">
+
+                <Button
+                    android:id="@+id/fragment_information_close"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_white_ripple"
+                    app:icon="@drawable/ic_leftarrow"
+                    app:iconGravity="top"
+                    app:iconSize="60dp"
+                    app:iconTint="#000000" />
+
+                <TextView
+                    android:id="@+id/fragment_information_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="101역"
+                    android:textAlignment="center"
+                    android:textColor="#000000"
+                    android:textColorHighlight="#D61B1B"
+                    android:textColorHint="#9A6262"
+                    android:textSize="50sp" />
+
+                <LinearLayout
+                    android:id="@+id/fragment_information_line"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="3"
+                    android:gravity="center|right"
+                    android:orientation="horizontal" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/round_button_topmenunoripple"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="70dp"
-                    android:background="@drawable/round_button_topmenunoripple"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="10dp"
                     android:orientation="horizontal"
-                    android:weightSum="5">
-
-                    <Button
-                        android:id="@+id/fragment_information_close"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@drawable/bg_white_ripple"
-                        app:icon="@drawable/ic_leftarrow"
-                        app:iconGravity="top"
-                        app:iconSize="60dp"
-                        app:iconTint="#000000" />
-
-                    <TextView
-                        android:id="@+id/fragment_information_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="101역"
-                        android:textAlignment="center"
-                        android:textColor="#000000"
-                        android:textColorHighlight="#D61B1B"
-                        android:textColorHint="#9A6262"
-                        android:textSize="50sp" />
+                    android:paddingBottom="15dp"
+                    android:weightSum="3">
 
                     <LinearLayout
-                        android:id="@+id/fragment_information_line"
+                        android:id="@+id/fragment_information_adjacent"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="3"
-                        android:gravity="center|right"
-                        android:orientation="horizontal" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
+                        <TextView
+                            android:id="@+id/textView9"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:text="인접한 역"
+                            android:textColor="#191515"
+                            android:textSize="24sp"
+                            android:textStyle="bold" />
 
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/textView20"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="내리는 문 방향"
+                                android:textColor="#191515"
+                                android:textSize="20sp"
+                                android:textStyle="bold"
+                                android:typeface="normal" />
+
+                            <TextView
+                                android:id="@+id/fragment_information_door"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingTop="5dp"
+                                android:text="오른쪽"
+                                android:textAlignment="center" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/fragment_information_facilities"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/textView22"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:text="역 내 시설"
+                            android:textColor="#191515"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:typeface="normal" />
+
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="15dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="15dp"
-                    android:background="@drawable/round_button_topmenunoripple"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginRight="10dp"
-                        android:orientation="horizontal"
-                        android:paddingBottom="15dp"
-                        android:weightSum="3">
-
-                        <LinearLayout
-                            android:id="@+id/fragment_information_adjacent"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="10dp"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/textView9"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="10dp"
-                                android:text="인접한 역"
-                                android:textColor="#191515"
-                                android:textSize="24sp"
-                                android:textStyle="bold" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="10dp"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="center"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:id="@+id/textView20"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="내리는 문 방향"
-                                    android:textColor="#191515"
-                                    android:textSize="20sp"
-                                    android:textStyle="bold"
-                                    android:typeface="normal" />
-
-                                <TextView
-                                    android:id="@+id/fragment_information_door"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:paddingTop="5dp"
-                                    android:text="오른쪽"
-                                    android:textAlignment="center" />
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/fragment_information_facilities"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="10dp"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/textView22"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="10dp"
-                                android:text="역 내 시설"
-                                android:textColor="#191515"
-                                android:textSize="20sp"
-                                android:textStyle="bold"
-                                android:typeface="normal" />
-
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginBottom="15dp"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <Button
-                                android:id="@+id/button14"
-                                android:layout_width="match_parent"
-                                android:layout_height="70dp"
-                                android:background="#00FFFFFF"
-                                android:text="개찰구 내\n화장실"
-                                android:textColor="#000000"
-                                android:textSize="16dp"
-                                android:textStyle="bold"
-                                app:icon="@mipmap/ic_newtoilet_foreground"
-                                app:iconGravity="textEnd"
-                                app:iconSize="50dp"
-                                app:iconTint="#000000" />
-
-                            <TextView
-                                android:id="@+id/fragment_information_toilet"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingTop="5dp"
-                                android:text="있음"
-                                android:textAlignment="center"
-                                android:textColor="#000000" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginBottom="10dp"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <Button
-                                android:id="@+id/button12"
-                                android:layout_width="match_parent"
-                                android:layout_height="70dp"
-                                android:background="#00FFFFFF"
-                                android:text="평균 혼잡도"
-                                android:textColor="#000000"
-                                android:textSize="18sp"
-                                android:textStyle="bold"
-                                app:icon="@drawable/ic_congestion"
-                                app:iconGravity="textEnd"
-                                app:iconTint="#000000" />
-
-                            <TextView
-                                android:id="@+id/fragment_information_congestion"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingTop="5dp"
-                                android:text="있음"
-                                android:textAlignment="center"
-                                android:textColor="#000000" />
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/round_button_topmenunoripple"
-                    android:orientation="vertical"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="15dp"
-                    android:paddingRight="10dp"
-                    android:paddingBottom="15dp">
-
-                    <TextView
-                        android:id="@+id/textView11"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="지하철 내 공기 질"
-                        android:textColor="#000000"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:weightSum="4">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="상태 : "
-                            android:textColor="#000000" />
-
-                        <TextView
-                            android:id="@+id/fragment_information_airstate"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="3"
-                            android:text="정보를 불러오는중..."
-                            android:textColor="#000000" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/fragment_information_pmq"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textColor="#000000" />
-
-                        <TextView
-                            android:id="@+id/fragment_information_update"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textColor="#000000" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:id="@+id/fragment_surrounding_restuarent"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:background="@drawable/round_button_topmenunoripple"
-                        android:orientation="vertical"
-                        android:paddingBottom="13dp">
+                        android:orientation="vertical">
 
                         <Button
-                            android:id="@+id/button5"
+                            android:id="@+id/button14"
+                            android:layout_width="match_parent"
+                            android:layout_height="70dp"
+                            android:background="#00FFFFFF"
+                            android:text="개찰구 내\n화장실"
+                            android:textColor="#000000"
+                            android:textSize="16dp"
+                            android:textStyle="bold"
+                            app:icon="@mipmap/ic_newtoilet_foreground"
+                            app:iconGravity="textEnd"
+                            app:iconSize="50dp"
+                            app:iconTint="#000000" />
+
+                        <TextView
+                            android:id="@+id/fragment_information_toilet"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="#00FFFFFF"
-                            android:text="주변식당"
-                            android:textColor="#000000"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            app:icon="@drawable/ic_restuarent"
-                            app:iconGravity="textEnd"
-                            app:iconTint="#000000" />
+                            android:paddingTop="5dp"
+                            android:text="있음"
+                            android:textAlignment="center"
+                            android:textColor="#000000" />
 
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/fragment_surrounding_building"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginBottom="10dp"
                         android:layout_weight="1"
-                        android:background="@drawable/round_button_topmenunoripple"
-                        android:orientation="vertical"
-                        android:paddingBottom="13dp">
+                        android:orientation="vertical">
 
                         <Button
-                            android:id="@+id/button"
+                            android:id="@+id/button12"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="70dp"
                             android:background="#00FFFFFF"
-                            android:text="주변건물"
+                            android:text="평균 혼잡도"
                             android:textColor="#000000"
                             android:textSize="18sp"
                             android:textStyle="bold"
-                            app:icon="@drawable/ic_building"
+                            app:icon="@drawable/ic_congestion"
                             app:iconGravity="textEnd"
                             app:iconTint="#000000" />
+
+                        <TextView
+                            android:id="@+id/fragment_information_congestion"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="5dp"
+                            android:text="있음"
+                            android:textAlignment="center"
+                            android:textColor="#000000" />
                     </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/textView24"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="전화번호:" />
-
-                    <TextView
-                        android:id="@+id/fragment_information_number"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="02-2222-2222"
-                        android:textColor="#254BB8" />
 
                 </LinearLayout>
 
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/round_button_topmenunoripple"
+                android:orientation="vertical"
+                android:paddingLeft="10dp"
+                android:paddingTop="15dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="15dp">
+
+                <TextView
+                    android:id="@+id/textView11"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="지하철 내 공기 질"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="상태 : "
+                        android:textColor="#000000" />
+
+                    <TextView
+                        android:id="@+id/fragment_information_airstate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:text="정보를 불러오는중..."
+                        android:textColor="#000000" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/fragment_information_pmq"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="#000000" />
+
+                    <TextView
+                        android:id="@+id/fragment_information_update"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="#000000" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/fragment_surrounding_restuarent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/round_button_topmenunoripple"
+                    android:orientation="vertical"
+                    android:paddingBottom="13dp">
+
+                    <Button
+                        android:id="@+id/button5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#00FFFFFF"
+                        android:text="주변식당"
+                        android:textColor="#000000"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:icon="@drawable/ic_restuarent"
+                        app:iconGravity="textEnd"
+                        app:iconTint="#000000" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/fragment_surrounding_building"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/round_button_topmenunoripple"
+                    android:orientation="vertical"
+                    android:paddingBottom="13dp">
+
+                    <Button
+                        android:id="@+id/button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#00FFFFFF"
+                        android:text="주변건물"
+                        android:textColor="#000000"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:icon="@drawable/ic_building"
+                        app:iconGravity="textEnd"
+                        app:iconTint="#000000" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView24"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="전화번호:" />
+
+                <TextView
+                    android:id="@+id/fragment_information_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="02-2222-2222"
+                    android:textColor="#254BB8" />
+
+            </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 
