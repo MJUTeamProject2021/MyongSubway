@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 public class OpenSourceInfoActivity extends AppCompatActivity {
@@ -29,5 +30,15 @@ public class OpenSourceInfoActivity extends AppCompatActivity {
                 "https://firebase.google.com/docs/android/setup\n\n" +
                 "인증 상태 지속성\n" +
                 "https://firebase.google.com/docs/auth/web/auth-state-persistence?hl=ko");
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:{ //toolbar의 back키 눌렀을 때 동작
+                onBackPressed();
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
