@@ -88,6 +88,10 @@ public class ZoomPathFragment extends Fragment {
                 }
             }
         }
+
+        // 마지막에 빈 버튼을 추가한다.
+        createEmptyButton(v, density);
+
     }
 
     // 역버튼을 생성하는 메소드.
@@ -147,22 +151,6 @@ public class ZoomPathFragment extends Fragment {
         ImageView line = new AppCompatImageView(getActivity());
         line.setBackgroundResource(R.drawable.simple_line);
         ((GradientDrawable) line.getBackground()).setColor(lineColors.get(lines.get(index)));
-        LinearLayout.LayoutParams lineParams = new LinearLayout.LayoutParams((int)(simpleLineWidthDp * density + 0.5), (int)(simpleLineHeightDp * density + 0.5));
-        line.setLayoutParams(lineParams);
-
-        // 뷰를 레이아웃에 추가한다.
-        btnContainer.addView(line);
-    }
-
-    // 역버튼을 잇는 선을 다른 호선의 색으로 생성하는 메소드
-    private void createSimpleLine(View v, int index, float density, int _line) {
-        LinearLayout btnContainer = (LinearLayout) v.findViewById(R.id.btnContainer);   // 버튼들을 담는 리니어레이아웃
-        CustomAppGraph.Vertex vertex = graph.getVertices().get(path.get(index));        // 현재 역 버튼이 나타내는 Vertex 객체
-
-        // 역 버튼을 잇는 선
-        ImageView line = new AppCompatImageView(getActivity());
-        line.setBackgroundResource(R.drawable.simple_line);
-        ((GradientDrawable) line.getBackground()).setColor(lineColors.get(_line));
         LinearLayout.LayoutParams lineParams = new LinearLayout.LayoutParams((int)(simpleLineWidthDp * density + 0.5), (int)(simpleLineHeightDp * density + 0.5));
         line.setLayoutParams(lineParams);
 
@@ -282,6 +270,18 @@ public class ZoomPathFragment extends Fragment {
         midLinear.addView(textView);
         btnContainer.addView(midLinear);
     }
+
+    // 마지막에 빈 버튼을 추가하는 메소드
+    private void createEmptyButton(View v, float density) {
+        LinearLayout btnContainer = (LinearLayout) v.findViewById(R.id.btnContainer);   // 버튼들을 담는 리니어레이아웃
+        TextView emptyTextView = new AppCompatTextView(getActivity());
+        emptyTextView.setBackgroundColor(Color.TRANSPARENT);
+        LinearLayout.LayoutParams emptyParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int)(60 * density + 0.5));
+        emptyTextView.setLayoutParams(emptyParams);
+
+        btnContainer.addView(emptyTextView);
+    }
+
 
     // 버튼의 클릭이벤트를 등록하는 메소드
     private void registerListener(View v) {

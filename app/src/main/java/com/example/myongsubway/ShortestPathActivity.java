@@ -3,7 +3,6 @@ package com.example.myongsubway;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
@@ -17,14 +16,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.BlendMode;
-import android.graphics.BlendModeColorFilter;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -160,11 +155,6 @@ public class ShortestPathActivity extends AppCompatActivity {
         Intent intent = getIntent();
         departure = intent.getStringExtra("departureStation");
         arrival = intent.getStringExtra("destinationStation");
-        // TODO : 디버깅용 코드
-        if (departure == null) {
-            departure = "112";
-            arrival = "411";
-        }
 
         // 파이어베이스 관련 변수 초기화
         mAuth = FirebaseAuth.getInstance();
@@ -301,8 +291,8 @@ public class ShortestPathActivity extends AppCompatActivity {
         calendar.setTimeInMillis(System.currentTimeMillis() + elapsedMilliSec);
 
         /** date 포맷을 이용해 알람이 등록되는 시간을 확인한다. */
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.KOREA);
-        Log.d("test", (sdf.format(calendar.getTime()).toString()));
+        /*SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.KOREA);
+        Log.d("test", (sdf.format(calendar.getTime()).toString()));*/
 
         // 얻어온 캘린더 객체가 현재의 캘린더 객체보다 이전의 것이면 갱신한다.
         if (calendar.before(Calendar.getInstance())) {
@@ -321,9 +311,6 @@ public class ShortestPathActivity extends AppCompatActivity {
             PendingIntent alarmIntent = PendingIntent.getBroadcast(ShortestPathContext, requestId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
-
-            // toast 를 띄운다.
-            Toast.makeText(ShortestPathContext, "알람이 등록되었습니다.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -348,9 +335,6 @@ public class ShortestPathActivity extends AppCompatActivity {
 
         // 알람이 모두 해제되었으므로 공유클래스의 키값을 초기화한다.
         graph.setAlarmKey(null);
-
-        // toast 를 띄운다.
-        Toast.makeText(ShortestPathContext, "알람이 해제되었습니다.", Toast.LENGTH_SHORT).show();
     }
 
     // 버튼에 클릭리스너를 등록하는 메소드
@@ -887,7 +871,6 @@ public class ShortestPathActivity extends AppCompatActivity {
 
         return output;
     }
-
 
     // 환승횟수를 계산한다.
     private int calculateElapsed(CustomAppGraph.SearchType ALL_COST_TYPE) {

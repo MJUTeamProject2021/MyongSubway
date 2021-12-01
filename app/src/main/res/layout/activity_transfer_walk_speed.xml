@@ -43,7 +43,7 @@
             android:layout_marginRight="15dp"
             android:layout_marginTop="20dp"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/fastWalk"
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -53,9 +53,10 @@
             android:textSize="16sp"
             android:gravity="left|center_vertical"
             android:layout_marginTop="-5dp"
-            android:layout_marginBottom="-5dp"/>
+            android:layout_marginBottom="-5dp"
+            app:rippleColor="@color/rippleColor"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/normalWalk"
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -65,9 +66,10 @@
             android:textSize="16sp"
             android:gravity="left|center_vertical"
             android:layout_marginTop="-5dp"
-            android:layout_marginBottom="-5dp"/>
+            android:layout_marginBottom="-5dp"
+            app:rippleColor="@color/rippleColor"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/slowWalk"
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -77,7 +79,8 @@
             android:textSize="16sp"
             android:gravity="left|center_vertical"
             android:layout_marginTop="-5dp"
-            android:layout_marginBottom="-5dp"/>
+            android:layout_marginBottom="-5dp"
+            app:rippleColor="@color/rippleColor"/>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

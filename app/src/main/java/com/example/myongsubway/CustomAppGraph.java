@@ -507,8 +507,6 @@ public class CustomAppGraph extends Application {
 
     // 등록되어 있는 알람을 없앤다.
     public void destroyAlarm() {
-        //Log.d("test", "destroyAlarm");
-
         if ((ShortestPathActivity) ShortestPathActivity.ShortestPathContext != null )
         {
             AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
