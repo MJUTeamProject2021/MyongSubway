@@ -1,9 +1,9 @@
 package com.example.myongsubway;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +20,6 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -76,7 +74,7 @@ public class ZoomPathFragment extends Fragment {
                 // 마지막 역버튼
                 createButton(v, i, density, stationButtonWidthDpBig, stationButtonHeightDp);
             } else if (i == 0) {
-                createLineAndButton(v, i, density, stationButtonWidthDpBig, stationButtonHeightDp);
+                createLineTextViewAndButton(v, i, density, stationButtonWidthDpBig, stationButtonHeightDp);
                 //createButton(v, i, density, stationButtonWidthDpBig, stationButtonHeightDp);
                 createSimpleLine(v, i, density);
             } else {
@@ -90,10 +88,11 @@ public class ZoomPathFragment extends Fragment {
                 }
             }
         }
+
+        // 마지막에 빈 버튼을 추가한다.
+        createEmptyButton(v, density);
+
     }
-
-
-
 
     // 역버튼을 생성하는 메소드.
     private void createButton(View v, int index, float density, int width, int height) {
@@ -159,31 +158,16 @@ public class ZoomPathFragment extends Fragment {
         btnContainer.addView(line);
     }
 
-    // 역버튼을 잇는 선을 다른 호선의 색으로 생성하는 메소드
-    private void createSimpleLine(View v, int index, float density, int _line) {
-        LinearLayout btnContainer = (LinearLayout) v.findViewById(R.id.btnContainer);   // 버튼들을 담는 리니어레이아웃
-        CustomAppGraph.Vertex vertex = graph.getVertices().get(path.get(index));        // 현재 역 버튼이 나타내는 Vertex 객체
-
-        // 역 버튼을 잇는 선
-        ImageView line = new AppCompatImageView(getActivity());
-        line.setBackgroundResource(R.drawable.simple_line);
-        ((GradientDrawable) line.getBackground()).setColor(lineColors.get(_line));
-        LinearLayout.LayoutParams lineParams = new LinearLayout.LayoutParams((int)(simpleLineWidthDp * density + 0.5), (int)(simpleLineHeightDp * density + 0.5));
-        line.setLayoutParams(lineParams);
-
-        // 뷰를 레이아웃에 추가한다.
-        btnContainer.addView(line);
-    }
-
     // 환승하는 역버튼을 생성하는 메소드
     private void createTransferButton(View v, int index, float density) {
         createMidLayout(v, index, density);
-        createLineAndButton(v, index, density, stationButtonWidthDpBig, stationButtonHeightDp);
+        createLineTextViewAndButton(v, index, density, stationButtonWidthDpBig, stationButtonHeightDp);
         //createButton(v, index, density, stationButtonWidthDpBig, stationButtonHeightDp);
         createSimpleLine(v, index, density);
     }
 
-    private void createLineAndButton(View v, int index, float density, int width, int height) {
+    // 역버튼과 호선을 나타내는 텍스트뷰를 만드는 메소드
+    private void createLineTextViewAndButton(View v, int index, float density, int width, int height) {
         LinearLayout btnContainer = (LinearLayout) v.findViewById(R.id.btnContainer);   // 버튼들을 담는 리니어레이아웃
         CustomAppGraph.Vertex vertex = graph.getVertices().get(path.get(index));        // 현재 역 버튼이 나타내는 Vertex 객체
         RelativeLayout relativeLayout = new RelativeLayout(getActivity());
@@ -205,9 +189,10 @@ public class ZoomPathFragment extends Fragment {
             }
         });
 
-        // 내리는문을 나타내는 텍스트뷰
+        // 호선을 나타내는 텍스트뷰
         TextView textView = new AppCompatTextView(getActivity());
         textView.setText(lines.get(index) + "호선");
+        textView.setTextColor(Color.BLACK);
         RelativeLayout.LayoutParams textParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, (int)(height * density + 0.5));
         textParams.rightMargin = (int)(20 * density + 0.5);
         textView.setGravity(Gravity.CENTER);
@@ -222,7 +207,7 @@ public class ZoomPathFragment extends Fragment {
 
     // 환승을 나타내는 레이아웃을 생성하는 메소드
     private void createMidLayout(View v, int index, float density) {
-        CustomAppGraph.Vertex vertex = graph.getVertices().get(path.get(index));        // 환승하는 역을 나타내는 vertex
+        CustomAppGraph.Vertex station = graph.getVertices().get(path.get(index));       // 환승하는 역을 나타내는 vertex
 
         LinearLayout btnContainer = (LinearLayout) v.findViewById(R.id.btnContainer);   // 버튼들을 담는 리니어레이아웃
         RelativeLayout midLinear = new RelativeLayout(getActivity());                   // 아이콘, 점선, 텍스트를 담는 레이아웃
@@ -240,25 +225,63 @@ public class ZoomPathFragment extends Fragment {
 
         // 내리는문을 나타내는 텍스트뷰
         TextView textView = new AppCompatTextView(getActivity());
-        textView.setText("내리는문 " + vertex.getDoorDirection());
+        textView.setText("내리는문 " + station.getDoorDirection());
+        textView.setTextColor(Color.BLACK);
         RelativeLayout.LayoutParams textParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, (int)(dottedLineHeightDp * density + 0.5));
         textView.setGravity(Gravity.CENTER);
         textParams.addRule(RelativeLayout.RIGHT_OF, dottedLine.getId());
+        textParams.addRule(RelativeLayout.CENTER_VERTICAL);
         textView.setLayoutParams(textParams);
+
+        // 걷는 아이콘과 도보시간을 나타내는 텍스트뷰를 담고있는 릴레이티브 레이아웃
+        RelativeLayout leftContainer = new RelativeLayout(getActivity());
+        RelativeLayout.LayoutParams leftContainerParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        leftContainerParams.addRule(RelativeLayout.LEFT_OF, dottedLine.getId());
+        leftContainer.setLayoutParams(leftContainerParams);
 
         // 걷는 아이콘을 나타내는 이미지뷰
         ImageView walkIcon = new AppCompatImageView(getActivity());
+        walkIcon.setId(index + 2);
         walkIcon.setBackgroundResource(R.mipmap.ic_walk_foreground);
         RelativeLayout.LayoutParams iconParams = new RelativeLayout.LayoutParams((int) (dottedLineHeightDp * density + 0.5), (int) (dottedLineHeightDp * density + 0.5));
-        iconParams.addRule(RelativeLayout.LEFT_OF, dottedLine.getId());
+        iconParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        iconParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         walkIcon.setLayoutParams(iconParams);
 
+        // 환승하는데 걸리는 시간(분) = 환승 거리(m) / (도보 속도(km/h) * 1000 / 60)
+        int transferTime = (int)(station.getTransferDistance() / (graph.getWalkSpeed() * 1000 / 60));
+
+        // 도보시간을 나타내는 텍스트뷰
+        TextView walkTextView = new AppCompatTextView(getActivity());
+        walkTextView.setText("도보 " + transferTime + "분");
+        walkTextView.setTextColor(Color.BLACK);
+        RelativeLayout.LayoutParams walkTextParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        walkTextParams.addRule(RelativeLayout.BELOW, walkIcon.getId());
+        walkTextParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        walkTextParams.bottomMargin = (int) (30 * density + 0.5);
+        walkTextView.setLayoutParams(walkTextParams);
+
+        leftContainer.addView(walkIcon);
+        leftContainer.addView(walkTextView);
+
         // 뷰와 레이아웃을 레이아웃에 추가한다.
-        midLinear.addView(walkIcon);
+        midLinear.addView(leftContainer);
         midLinear.addView(dottedLine);
         midLinear.addView(textView);
         btnContainer.addView(midLinear);
     }
+
+    // 마지막에 빈 버튼을 추가하는 메소드
+    private void createEmptyButton(View v, float density) {
+        LinearLayout btnContainer = (LinearLayout) v.findViewById(R.id.btnContainer);   // 버튼들을 담는 리니어레이아웃
+        TextView emptyTextView = new AppCompatTextView(getActivity());
+        emptyTextView.setBackgroundColor(Color.TRANSPARENT);
+        LinearLayout.LayoutParams emptyParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int)(60 * density + 0.5));
+        emptyTextView.setLayoutParams(emptyParams);
+
+        btnContainer.addView(emptyTextView);
+    }
+
 
     // 버튼의 클릭이벤트를 등록하는 메소드
     private void registerListener(View v) {

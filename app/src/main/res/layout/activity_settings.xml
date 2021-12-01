@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SettingsActivity"
-    android:background="#d3d3d3"
+    android:background="#EEEEEE"
     android:orientation="vertical">
 
     <LinearLayout
@@ -47,7 +47,7 @@
             android:text="\n   계정"
             android:layout_marginBottom="5dp"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/setiings_button_accountinfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -57,7 +57,8 @@
             android:gravity="left"
             android:text="계정 정보"
             android:onClick="onClickAccount"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="10dp"
+            app:rippleColor="@color/rippleColor"/>
 
         <TextView
             android:id="@+id/settings_textview_findpath"
@@ -68,17 +69,18 @@
             android:textColor="#808080"
             android:textSize="16dp" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/setiings_button_walking"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:backgroundTint="@color/white"
             android:gravity="left"
-            android:onClick="onClickAccount"
+            android:onClick="onClickTransferWalkSpeed"
             android:text="환승 도보 시간"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            app:rippleColor="@color/rippleColor"/>
 
         <TextView
             android:id="@+id/settings_textview_customersupport"
@@ -89,7 +91,7 @@
             android:text="\n   고객 지원"
             android:layout_marginBottom="5dp"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/setiings_button_question"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -99,7 +101,8 @@
             android:textSize="16sp"
             android:gravity="left"
             android:text="문의하기"
-            android:onClick="onclickQuestion"/>
+            android:onClick="onclickQuestion"
+            app:rippleColor="@color/rippleColor"/>
 
         <TextView
             android:id="@+id/settings_textview_appinfo"

@@ -2,11 +2,17 @@ package com.example.myongsubway;
 
 import android.app.AlarmManager;
 import android.app.Application;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.media.AudioAttributes;
+import android.media.RingtoneManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -15,6 +21,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import jxl.Sheet;
 import jxl.Workbook;
@@ -78,14 +85,16 @@ TODO) 현재 로그인 상태인지 확인하기
 // 그래프 자료구조, 다익스트라 알고리즘에 필요한 데이터를 모아두는 클래스
 // 로그인과 관련된 데이터를 담는 클래스
 public class CustomAppGraph extends Application {
+    // 경로 탐색의 각 경우를 나타내는 enum
     public enum SearchType {
         MIN_TIME,       // 최소 시간
         MIN_DISTANCE,   // 최소 거리
         MIN_COST,       // 최소 비용
-        MIN_TRANSFER,   // 최소 환승
+        TRANSFER,       // 최소 환승
         NONE            // nothing
     }
 
+    // 역 사이의 정보를 나타내는 Edge 클래스
     public class Edge {
         private int[] edgeData;                 // 역 사이의 정보(걸리는시간, 거리, 비용)를 저장하는 배열
 
@@ -102,6 +111,7 @@ public class CustomAppGraph extends Application {
         }
     }
 
+    // 역의 정보를 나타내는 Vertex 클래스
     public class Vertex {
         private String vertex;                          // 역의 이름 (ex. "101")
         private ArrayList<Integer> adjacent;            // 역과 연결된 역을 저장하는 리스트
@@ -114,6 +124,7 @@ public class CustomAppGraph extends Application {
         private String[] nearbyRestaurants;             // 역 주변 식당을 저장하는 리스트
         private String[] nearbyFacilities;              // 역 주변 시설을 저장하는 리스트
         private String congestion;                      // 해당 역의 평균 혼잡도
+        private int transferDistance = -1;              // 해당 역의 환승 거리
 
         public Vertex(String _vertex, int _line) {
             adjacent = new ArrayList<Integer>();
@@ -123,18 +134,22 @@ public class CustomAppGraph extends Application {
         }
 
         // 역과 연결된 역을 등록하는 메소드
-        public void addAdjacent(int _adjacent) {
+        private void addAdjacent(int _adjacent) {
             adjacent.add(_adjacent);
         }
 
         // 역의 정보를 등록하는 메소드
-        public void addInformation(String _toilet, String _number, String _doorDirection, String _stationFacilities, String _nearbyRestaurants, String _nearbyFacilities) {
+        private void addInformation(String _toilet, String _number, String _doorDirection, String _stationFacilities, String _nearbyRestaurants, String _nearbyFacilities) {
             toilet = (Integer.parseInt(_toilet) == 1);
             number = _number;
             doorDirection = _doorDirection;
             stationFacilities = _stationFacilities.split(",");
             nearbyRestaurants = _nearbyRestaurants.split(",");
             nearbyFacilities = _nearbyFacilities.split(",");
+        }
+
+        private void addTransferDistance(int distance) {
+            transferDistance = distance;
         }
 
         private void setCongestion(String _congestion) {
@@ -153,6 +168,7 @@ public class CustomAppGraph extends Application {
         public String[] getNearbyRestaurants() { return nearbyRestaurants; }
         public String[] getNearbyFacilities() { return nearbyFacilities; }
         public String getCongestion() { return congestion; }
+        public int getTransferDistance() { return transferDistance; }
     }
 
     private HashMap<String, Integer> map = new HashMap<String, Integer>();          // 역의 이름을 배열의 index 로 변환시키기 위한 map
@@ -177,10 +193,66 @@ public class CustomAppGraph extends Application {
     private int alarmCount = 0;                         // 등록된 알람의 개수를 나타내는 변수
     private int alarmNumForCount = 0;                   // 알람의 개수를 세기 위한 변수
 
+    public  final float FAST_WALK = 6.0f;               // 빠른 걸음 (km/h)
+    public  final float NORMAL_WALK = 4.5f;             // 보통 걸음 (km/h)
+    public  final float SLOW_WALK = 3.5f;               // 느린 걸음 (km/h)
+    private float walkSpeed;                            // 도보 속도 (km/h) , 기본값은 보통걸음
+
+    // 환승 거리 정보를 담고있는 배열 (각 역의 환승 거리를 순서대로 할당)
+    // 250, 300, 350, 400 (m)
+    private final int[] TRANSFER_DISTANCE = {
+            250, 300, 350, 400
+    };
+
+    // 각 역의 환승 거리를 할당하기 위한 인덱스
+    private int distanceIndex = 0;
+
+    // value 가 min 과 max 사이를 순환하는 값이 되도록 반환하는 메소드
+    private int clamp(int value, int min, int max) {
+        if (value > max) {
+            return min;
+        }
+        return value;
+    }
+
+    // 도보 속도 setter
+    public void setWalkSpeed(float speed) {
+        // walkSpeed 갱신
+        walkSpeed = speed;
+
+        // 저장된 SharedPreference 의 값을 갱신한다.
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putFloat(getString(R.string.walk_speed), speed);
+        editor.apply();
+    }
+
+    // 도보 속도 getter
+    public float getWalkSpeed() { return walkSpeed; }
+
+    // walkSpeed 를 초기화 한다.
+    private void initWalkSpeed() {
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        float tempWalkSpeed = sharedPref.getFloat(getString(R.string.walk_speed), -1);
+        
+        // SharedPreference 값 설정
+        if (tempWalkSpeed == -1) {
+            SharedPreferences.Editor editor = sharedPref.edit();
+            // 기본값을 NORMAL_WALK 로 설정
+            editor.putFloat(getString(R.string.walk_speed), NORMAL_WALK);
+            editor.apply();
+        }
+
+        // 저장된 값으로 walkSpeed 를 초기화한다.
+        walkSpeed = sharedPref.getFloat(getString(R.string.walk_speed), NORMAL_WALK);
+    }
+
     @Override
     public void onCreate() {
         // 그래프 생성
         createGraph();
+
+        initWalkSpeed();
 
         super.onCreate();
     }
@@ -281,6 +353,22 @@ public class CustomAppGraph extends Application {
                         }
                     }
 
+                    // 추가로 lines.xls 를 읽어서 각 역의 호선 업데이트
+                    {
+                        for (int row = 1; row <= LINE_COUNT; row++) {
+                            int col = 1;
+                            int line = row;
+                            while (true) {
+                                try {
+                                    Cell c = linesSheet.getCell(col++, row);
+                                    vertices.get(map.get(c.getContents())).getLines().add(line);
+                                } catch (Exception e) {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
                     // 추가로 data.xls 를 읽어서 vertices 업데이트
                     {
                         int colTotal = dataSheet.getColumns();
@@ -297,21 +385,15 @@ public class CustomAppGraph extends Application {
                             String nearbyRestaurants = dataSheet.getCell(5, row).getContents();
                             String nearbyFacilities = dataSheet.getCell(6, row).getContents();
                             vertices.get(map.get(index)).addInformation(toilet, number, doorDirection, stationFacilities, nearbyRestaurants, nearbyFacilities);
-                        }
-                    }
+                            
+                            // 환승할 수 있는 역이면
+                            if (vertices.get(map.get(index)).getLines().size() > 1) {
+                                // 0이상 4미만의 수를 순서대로 정해 환승 거리를 저장한다.
+                                int distance = TRANSFER_DISTANCE[distanceIndex];
+                                vertices.get(map.get(index)).addTransferDistance(distance);
 
-                    // 추가로 lines.xls 를 읽어서 각 역의 호선 업데이트
-                    {
-                        for (int row = 1; row <= LINE_COUNT; row++) {
-                            int col = 1;
-                            int line = row;
-                            while (true) {
-                                try {
-                                    Cell c = linesSheet.getCell(col++, row);
-                                    vertices.get(map.get(c.getContents())).getLines().add(line);
-                                } catch (Exception e) {
-                                    break;
-                                }
+                                // 인덱스를 1 증가시켜준다. (0~3 범위를 벗어나지 않도록)
+                                distanceIndex = clamp(distanceIndex + 1, 0, 3);
                             }
                         }
                     }
@@ -336,22 +418,6 @@ public class CustomAppGraph extends Application {
             e.printStackTrace();
         }
     }
-
-    /* TODO : 디버깅용 코드
-    void printLines() {
-        for (Vertex vertex : vertices) {
-            String output = vertex.getVertex() + " 인접역 : ";
-            for (int index : vertex.getAdjacent()) {
-                output += reverseMap.get(index) + " ";
-            }
-            output += "호선 : ";
-            for (int line : vertex.getLines()) {
-                output += line + " ";
-            }
-
-            Log.d("test", output);
-        }
-    }*/
 
     // 로그인 관련 setter
     // email 과 password 는 초기에 null 이지만 해당 setter 가 수행되면 email 과 password 는 값이 생기게 된다.
@@ -441,8 +507,6 @@ public class CustomAppGraph extends Application {
 
     // 등록되어 있는 알람을 없앤다.
     public void destroyAlarm() {
-        //Log.d("test", "destroyAlarm");
-
         if ((ShortestPathActivity) ShortestPathActivity.ShortestPathContext != null )
         {
             AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);

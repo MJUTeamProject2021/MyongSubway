@@ -1,7 +1,6 @@
 package com.example.myongsubway;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -135,7 +134,7 @@ public class MinTimePathFragment extends Fragment {
                         break;
 
                     case R.id.zoomButton:
-                        ((ShortestPathActivity) getActivity()).generateStationInformationFragment(minTimePath, btnBackgrounds, CustomAppGraph.SearchType.MIN_TIME);
+                        ((ShortestPathActivity) getActivity()).generateZoomPathFragment(minTimePath, btnBackgrounds, CustomAppGraph.SearchType.MIN_TIME);
                         break;
 
                     case R.id.reportButton:
@@ -199,7 +198,7 @@ public class MinTimePathFragment extends Fragment {
         String cost = convertCost(costs.get(CustomAppGraph.SearchType.MIN_COST.ordinal()));
         costCost.setText(cost);
 
-        String transfer = costs.get(CustomAppGraph.SearchType.MIN_TRANSFER.ordinal()) + "회";
+        String transfer = costs.get(CustomAppGraph.SearchType.TRANSFER.ordinal()) + "회";
         costTransfer.setText(transfer);
     }
 

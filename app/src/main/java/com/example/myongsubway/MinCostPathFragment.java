@@ -132,7 +132,7 @@ public class MinCostPathFragment extends Fragment {
                         break;
 
                     case R.id.zoomButton:
-                        ((ShortestPathActivity) getActivity()).generateStationInformationFragment(minCostPath, btnBackgrounds, CustomAppGraph.SearchType.MIN_COST);
+                        ((ShortestPathActivity) getActivity()).generateZoomPathFragment(minCostPath, btnBackgrounds, CustomAppGraph.SearchType.MIN_COST);
                         break;
 
                     case R.id.reportButton:
@@ -193,7 +193,7 @@ public class MinCostPathFragment extends Fragment {
         String cost = convertCost(costs.get(CustomAppGraph.SearchType.MIN_COST.ordinal()));
         costCost.setText(cost);
 
-        String transfer = costs.get(CustomAppGraph.SearchType.MIN_TRANSFER.ordinal()) + "회";
+        String transfer = costs.get(CustomAppGraph.SearchType.TRANSFER.ordinal()) + "회";
         costTransfer.setText(transfer);
     }
 

@@ -7,5 +7,15 @@
     android:background="@color/white"
     android:elevation="20dp"
     android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-    app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+    app:contentInsetStart="0dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="길찾기"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:layout_gravity="center"/>
+
 </androidx.appcompat.widget.Toolbar>

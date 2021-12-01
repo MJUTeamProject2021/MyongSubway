@@ -17,6 +17,7 @@ import androidx.preference.PreferenceFragmentCompat;
 public class SettingsActivity extends AppCompatActivity {
 
     private Button accountInformation;
+    private Button transferWalkSpeed;
     private CustomAppGraph graph;
 
     @Override
@@ -30,6 +31,7 @@ public class SettingsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); // 뒤로가기 버튼, 디폴트로 true만 해도 백버튼이 생김
 
         accountInformation = findViewById(R.id.setiings_button_accountinfo);
+        transferWalkSpeed = findViewById(R.id.setiings_button_walking);
         graph = (CustomAppGraph) getApplicationContext();        //공유되는 데이터 담는 객체
     }
 
@@ -75,6 +77,11 @@ public class SettingsActivity extends AppCompatActivity {
         email.putExtra(Intent.EXTRA_SUBJECT, "");
         email.putExtra(Intent.EXTRA_TEXT, "잘못된 정보를 입력해주세요.");
         startActivity(email);
+    }
+
+    public void onClickTransferWalkSpeed(View view) {
+        Intent intent = new Intent(getApplicationContext(), TransferWalkTimeActivity.class);
+        startActivity(intent);
     }
 
     public void onnClickOpenSourceInfo(View view) {

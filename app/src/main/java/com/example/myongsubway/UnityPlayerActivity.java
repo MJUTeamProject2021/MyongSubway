@@ -74,7 +74,7 @@ public class UnityPlayerActivity extends Activity implements IUnityPlayerLifecyc
     // Quit Unity
     @Override protected void onDestroy ()
     {
-        Log.d("test", "UnityPlayerActivity onDestroy");
+        //Log.d("test", "UnityPlayerActivity onDestroy");
         mUnityPlayer.destroy();
         super.onDestroy();
     }
