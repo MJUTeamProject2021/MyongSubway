@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyongSubway"
         android:usesCleartextTraffic="true">
-        <activity android:name=".AccountInformationActivity"></activity>
+        <activity android:name=".OpenSourceInfoActivity"></activity>
+        <activity android:name=".AccountInformationActivity" />
         <activity android:name=".ShortestPathActivity" />
         <activity android:name=".SettingsActivity" />
         <activity

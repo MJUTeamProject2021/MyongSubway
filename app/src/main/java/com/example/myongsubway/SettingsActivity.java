@@ -76,4 +76,9 @@ public class SettingsActivity extends AppCompatActivity {
         email.putExtra(Intent.EXTRA_TEXT, "잘못된 정보를 입력해주세요.");
         startActivity(email);
     }
+
+    public void onnClickOpenSourceInfo(View view) {
+        Intent intent = new Intent(getApplicationContext(), OpenSourceInfoActivity.class);
+        startActivity(intent);
+    }
 }
