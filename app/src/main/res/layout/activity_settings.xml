@@ -113,6 +113,19 @@
             android:text="\n   앱 정보"
             android:layout_marginBottom="10dp"/>
 
+        <Button
+            android:id="@+id/setiings_button_opensource"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-5dp"
+            android:backgroundTint="@color/white"
+            android:gravity="left"
+            android:onClick="onnClickOpenSourceInfo"
+            android:text="오픈 소스 정보"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
         <TextView
             android:id="@+id/setiings_textView_appinfo"
             android:layout_width="match_parent"

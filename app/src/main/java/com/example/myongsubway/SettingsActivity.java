@@ -83,4 +83,9 @@ public class SettingsActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), TransferWalkTimeActivity.class);
         startActivity(intent);
     }
+
+    public void onnClickOpenSourceInfo(View view) {
+        Intent intent = new Intent(getApplicationContext(), OpenSourceInfoActivity.class);
+        startActivity(intent);
+    }
 }

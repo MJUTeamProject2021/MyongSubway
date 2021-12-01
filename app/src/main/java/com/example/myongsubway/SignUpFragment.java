@@ -142,5 +142,4 @@ public class SignUpFragment extends Fragment {
     String getEmail(){ return email.getText().toString(); }
     String getPassword(){ return password.getText().toString(); }
     String getUserData(){return getEmail() +"_" + getPassword();}
-
 }
