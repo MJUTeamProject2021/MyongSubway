@@ -5,11 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,7 +39,7 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
     private Button changeButton;
     private Button departX;
     private Button destiX;
-    private Button gotoShort;
+    private Button gotoGame;
     private Button gotoBookmark;
     private Button gotoSearch;
     private Button gotoSetting;
@@ -87,7 +85,7 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
         gotoBookmark = findViewById(R.id.Main_Button_GotoBookmark);
         gotoSearch = findViewById(R.id.Main_Button_GotoSearch);
         gotoSetting = findViewById(R.id.Main_Button_GotoSetting);
-        gotoShort = findViewById(R.id.Main_Button_GotoShort);
+        gotoGame = findViewById(R.id.Main_Button_GotoGame);
         gotoBoard = findViewById((R.id.Main_Button_GotoBoard));
         departX = findViewById(R.id.Main_Button_departX);
         destiX = findViewById(R.id.Main_Button_DestiX);
@@ -98,7 +96,7 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
         gotoBookmark.setOnClickListener(this);
         gotoSearch.setOnClickListener(this);
         gotoSetting.setOnClickListener(this);
-        gotoShort.setOnClickListener(this);
+        gotoGame.setOnClickListener(this);
         gotoBoard.setOnClickListener(this);
         departX.setOnClickListener(this);
         destiX.setOnClickListener(this);
@@ -267,7 +265,7 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
                 intent = new Intent(this,SettingsActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.Main_Button_GotoShort:
+            case R.id.Main_Button_GotoGame:
                 intent = new Intent(this,ShortestPathActivity.class);
                 startActivity(intent);
                 break;
