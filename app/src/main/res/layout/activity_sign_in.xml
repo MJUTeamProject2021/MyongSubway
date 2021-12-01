@@ -110,12 +110,7 @@
             android:text="로그인 없이 시작"
             android:textColor="#FFFFFF" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal"
-            android:weightSum="10">
+
 
             <TextView
                 android:id="@+id/signin_textview_signup"
@@ -129,7 +124,7 @@
                 android:textSize="16dp"
                 android:textStyle="bold" />
 
-        </LinearLayout>
+
 
     </LinearLayout>
 

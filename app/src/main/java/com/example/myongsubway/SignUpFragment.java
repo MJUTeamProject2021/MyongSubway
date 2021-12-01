@@ -142,4 +142,11 @@ public class SignUpFragment extends Fragment {
     String getEmail(){ return email.getText().toString(); }
     String getPassword(){ return password.getText().toString(); }
     String getUserData(){return getEmail() +"_" + getPassword();}
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ((SignInActivity)getActivity()).isFragment = false;
+        System.out.println("ㅎㅇ");
+    }
+
 }

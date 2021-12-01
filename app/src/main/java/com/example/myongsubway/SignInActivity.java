@@ -58,8 +58,9 @@ public class SignInActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;        // 프래그먼트를 다루는 매니저
     private SignUpFragment SignUpFragment;
     private FragmentTransaction transaction;
-
     private FirebaseAuth mAuth;
+
+    public boolean isFragment = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,6 +179,7 @@ public class SignInActivity extends AppCompatActivity {
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isFragment = true;
                 transaction = fragmentManager.beginTransaction();
                 getSupportFragmentManager().beginTransaction().replace(R.id.signin_constraintlayout_signin, SignUpFragment).commit();
             }
@@ -205,4 +207,20 @@ public class SignInActivity extends AppCompatActivity {
     void setEmail(String s){ email.setText(s); }
     String getEmail(){ return email.getText().toString(); }
     String getPassword(){ return password.getText().toString(); }
+
+    void destroyFragment(){
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.remove(SignUpFragment);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(isFragment == false) {
+            finishAndRemoveTask();
+        }
+        if(isFragment == true) {
+            destroyFragment();
+        }
+    }
 }
