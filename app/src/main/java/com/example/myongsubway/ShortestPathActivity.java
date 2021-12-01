@@ -63,7 +63,6 @@ public class ShortestPathActivity extends AppCompatActivity {
     private final List<String> tabElement =
             Arrays.asList("최소시간", "최단거리", "최소비용");  // 탭을 채울 텍스트
 
-
     private String departure, arrival;                      // 출발역과 도착역
     private ArrayList<ArrayList<Integer>> paths;            // 출발역 ~ 도착역의 경로를 저장하는 리스트, 순서대로 최소시간, 최단거리, 최소비용의 경로가 저장됨
     private ArrayList<ArrayList<Integer>> allCosts;         // 소요시간, 소요거리, 소요비용, 환승횟수를 저장하는 리스트, 순서대로 최소시간, 최단거리, 최소비용의 경우가 저장됨
@@ -81,7 +80,6 @@ public class ShortestPathActivity extends AppCompatActivity {
     private ArrayList<Integer> lineColors;                  // 호선의 색들을 담고있는 리스트
 
     private ImageButton bookmarkButton;                     // 즐겨찾기 등록 버튼
-    private boolean isSelected = false;                     // 즐겨찾기 버튼이 눌렸는지를 나타내는 상태변수
 
     private boolean isButtonClicked = false;                // 알람버튼이 눌렸는지를 확인하는 상태변수
     private CustomAppGraph.SearchType pageType;             // 현재 켜져있는 페이지의 타입
@@ -96,8 +94,6 @@ public class ShortestPathActivity extends AppCompatActivity {
             R.mipmap.ic_alarm_foreground;
     final int IC_ANOTHER_SELECTED_ALARM_BUTTON =            // 이미 다른 페이지에서 알람이 등록된 상태의 알람 버튼 아이콘
             R.mipmap.ic_alarm_another_selected_foreground;
-
-    private Button unityBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,15 +120,6 @@ public class ShortestPathActivity extends AppCompatActivity {
 
         // 뷰페이저2, 탭레이아웃 설정
         setPagerAndTabLayout();
-
-        unityBtn = findViewById(R.id.unityBtn);
-        unityBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ShortestPathContext, UnityPlayerActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
     // 초기설정을 한다.

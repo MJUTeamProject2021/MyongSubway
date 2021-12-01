@@ -196,7 +196,7 @@ public class CustomAppGraph extends Application {
     public  final float FAST_WALK = 6.0f;               // 빠른 걸음 (km/h)
     public  final float NORMAL_WALK = 4.5f;             // 보통 걸음 (km/h)
     public  final float SLOW_WALK = 3.5f;               // 느린 걸음 (km/h)
-    private float walkSpeed = NORMAL_WALK;              // 도보 속도 (km/h) , 기본값은 보통걸음
+    private float walkSpeed;                            // 도보 속도 (km/h) , 기본값은 보통걸음
 
     // 환승 거리 정보를 담고있는 배열 (각 역의 환승 거리를 순서대로 할당)
     // 250, 300, 350, 400 (m)
@@ -216,14 +216,43 @@ public class CustomAppGraph extends Application {
     }
 
     // 도보 속도 setter
-    public void setWalkSpeed(float speed) { walkSpeed = speed; }
+    public void setWalkSpeed(float speed) {
+        // walkSpeed 갱신
+        walkSpeed = speed;
+
+        // 저장된 SharedPreference 의 값을 갱신한다.
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putFloat(getString(R.string.walk_speed), speed);
+        editor.apply();
+    }
+
     // 도보 속도 getter
     public float getWalkSpeed() { return walkSpeed; }
+
+    // walkSpeed 를 초기화 한다.
+    private void initWalkSpeed() {
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        float tempWalkSpeed = sharedPref.getFloat(getString(R.string.walk_speed), -1);
+        
+        // SharedPreference 값 설정
+        if (tempWalkSpeed == -1) {
+            SharedPreferences.Editor editor = sharedPref.edit();
+            // 기본값을 NORMAL_WALK 로 설정
+            editor.putFloat(getString(R.string.walk_speed), NORMAL_WALK);
+            editor.apply();
+        }
+
+        // 저장된 값으로 walkSpeed 를 초기화한다.
+        walkSpeed = sharedPref.getFloat(getString(R.string.walk_speed), NORMAL_WALK);
+    }
 
     @Override
     public void onCreate() {
         // 그래프 생성
         createGraph();
+
+        initWalkSpeed();
 
         super.onCreate();
     }

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SettingsActivity"
-    android:background="#d3d3d3"
+    android:background="#EEEEEE"
     android:orientation="vertical">
 
     <LinearLayout
@@ -60,6 +60,27 @@
             android:layout_marginBottom="10dp"/>
 
         <TextView
+            android:id="@+id/settings_textview_findpath"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="\n   길찾기 설정"
+            android:textColor="#808080"
+            android:textSize="16dp" />
+
+        <Button
+            android:id="@+id/setiings_button_walking"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:backgroundTint="@color/white"
+            android:gravity="left"
+            android:onClick="onClickTransferWalkSpeed"
+            android:text="환승 도보 시간"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <TextView
             android:id="@+id/settings_textview_customersupport"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -67,17 +88,6 @@
             android:textSize="16dp"
             android:text="\n   고객 지원"
             android:layout_marginBottom="5dp"/>
-
-        <Button
-            android:id="@+id/setiings_button_help"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:textColor="@color/black"
-            android:layout_marginBottom="-5dp"
-            android:textSize="16sp"
-            android:gravity="left"
-            android:text="도움말" />
 
         <Button
             android:id="@+id/setiings_button_question"

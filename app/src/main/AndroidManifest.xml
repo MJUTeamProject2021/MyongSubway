@@ -15,6 +15,7 @@
         android:theme="@style/Theme.MyongSubway"
         android:usesCleartextTraffic="true">
         <activity android:name=".AccountInformationActivity"></activity>
+        <activity android:name=".TransferWalkTimeActivity"/>
 
         <activity android:name=".ShortestPathActivity"
             android:parentActivityName=".MainActivity">

@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EEEEEE"
-    tools:context=".AccountInformationActivity">
+        android:background="#EEEEEE">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,14 +11,13 @@
         android:orientation="vertical">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/accountinfo_toolbar"
+            android:id="@+id/transferWalkSpeedToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:elevation="20dp"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
             app:contentInsetStart="0dp"
-            android:layout_marginBottom="10dp"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
             <TextView
@@ -29,53 +26,58 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:textColor="@color/black"
-                android:text="계정 정보"
-                android:textSize="20sp" >
+                android:text="환승 도보 시간"
+                android:textSize="20sp" />
 
-            </TextView>
         </androidx.appcompat.widget.Toolbar>
 
         <TextView
-            android:id="@+id/accountinfo_textview_account"
+            android:id="@+id/transferWalkSpeedTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#808080"
             android:textSize="16dp"
-            android:text="\n   로그인된 계정"
-            android:layout_marginBottom="5dp"/>
-
-        <TextView
-            android:id="@+id/accountinfo_textview_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="@color/black"
-            android:textSize="20dp"
-            android:text=""
-            android:layout_marginBottom="20dp"/>
+            android:text="내 걸음 속도에 맞는 환승 도보 시간을 선택해 주세요. 선택된 걸음을 반영하여 환승 도보 시간을 안내합니다."
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="20dp"/>
 
         <Button
-            android:id="@+id/accountinfo_button_logout"
+            android:id="@+id/fastWalk"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:backgroundTint="@color/white"
+            android:text="빠른 걸음 6.0km/h"
             android:textColor="@color/black"
-            android:layout_marginBottom="-5dp"
             android:textSize="16sp"
-            android:onClick="onClickSignOut"
-            android:gravity="left"
-            android:text="로그아웃" />
-
-        <Button
-            android:id="@+id/accountinfo_button_quit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:textColor="@color/black"
+            android:gravity="left|center_vertical"
             android:layout_marginTop="-5dp"
+            android:layout_marginBottom="-5dp"/>
+
+        <Button
+            android:id="@+id/normalWalk"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:backgroundTint="@color/white"
+            android:text="보통 걸음 4.5km/h"
+            android:textColor="@color/black"
             android:textSize="16sp"
-            android:onClick="onCLickRevoke"
-            android:gravity="left"
-            android:text="회원탈퇴" />
+            android:gravity="left|center_vertical"
+            android:layout_marginTop="-5dp"
+            android:layout_marginBottom="-5dp"/>
+
+        <Button
+            android:id="@+id/slowWalk"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:backgroundTint="@color/white"
+            android:text="느린 걸음 3.5km/h"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:gravity="left|center_vertical"
+            android:layout_marginTop="-5dp"
+            android:layout_marginBottom="-5dp"/>
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
