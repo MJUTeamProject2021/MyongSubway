@@ -114,7 +114,7 @@ public class BookmarkActivity extends AppCompatActivity  {
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
                 // 선택된 역이 검색할 역이 맞는지 확인하는 알림창
                 AlertDialog.Builder dialog = new AlertDialog.Builder(view.getContext());
-                dialog.setMessage("선택한 역이 " + graph.getBookmarkedRoute().get(pos) + "이 맞습니까?");
+                dialog.setMessage("선택한 경로가 " + graph.getBookmarkedRoute().get(pos) + "이 맞습니까?");
                 dialog.setPositiveButton("네", new DialogInterface.OnClickListener() {
                     // 맞다면 검색된 역에 해당 역을 추가하고, 메인으로 넘어가 메소드 호출!!
                     @Override
