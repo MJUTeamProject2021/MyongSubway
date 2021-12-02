@@ -175,7 +175,8 @@
                     android:layout_height="14dp"
                     android:backgroundTint="@color/line1Color"
                     android:translationX="10dp"
-                    android:translationY="552dp" />
+                    android:translationY="552dp"
+                    android:enabled="false" />
 
                 <TextView
                     android:id="@+id/textView5"
@@ -193,7 +194,8 @@
                     android:layout_height="14dp"
                     android:backgroundTint="@color/line2Color"
                     android:translationX="10dp"
-                    android:translationY="562dp" />
+                    android:translationY="562dp"
+                    android:enabled="false" />
 
                 <TextView
                     android:id="@+id/textView6"
@@ -211,7 +213,8 @@
                     android:layout_height="14dp"
                     android:backgroundTint="@color/line3Color"
                     android:translationX="10dp"
-                    android:translationY="572dp" />
+                    android:translationY="572dp"
+                    android:enabled="false" />
 
                 <TextView
                     android:id="@+id/textView7"
@@ -229,7 +232,8 @@
                     android:layout_height="14dp"
                     android:backgroundTint="@color/line4Color"
                     android:translationX="10dp"
-                    android:translationY="582dp" />
+                    android:translationY="582dp"
+                    android:enabled="false" />
 
                 <TextView
                     android:id="@+id/textView8"
@@ -247,7 +251,8 @@
                     android:layout_height="14dp"
                     android:backgroundTint="@color/line5Color"
                     android:translationX="10dp"
-                    android:translationY="592dp" />
+                    android:translationY="592dp"
+                    android:enabled="false" />
 
                 <TextView
                     android:id="@+id/textView10"
@@ -265,7 +270,8 @@
                     android:layout_height="14dp"
                     android:backgroundTint="@color/line6Color"
                     android:translationX="10dp"
-                    android:translationY="602dp" />
+                    android:translationY="602dp"
+                    android:enabled="false" />
 
                 <TextView
                     android:id="@+id/textView12"
@@ -283,7 +289,8 @@
                     android:layout_height="14dp"
                     android:backgroundTint="@color/line7Color"
                     android:translationX="10dp"
-                    android:translationY="612dp" />
+                    android:translationY="612dp"
+                    android:enabled="false" />
 
                 <TextView
                     android:id="@+id/textView13"
@@ -301,7 +308,8 @@
                     android:layout_height="14dp"
                     android:backgroundTint="@color/line8Color"
                     android:translationX="10dp"
-                    android:translationY="622dp" />
+                    android:translationY="622dp"
+                    android:enabled="false" />
 
                 <TextView
                     android:id="@+id/textView14"
@@ -319,7 +327,8 @@
                     android:layout_height="14dp"
                     android:backgroundTint="@color/line9Color"
                     android:translationX="10dp"
-                    android:translationY="632dp" />
+                    android:translationY="632dp"
+                    android:enabled="false" />
 
                 <TextView
                     android:id="@+id/textView15"
