@@ -45,15 +45,11 @@ public class AlarmReceiver extends BroadcastReceiver {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Log.d("test", "this device's version is more than Oreo");
 
-            NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
+            NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_LOW);
             channel.enableLights(true);
             channel.setLightColor(Color.GREEN);
             channel.enableVibration(true);
-            channel.setVibrationPattern(new long[]{0, 2000, 1000, 3000});
-            AudioAttributes audioAttributes = new AudioAttributes.Builder().
-                            setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).
-                            setUsage(AudioAttributes.USAGE_NOTIFICATION).build();
-            channel.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION), audioAttributes);
+            channel.setVibrationPattern(new long[]{0, 400, 300, 400});
             notificationManager.createNotificationChannel(channel);
         }
 
@@ -70,19 +66,13 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         notificationBuilder.setContentTitle(station + "역 하차 알림").
                             setContentText("잠시 후 도착 (내리는문 " + doorDirection + ")").
-                            setDefaults(Notification.DEFAULT_ALL).
+                            setDefaults(Notification.DEFAULT_VIBRATE).
                             setPriority(NotificationCompat.PRIORITY_HIGH).
                             setAutoCancel(true).
-                            setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)).
                             setSmallIcon(R.mipmap.img_appico4white_foreground).
                             setContentIntent(getOffAlarmPendingIntent);
 
         notificationManager.notify(requestId, notificationBuilder.build());
-
-        // 알림 소리를 울린다.
-        /*Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        Ringtone ringtone = RingtoneManager.getRingtone(mContext.getApplicationContext(), notification);
-        ringtone.play();*/
 
         // Notification 을 띄우고 알람을 제거하기 위해 ShortestPathActivity 의 finishAlarm() 메소드를 호출한다.
         if (ShortestPathActivity.ShortestPathContext != null) {
