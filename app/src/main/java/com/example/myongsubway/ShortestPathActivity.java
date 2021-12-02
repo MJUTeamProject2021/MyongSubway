@@ -933,7 +933,7 @@ public class ShortestPathActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent email = new Intent(Intent.ACTION_SEND);
                 email.setType("plain/text");
-                String[] address = {"email@address.com"};
+                String[] address = {"htdobad@gmail.com"};
                 email.putExtra(Intent.EXTRA_EMAIL, address);
                 email.putExtra(Intent.EXTRA_SUBJECT, "");
                 email.putExtra(Intent.EXTRA_TEXT, "잘못된 정보를 입력해주세요.");
