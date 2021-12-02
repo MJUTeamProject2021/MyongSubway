@@ -17,9 +17,6 @@
 
         <activity android:name=".ShortestPathActivity"
             android:parentActivityName=".MainActivity">
-            <intent-filter>
-                <action android:name="111"/>
-            </intent-filter>
         </activity>
 
         <activity android:name=".OpenSourceInfoActivity"></activity>
