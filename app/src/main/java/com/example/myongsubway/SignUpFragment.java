@@ -131,7 +131,16 @@ public class SignUpFragment extends Fragment {
                                         }
                                     });
                         } else {
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            try{
+                                task.getResult();
+                            }catch (Exception e) {
+                                e.printStackTrace();
+                                Log.d("Fail_register_email",e.getMessage());
+                                Toast.makeText(getActivity(),"이미 생성된 계정 이메일입니다.",Toast.LENGTH_SHORT).show();
+                                email.setText(null);
+                                password.setText(null);
+                                email.requestFocus();
+                            }
                         }
                     }
                 });
