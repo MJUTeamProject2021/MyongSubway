@@ -63,7 +63,7 @@ public class ShortestPathActivity extends AppCompatActivity {
     private ArrayList<ArrayList<Integer>> allCosts;         // 소요시간, 소요거리, 소요비용, 환승횟수를 저장하는 리스트, 순서대로 최소시간, 최단거리, 최소비용의 경우가 저장됨
     private ArrayList<ArrayList<Integer>> allLines;         // 경로의 각 역의 호선을 저장하는 리스트
     private final int TYPE_COUNT = 3;                       // SearchType 의 경우의 수 (최소시간, 최단거리, 최소비용)
-    private final int TRANSFER_WEIGHT = 100;                // 환승 시에 추가되는 가중치
+    private final int TRANSFER_WEIGHT = 300;                // 환승 시에 추가되는 가중치
     final int LAST_INDEX = CustomAppGraph.SearchType.TRANSFER.ordinal();
 
     private ImageButton setAlarmButton;                     // 도착알람 설정 버튼
