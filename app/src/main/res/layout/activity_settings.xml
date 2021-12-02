@@ -113,7 +113,7 @@
             android:text="\n   앱 정보"
             android:layout_marginBottom="10dp"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/setiings_button_opensource"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -124,7 +124,8 @@
             android:text="오픈 소스 정보"
             android:layout_marginBottom="10dp"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            app:rippleColor="@color/rippleColor"/>
 
         <TextView
             android:id="@+id/setiings_textView_appinfo"

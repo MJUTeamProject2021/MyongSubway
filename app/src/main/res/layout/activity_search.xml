@@ -82,14 +82,16 @@
                 android:layout_height="0dp"
                 android:layout_weight="1" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/Search_Button_removeSearchHistory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:background="#00FFFFFF"
+                android:backgroundTint="@color/white"
                 android:text="검색내역\n전체삭제"
-                android:textColor="@color/purple_500" />
+                android:textColor="@color/purple_500"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                app:rippleColor="@color/rippleColor" />
 
         </LinearLayout>
 

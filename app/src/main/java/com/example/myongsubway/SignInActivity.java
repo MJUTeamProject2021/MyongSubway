@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,7 +51,7 @@ public class SignInActivity extends AppCompatActivity {
     private Button withoutSignIn;                   // 로그인 없이 진행하는 버튼
     public EditText email;
     public EditText password;
-    public TextView signUp;                         // 회원가입 프래그먼트로 이동
+    public Button signUp;                           // 회원가입 프래그먼트로 이동
     public ArrayList<String> bookmarkedStation;     // "즐겨찾는 역" 데이터를 저장
     public ArrayList<String> bookmarkedRoute;       // "즐겨찾는 경로" 데이터를 저장
     public Map<String, Object> bookmarkedMap;       // 유저 즐겨찾기 정보 저장
@@ -73,7 +74,7 @@ public class SignInActivity extends AppCompatActivity {
         startService(new Intent(this, ForcedTerminationService.class));
 
         fragmentManager = getSupportFragmentManager();
-        SignUpFragment = new SignUpFragment();
+        //SignUpFragment = new SignUpFragment();
 
         signIn = findViewById(R.id.signin_button_signin);
         withoutSignIn = findViewById(R.id.signin_button_withoutsignin);
@@ -130,7 +131,7 @@ public class SignInActivity extends AppCompatActivity {
                                             System.out.println("No such document");
                                         }
                                         // 메인 액티비티로 이동
-                                        Toast.makeText(SignInActivity.this, "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show();
+                                        //Toast.makeText(SignInActivity.this, "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                         startActivity(intent);
                                         finish();
@@ -159,7 +160,7 @@ public class SignInActivity extends AppCompatActivity {
                 dlg.setPositiveButton("예", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         //토스트 메시지
-                        Toast.makeText(SignInActivity.this, "메인화면으로 넘어갑니다.", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(SignInActivity.this, "메인화면으로 넘어갑니다.", Toast.LENGTH_SHORT).show();
                         ((CustomAppGraph) getApplicationContext()).clearAccount();
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
@@ -168,7 +169,7 @@ public class SignInActivity extends AppCompatActivity {
                 });
                 dlg.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getApplicationContext(),"아니오를 선택했습니다.",Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(),"아니오를 선택했습니다.",Toast.LENGTH_SHORT).show();
                     }
                 });
                 dlg.show();
@@ -179,6 +180,11 @@ public class SignInActivity extends AppCompatActivity {
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // 에러메세지를 모두 제거한다.
+                email.setError(null);
+                password.setError(null);
+
+                SignUpFragment = new SignUpFragment();
                 isFragment = true;
                 transaction = fragmentManager.beginTransaction();
                 getSupportFragmentManager().beginTransaction().replace(R.id.signin_constraintlayout_signin, SignUpFragment).commit();
@@ -201,7 +207,7 @@ public class SignInActivity extends AppCompatActivity {
 
         SharedPreferences prefs = getSharedPreferences("savedid", MODE_PRIVATE);
 
-         setEmail(prefs.getString("savedid", null));
+        setEmail(prefs.getString("savedid", null));
 
     }
     void setEmail(String s){ email.setText(s); }
@@ -212,6 +218,7 @@ public class SignInActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.remove(SignUpFragment);
         fragmentTransaction.commit();
+        SignUpFragment = null;
     }
 
     @Override
