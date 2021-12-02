@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.AudioAttributes;
+import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -42,17 +43,17 @@ public class AlarmReceiver extends BroadcastReceiver {
         final NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Log.d("test", "this device's version is more than Oreo");
+
             NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
-            /*channel.setShowBadge(true);
             channel.enableLights(true);
             channel.setLightColor(Color.GREEN);
             channel.enableVibration(true);
             channel.setVibrationPattern(new long[]{0, 2000, 1000, 3000});
-            channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
             AudioAttributes audioAttributes = new AudioAttributes.Builder().
                             setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).
                             setUsage(AudioAttributes.USAGE_NOTIFICATION).build();
-            channel.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION), audioAttributes);*/
+            channel.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION), audioAttributes);
             notificationManager.createNotificationChannel(channel);
         }
 
@@ -77,6 +78,11 @@ public class AlarmReceiver extends BroadcastReceiver {
                             setContentIntent(getOffAlarmPendingIntent);
 
         notificationManager.notify(requestId, notificationBuilder.build());
+
+        // 알림 소리를 울린다.
+        /*Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Ringtone ringtone = RingtoneManager.getRingtone(mContext.getApplicationContext(), notification);
+        ringtone.play();*/
 
         // Notification 을 띄우고 알람을 제거하기 위해 ShortestPathActivity 의 finishAlarm() 메소드를 호출한다.
         if (ShortestPathActivity.ShortestPathContext != null) {

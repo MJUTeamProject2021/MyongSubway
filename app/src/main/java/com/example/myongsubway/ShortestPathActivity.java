@@ -63,7 +63,7 @@ public class ShortestPathActivity extends AppCompatActivity {
     private ArrayList<ArrayList<Integer>> allCosts;         // 소요시간, 소요거리, 소요비용, 환승횟수를 저장하는 리스트, 순서대로 최소시간, 최단거리, 최소비용의 경우가 저장됨
     private ArrayList<ArrayList<Integer>> allLines;         // 경로의 각 역의 호선을 저장하는 리스트
     private final int TYPE_COUNT = 3;                       // SearchType 의 경우의 수 (최소시간, 최단거리, 최소비용)
-    private final int TRANSFER_WEIGHT = 100;                // 환승 시에 추가되는 가중치
+    private final int TRANSFER_WEIGHT = 500;                // 환승 시에 추가되는 가중치
     final int LAST_INDEX = CustomAppGraph.SearchType.TRANSFER.ordinal();
 
     private ImageButton setAlarmButton;                     // 도착알람 설정 버튼
@@ -156,6 +156,9 @@ public class ShortestPathActivity extends AppCompatActivity {
         departure = intent.getStringExtra("departureStation");
         arrival = intent.getStringExtra("destinationStation");
 
+        // departure 와 arrival 이 올바른 값이 들어있는지 체크한다.
+        checkDepartureArrival();
+
         // 파이어베이스 관련 변수 초기화
         mAuth = FirebaseAuth.getInstance();
 
@@ -168,6 +171,30 @@ public class ShortestPathActivity extends AppCompatActivity {
         setAlarmButton = findViewById(R.id.setAlarmButton);
         setAlarmButton.setColorFilter(getResources().getColor(R.color.moreGray, null));
         initAlarmButton();
+    }
+
+    // 출발역과 도착역을 올바르게 설정한다.
+    private void checkDepartureArrival() {
+        // Notification 을 터치해 넘어온 경우
+        if (departure == null) {
+            // SharedPreference 에 저장한 기존의 출발역 도착역을 저장한다.
+            SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+            String departure_arrival = sharedPref.getString(getString(R.string.departure_arrival), null);
+
+            if (departure_arrival != null) {
+                departure = departure_arrival.split("_")[0];
+                arrival = departure_arrival.split("_")[1];
+            }
+        }
+        // 메인액티비티에서 넘어온 경우
+        else {
+            // departure 와 arrival 을 SharedPreference 에 저장한다.
+            String departure_arrival = departure + "_" + arrival;
+            SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString(getString(R.string.departure_arrival), departure_arrival);
+            editor.apply();
+        }
     }
 
     // 즐겨찾기 버튼을 초기화한다.
@@ -229,7 +256,7 @@ public class ShortestPathActivity extends AppCompatActivity {
     private void registerAlarm() {
         // 초를 밀리세컨드로 변환하기 위한 상수 , 현재는 디버깅을 위해 10으로 설정.
         // TODO : 실제 시간으로 설정하기 위해선 1000으로 바꿔야함
-        final int CONSTANT_FOR_CONVERT = 10;
+        final int CONSTANT_FOR_CONVERT = 100;
 
         // 환승을 위해 하차할 때 마다 알람이 울리도록 설정한다.
         ArrayList<Integer> lines = allLines.get(pageType.ordinal());
