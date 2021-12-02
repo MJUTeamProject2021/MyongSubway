@@ -216,7 +216,7 @@ public class StationInformationFragment extends Fragment implements View.OnClick
             case R.id.fragment_information_reportButton:
                 Intent email = new Intent(Intent.ACTION_SEND);
                 email.setType("plain/text");
-                String[] address = {"email@address.com"};
+                String[] address = {"jh990517@naver.com"};
                 email.putExtra(Intent.EXTRA_EMAIL, address);
                 email.putExtra(Intent.EXTRA_SUBJECT, "");
                 email.putExtra(Intent.EXTRA_TEXT, "잘못된 정보를 입력해주세요.");
