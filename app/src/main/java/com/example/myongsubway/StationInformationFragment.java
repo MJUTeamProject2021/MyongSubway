@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -63,15 +64,13 @@ public class StationInformationFragment extends Fragment implements View.OnClick
         isZoomPath = _isZoomPath;
     }
 
-    // ShortestPathActivity 에서 프래그먼트를 띄울 때 화면에 띄운 신고 버튼을
-    // 프래그먼트를 종료할 때 동적으로 숨긴다.
+    // ShortestPathActivity 에서 프래그먼트를 띄울 때 숨긴 툴바를 보이게 만들고
+    // 역정보 프래그먼트를 나타내는 레이아웃을 숨ㄱ니다.
     @Override
     public void onDestroy() {
-        if (isZoomPath) {
-            if (((ShortestPathActivity) ShortestPathActivity.ShortestPathContext) != null) {
-                Button infoReportButton = ((ShortestPathActivity) ShortestPathActivity.ShortestPathContext).findViewById(R.id.infoReportButton);
-                infoReportButton.setVisibility(View.GONE);
-            }
+        if (isZoomPath && ((ShortestPathActivity) ShortestPathActivity.ShortestPathContext) != null) {
+            ((ShortestPathActivity) ShortestPathActivity.ShortestPathContext).showToolbar();
+            ((ShortestPathActivity) ShortestPathActivity.ShortestPathContext).hideInfoFragmentContainer();
         }
 
         super.onDestroy();
@@ -112,12 +111,6 @@ public class StationInformationFragment extends Fragment implements View.OnClick
         number.setOnClickListener(this);
         closeButton.setOnClickListener(this);
         reportButton.setOnClickListener(this);
-
-        // ShortestPathActivity 에서 생성한 프래그먼트 객체일 때 나가기버튼을 막는다.
-        if (isZoomPath) {
-            closeButton.setVisibility(View.INVISIBLE);
-            reportButton.setVisibility(View.INVISIBLE);
-        }
 
         //역 이름 및 호선이름
         vertexName.setText(vertex.getVertex()+"역");
@@ -207,7 +200,15 @@ public class StationInformationFragment extends Fragment implements View.OnClick
         StationReportFragment af =  (StationReportFragment)getParentFragment();
         switch (v.getId()) {
             case R.id.fragment_information_close:
-                 af.removeInformationFragment(this);
+                // ShortestPathActivity 에서 생성한 프래그먼트일 때
+                if (isZoomPath && ((ShortestPathActivity) ShortestPathActivity.ShortestPathContext) != null) {
+                    ((ShortestPathActivity) ShortestPathActivity.ShortestPathContext).hideInfoFragmentContainer();
+                    ((ShortestPathActivity) ShortestPathActivity.ShortestPathContext).removeInfoFragment(this);
+                }
+                // StationReportFragment 에서 생성한 프래그먼트일 때
+                else {
+                    af.removeInformationFragment(this);
+                }
                 break;
             case R.id.fragment_information_number:
                 Intent tt = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+vertex.getNumber().replace("-","")));
