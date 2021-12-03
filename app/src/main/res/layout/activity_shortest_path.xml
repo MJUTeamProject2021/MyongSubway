@@ -69,42 +69,48 @@
         app:layout_constraintRight_toRightOf="parent"/>
 
     <FrameLayout
+        android:id="@+id/station_info_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FAFAFA"
+        android:visibility="gone"/>
+
+    <!--<FrameLayout
+        android:id="@+id/info_layout_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
+        app:layout_constraintRight_toRightOf="parent"
+        android:orientation="vertical"
+        android:background="#FAFAFA"
+        android:visibility="gone">
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top">
 
                 <FrameLayout
                     android:id="@+id/station_info_fragment_container"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/infoReportButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:background="@drawable/ripple_report_button"
-                    android:paddingLeft="10dp"
-                    android:text="잘못된 정보 신고 >"
-                    android:gravity="left|center_vertical"
-                    android:textColor="#808487"
-                    android:visibility="gone"/>
-
-            </LinearLayout>
+                    android:layout_height="match_parent"/>
 
         </ScrollView>
 
-    </FrameLayout>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/infoReportButton"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/ripple_report_button"
+            android:paddingLeft="10dp"
+            android:text="잘못된 정보 신고 >"
+            android:gravity="left|center_vertical"
+            android:textColor="#808487"
+            android:visibility="gone"
+            android:layout_gravity="bottom|left"/>
+
+    </FrameLayout>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
