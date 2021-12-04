@@ -963,22 +963,6 @@ public class ShortestPathActivity extends AppCompatActivity {
         transaction.add(R.id.station_info_fragment_container, infoFragment);
         transaction.addToBackStack(null);
         transaction.commit();
-
-        // 역정보 프래그먼트 밑에 문의버튼을 보이게한다.
-        /*Button infoReportButton = findViewById(R.id.infoReportButton);
-        infoReportButton.setVisibility(View.VISIBLE);
-        infoReportButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent email = new Intent(Intent.ACTION_SEND);
-                email.setType("plain/text");
-                String[] address = {"htdobad@gmail.com"};
-                email.putExtra(Intent.EXTRA_EMAIL, address);
-                email.putExtra(Intent.EXTRA_SUBJECT, "");
-                email.putExtra(Intent.EXTRA_TEXT, "잘못된 정보를 입력해주세요.");
-                startActivity(email);
-            }
-        });*/
     }
     
     // 확대경로 프래그먼트를 띄우는 메소드
