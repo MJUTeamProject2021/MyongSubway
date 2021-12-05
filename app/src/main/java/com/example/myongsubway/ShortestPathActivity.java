@@ -379,11 +379,13 @@ public class ShortestPathActivity extends AppCompatActivity {
                         // 로그인된 상태일 때만 즐겨찾기 가능
                         if (graph.isLogined()) {
                             if (isContained()) {
+                                Toast.makeText(ShortestPathContext, "즐겨찾기 해제되었습니다.", Toast.LENGTH_SHORT).show();
                                 // 이미 켜져있을 때, 버튼의 이미지를 빈 별의 이미지로 바꾼다.
                                 bookmarkButton.setBackgroundResource(R.mipmap.ic_star_unselected_foreground);
                                 // 해당 경로의 즐겨찾기를 제거한다.
                                 removeBookmarkedRoute();
                             } else {
+                                Toast.makeText(ShortestPathContext, "즐겨찾기 설정되었습니다.", Toast.LENGTH_SHORT).show();
                                 // 이미 꺼져있을 때, 버튼의 이미지를 노란 별의 이미지로 바꾼다.
                                 bookmarkButton.setBackgroundResource(R.mipmap.ic_star_selected_foreground);
                                 // 해당 경로의 즐겨찾기를 추가한다.
