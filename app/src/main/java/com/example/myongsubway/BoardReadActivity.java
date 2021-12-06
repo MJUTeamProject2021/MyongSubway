@@ -202,7 +202,7 @@ public class BoardReadActivity extends AppCompatActivity implements View.OnClick
                             databaseReference.child("boardid").setValue(item.getId());
                             databaseReference.child("content").setValue(commentText.getText().toString());
                             databaseReference.child("writer").setValue(graph.getEmail());
-                            databaseReference.child("time").setValue(new SimpleDateFormat("yy/MM/dd hh:mm").format(new Date(System.currentTimeMillis())));
+                            databaseReference.child("time").setValue(new SimpleDateFormat("yy/MM/dd HH:mm").format(new Date(System.currentTimeMillis())));
                             setCommentRefresh();
                             commentText.setText("");
                         }
