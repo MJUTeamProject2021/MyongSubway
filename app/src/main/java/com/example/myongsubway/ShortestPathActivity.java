@@ -119,6 +119,10 @@ public class ShortestPathActivity extends AppCompatActivity {
 
         // 뷰페이저2, 탭레이아웃 설정
         setPagerAndTabLayout();
+
+        int time1 = graph.getVertices().get(graph.getMap().get("122")).getTransferDistance();
+        int time2 = graph.getVertices().get(graph.getMap().get("503")).getTransferDistance();
+        Log.d("test", "time1 : " + time1 + " time2 : " + time2);
     }
 
     // 초기설정을 한다.
@@ -890,8 +894,9 @@ public class ShortestPathActivity extends AppCompatActivity {
                             if (transferDistance != -1) {
                                 // 환승하는데 걸리는 시간(분) = 환승 거리(m) / (도보 속도(km/h) * 1000 / 60)
                                 int transferTime = (int) (transferDistance / (graph.getWalkSpeed() * 1000 / 60));
+                                //Log.d("test", "transferTime : " + transferTime +" station : " + transferStation.getVertex());
                                 // 환승하는데 걸리는 시간을 소요시간에 추가
-                                output += transferTime;
+                                output += transferTime * 60;
                             }
 
                             break;
@@ -901,6 +906,7 @@ public class ShortestPathActivity extends AppCompatActivity {
                             // 환승이 불가능한 역이면 -1
                             if (transferDistance != -1) {
                                 // 환승 거리를 가중치로 추가
+                                //Log.d("test", "transferDistance : " + transferDistance);
                                 output += transferDistance;
                             }
 
